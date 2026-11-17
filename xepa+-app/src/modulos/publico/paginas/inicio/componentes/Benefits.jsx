@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { Apple, Carrot, LeafyGreen, Sprout } from 'lucide-react';
 import '@/modulos/publico/paginas/inicio/estilos/Benefits.css';
 
-import cestaXepa from '@/assets/imagens/pagina-inicial/xepa.png';
+import '@google/model-viewer';
+
+
 import Rabisco from '@/modulos/publico/paginas/inicio/componentes/Rabisco.jsx';
 
 // A ordem define a posição: no computador, 1 e 3 ficam à esquerda da caixa e 2 e 4 à direita;
@@ -68,7 +70,21 @@ export default function Benefits() {
       </header>
 
       <div className="ilustracao-beneficios" data-revelar="zoom" style={{ '--atraso': '0.15s' }}>
-        <img className="cesta-beneficios" src={cestaXepa} alt="Cesta de alimentos do Xepa+" />
+        {/* Modelo 3D da cesta (fica em public/modelos). A imagem antiga aparece enquanto carrega. */}
+        <model-viewer
+          class="cesta-beneficios"
+          src="/modelos/cesta-xepa.glb"
+          alt="Cesta de alimentos do Xepa+ em 3D"
+          camera-controls
+          auto-rotate
+          auto-rotate-delay="0"
+          rotation-per-second="20deg"
+          disable-zoom
+          interaction-prompt="none"
+          shadow-intensity="1"
+          exposure="1"
+          loading="lazy"
+        />
 
         {categorias.map(({ nome, Icone, cor }, indice) => (
           <div
