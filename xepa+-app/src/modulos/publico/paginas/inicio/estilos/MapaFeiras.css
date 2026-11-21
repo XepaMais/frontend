@@ -34,8 +34,11 @@
   letter-spacing: 0.08em;
 }
 
-.mapa-texto h2 {
-  margin: 0 0 14px;
+/* título centralizado, ocupando a linha inteira */
+.mapa-titulo {
+  grid-column: 1 / -1;
+  margin: 0;
+  text-align: center;
 
   font-family: 'Poppins', sans-serif;
   font-size: clamp(28px, 3.4vw, 44px);
@@ -45,12 +48,12 @@
 }
 
 .mapa-texto p {
-  max-width: 440px;
+  max-width: 520px;
   margin: 0;
 
   color: rgba(255, 255, 255, 0.9);
-  font-size: clamp(15px, 1.2vw, 16px);
-  line-height: 1.7;
+  font-size: clamp(17px, 1.35vw, 19px);
+  line-height: 1.6;
 }
 
 /* ---------- Busca ---------- */
@@ -63,6 +66,12 @@
 /* a seção é laranja: contorno branco para o botão laranja não sumir no fundo */
 .mapa-busca button {
   box-shadow: 0 0 0 2px #fff;
+}
+
+/* texto maior na busca (só nesta seção) */
+.mapa-busca input,
+.mapa-busca button {
+  font-size: 17px;
 }
 
 /* ---------- Mapa ---------- */
@@ -89,9 +98,29 @@
   grid-column: 1 / -1;
   margin: -8px 0 0;
 
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
   line-height: 1.5;
+}
+
+/* ---------- Computadores: seção com 650px de altura ---------- */
+/* o mapa estica para ocupar o espaço que sobra */
+
+@media (min-width: 761px) {
+  .mapa-feiras {
+    height: 650px;
+    padding-block: 44px;
+  }
+
+  .mapa-conteudo {
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    height: 100%;
+  }
+
+  .mapa-visual {
+    aspect-ratio: auto;
+    height: 100%;
+  }
 }
 
 /* ---------- Tablets e celulares: uma coluna ---------- */
@@ -112,6 +141,6 @@
 
   .mapa-observacao {
     margin-top: -6px;
-    font-size: 12px;
+    font-size: 14px;
   }
 }

@@ -41,8 +41,8 @@ const colunas = [
 ];
 
 function PerguntasFrequentes() {
-  // As duas primeiras perguntas começam abertas, como na referência
-  const [abertas, setAbertas] = useState(() => new Set([perguntas[0].pergunta, perguntas[1].pergunta]));
+  // Todas começam fechadas: só abrem quando a pessoa clica
+  const [abertas, setAbertas] = useState(() => new Set());
 
   function alternar(pergunta) {
     setAbertas((atuais) => {

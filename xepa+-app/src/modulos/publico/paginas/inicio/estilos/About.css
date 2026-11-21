@@ -10,7 +10,7 @@
 
 .sobre-container {
   display: grid;
-  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
   gap: clamp(36px, 5vw, 72px);
 
@@ -21,25 +21,30 @@
 /* ---------- Texto ---------- */
 
 .sobre-conteudo {
-  max-width: 440px;
+  max-width: 600px;
 }
 
 .sobre-titulo {
   margin: 0 0 24px;
 
   color: #18552f;
-  font-size: clamp(30px, 3.4vw, 44px);
+  font-size: clamp(28px, 2.9vw, 40px);
   font-weight: 700;
   line-height: 1.18;
   letter-spacing: -0.03em;
-  text-wrap: balance;
+}
+
+/* título sempre em 2 linhas no computador */
+.sobre-titulo__linha {
+  display: block;
+  white-space: nowrap;
 }
 
 .sobre-texto {
   margin: 0 0 16px;
   color: #3c5a44;
-  font-size: 16px;
-  line-height: 1.75;
+  font-size: clamp(17px, 1.35vw, 19px);
+  line-height: 1.7;
 }
 
 .sobre-texto strong {
@@ -142,8 +147,31 @@
   }
 }
 
+/* em telas pequenas o título pode quebrar livremente */
+@media (max-width: 560px) {
+  .sobre-titulo__linha {
+    display: inline;
+    white-space: normal;
+  }
+}
+
 @media (max-width: 480px) {
   .botao-sobre {
+    width: 100%;
+  }
+}
+
+/* Computadores: seção com altura fixa de 650px, conteúdo centralizado */
+@media (min-width: 901px) {
+  .secao-sobre {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    height: 650px;
+    padding-block: 0;
+  }
+
+  .sobre-container {
     width: 100%;
   }
 }

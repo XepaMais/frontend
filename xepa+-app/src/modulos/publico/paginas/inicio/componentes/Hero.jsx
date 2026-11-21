@@ -42,8 +42,9 @@ export default function Hero() {
           </h1>
 
           <p className="lead-inicio">
-            O Xepa+ conecta feirantes e consumidores para que o alimento fresquinho chegue à mesa
-            das pessoas, e não ao lixo.
+            O Xepa+ conecta feirantes e consumidores para que o alimento
+            <br className="lead-inicio__quebra" />
+            {' '}fresquinho chegue à mesa das pessoas, e não ao lixo.
           </p>
 
           <a className="botao-inicio" href="#como-funciona">
