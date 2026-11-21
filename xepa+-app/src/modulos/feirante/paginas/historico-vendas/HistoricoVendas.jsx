@@ -3,10 +3,13 @@ import { Receipt } from 'lucide-react';
 import {
   atualizarStatusPedido,
   carregarPedidos,
+  descreverRecebimento,
   formatarDataHora,
   formatarMoeda,
   PENDENTE_RETIRADA,
   RETIRADO,
+  textoStatus,
+  textoTaxaEntrega,
 } from '@/compartilhado/servicos/pedidos';
 import base from '@/compartilhado/estilos/conta.module.css';
 import styles from './estilos/HistoricoVendas.module.css';
@@ -81,7 +84,7 @@ function HistoricoVendas() {
                   <th scope="col">Qtd.</th>
                   <th scope="col">Total</th>
                   <th scope="col">Status</th>
-                  <th scope="col">Retirada</th>
+                  <th scope="col">Recebimento</th>
                   <th scope="col">Código</th>
                   <th scope="col">Entrega</th>
                 </tr>
@@ -105,9 +108,21 @@ function HistoricoVendas() {
                       <strong>{formatarMoeda(venda.total)}</strong>
                     </td>
                     <td data-rotulo="Status">
-                      <span className={base.status}>{venda.status}</span>
+                      <span className={base.status}>{textoStatus(venda)}</span>
                     </td>
-                    <td data-rotulo="Retirada">{venda.itens[0].retirada}</td>
+                    <td data-rotulo="Recebimento">
+                      <strong className={styles.recebimentoTipo}>
+                        {descreverRecebimento(venda).titulo}
+                      </strong>
+                      <span className={styles.recebimentoDetalhe}>
+                        {descreverRecebimento(venda).detalhe || '-'}
+                      </span>
+                      {descreverRecebimento(venda).taxa != null && (
+                        <span className={styles.recebimentoDetalhe}>
+                          {textoTaxaEntrega(descreverRecebimento(venda))}
+                        </span>
+                      )}
+                    </td>
                     <td data-rotulo="Código">
                       <strong>{venda.codigo || '-'}</strong>
                     </td>

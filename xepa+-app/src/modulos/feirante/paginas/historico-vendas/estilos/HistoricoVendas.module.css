@@ -28,6 +28,18 @@
   display: block;
 }
 
+/* Recebimento: tipo (retirada/entrega) e, embaixo, a feira ou o endereço */
+.recebimentoTipo {
+  display: block;
+  white-space: nowrap;
+}
+
+.recebimentoDetalhe {
+  display: block;
+  min-width: 160px;
+  color: var(--cinza);
+}
+
 /* Em telas menores, cada venda vira um card */
 @media (max-width: 860px) {
   .tabelaBorda {
@@ -86,6 +98,13 @@
   }
 
   .tabela td > .produto + .produto {
+    margin-top: -12px;
+  }
+
+  .tabela td > .recebimentoDetalhe {
+    grid-column: 2;
+    justify-self: stretch;
+    min-width: 0;
     margin-top: -12px;
   }
 }

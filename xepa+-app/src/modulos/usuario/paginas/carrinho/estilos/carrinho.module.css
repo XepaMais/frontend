@@ -33,7 +33,8 @@
 /* Grid que separa a Tabela do Card de Resumo */
 .carrinho_grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  /* Resumo mais largo para caber a escolha de recebimento e o endereço */
+  grid-template-columns: minmax(0, 1.4fr) minmax(400px, 1fr);
   gap: 24px;
   align-items: start;
 }
@@ -243,6 +244,11 @@
 
 .btn_pagar:hover {
   background-color: #18552f;
+}
+
+.btn_pagar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Responsividade */

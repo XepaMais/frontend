@@ -238,3 +238,34 @@
   height: 20px;
   object-fit: contain;
 }
+
+/* Forma de recebimento no resumo do pedido */
+.recebimentoInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 0 1rem;
+  padding: 10px 12px;
+  border-left: 4px solid #f76019;
+  border-radius: 8px;
+  background-color: #eef5f0;
+  font-family: 'Poppins', sans-serif;
+  color: #18552f;
+}
+
+.recebimentoInfo span {
+  font-size: 12px;
+}
+
+.recebimentoInfo strong {
+  font-size: var(--fonte-pequena);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.recebimentoInfo a {
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f76019;
+}

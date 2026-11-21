@@ -1,7 +1,9 @@
 // Carrinho do consumidor. Guarda só o id e a quantidade; o resto vem da xepa.
 import { carregarXepasDisponiveis } from '@/compartilhado/servicos/xepas';
+import { ENTREGA_CASA, RETIRADA_FEIRA } from '@/compartilhado/servicos/pedidos';
 
 const CHAVE_CARRINHO = 'carrinhoXepa';
+const CHAVE_RECEBIMENTO = 'recebimentoXepa';
 
 export const EVENTO_CARRINHO = 'carrinho-atualizado';
 
@@ -81,4 +83,56 @@ export function contarItens(itens) {
   }
 
   return quantidade;
+}
+
+// Forma de recebimento escolhida no carrinho (retirada na feira ou entrega em casa).
+// Fica guardada para o pagamento e para as próximas compras.
+export const ENDERECO_VAZIO = {
+  cep: '',
+  logradouro: '',
+  numero: '',
+  complemento: '',
+  bairro: '',
+  cidade: '',
+  uf: '',
+};
+
+export function carregarRecebimento() {
+  const salvo = JSON.parse(localStorage.getItem(CHAVE_RECEBIMENTO)) || {};
+
+  return {
+    tipo: salvo.tipo === ENTREGA_CASA ? ENTREGA_CASA : RETIRADA_FEIRA,
+    endereco: { ...ENDERECO_VAZIO, ...salvo.endereco },
+    // Frete calculado para o endereço (ver servicos/frete.js).
+    frete: salvo.frete || null,
+  };
+}
+
+export function salvarRecebimento(recebimento) {
+  localStorage.setItem(CHAVE_RECEBIMENTO, JSON.stringify(recebimento));
+}
+
+// Campos obrigatórios para entregar em casa.
+export function enderecoCompleto(endereco) {
+  return Boolean(
+    endereco.cep.replace(/\D/g, '').length === 8
+      && endereco.logradouro.trim()
+      && endereco.numero.trim()
+      && endereco.bairro.trim()
+      && endereco.cidade.trim()
+      && endereco.uf.trim(),
+  );
+}
+
+// O que vai junto com o pedido: endereço e frete só quando for entrega.
+export function recebimentoParaPedido(recebimento) {
+  if (recebimento.tipo === ENTREGA_CASA) {
+    return {
+      tipo: ENTREGA_CASA,
+      endereco: { ...recebimento.endereco },
+      frete: recebimento.frete,
+    };
+  }
+
+  return { tipo: RETIRADA_FEIRA };
 }

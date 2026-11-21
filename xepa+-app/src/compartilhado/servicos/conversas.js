@@ -1,5 +1,9 @@
 import { carregarPerfil } from '@/compartilhado/servicos/perfil';
-import { atualizarStatusPedido, formatarMoeda } from '@/compartilhado/servicos/pedidos';
+import {
+  atualizarStatusPedido,
+  descreverRecebimento,
+  formatarMoeda,
+} from '@/compartilhado/servicos/pedidos';
 
 const CHAVE_CONVERSAS = 'conversasXepa';
 
@@ -167,6 +171,8 @@ export function abrirConversaDoPedido(pedido) {
       data: pedido.data,
       total: pedido.total,
       retirada: pedido.itens[0]?.retirada || '',
+      // Ex.: { titulo: 'Entrega em casa', detalhe: 'Rua X, 10 - ...' }
+      recebimento: descreverRecebimento(pedido),
       itens: pedido.itens.map(({ nome, quantidade, preco }) => ({ nome, quantidade, preco })),
     },
     mensagens: [

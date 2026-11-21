@@ -1,0 +1,261 @@
+/* Escolha da forma de recebimento (retirada na feira / entrega em casa) */
+.recebimento {
+  font-family: 'Poppins', sans-serif;
+  color: #18552f;
+  margin-bottom: 1.2rem;
+}
+
+.recebimento > h4 {
+  margin: 0 0 12px;
+  font-size: var(--fonte-texto);
+  color: #18552f;
+}
+
+.opcoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 4px solid #d6e1d9;
+  border-radius: 12px;
+  background-color: #fff;
+  color: #18552f;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.opcao:hover {
+  border-color: #18552f;
+}
+
+.opcao svg {
+  flex-shrink: 0;
+}
+
+.opcao:focus-visible {
+  outline: 3px solid #f76019;
+  outline-offset: 2px;
+}
+
+.opcao span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.opcao strong {
+  font-size: var(--fonte-pequena);
+  font-weight: 600;
+}
+
+.opcao small {
+  font-size: 12px;
+  color: #4a5568;
+}
+
+.opcaoAtiva {
+  border-color: #18552f;
+  background-color: #eef5f0;
+}
+
+.opcaoAtiva svg {
+  color: #f76019;
+}
+
+.detalhe {
+  margin-top: 14px;
+}
+
+.legenda {
+  margin: 0 0 8px;
+  font-size: var(--fonte-pequena);
+  font-weight: 600;
+}
+
+.locais {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.locais li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.locais svg {
+  flex-shrink: 0;
+  color: #f76019;
+  margin-top: 2px;
+}
+
+.locais span {
+  display: flex;
+  flex-direction: column;
+}
+
+.locais strong {
+  font-size: var(--fonte-pequena);
+}
+
+.locais small {
+  font-size: 12px;
+  color: #4a5568;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.grade label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.inteiro {
+  grid-column: span 6;
+}
+
+.metade {
+  grid-column: span 3;
+}
+
+.cidade {
+  grid-column: span 4;
+}
+
+.uf {
+  grid-column: span 2;
+}
+
+.campo {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1.5px solid #18552f;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: var(--fonte-pequena);
+  color: #18552f;
+  background-color: #fff;
+}
+
+.campo:focus {
+  outline: 2px solid #f76019;
+  outline-offset: 1px;
+}
+
+.campoErro {
+  border-color: #c53030;
+}
+
+.avisoCep {
+  align-self: end;
+  font-size: 12px;
+  color: #4a5568;
+  padding-bottom: 8px;
+}
+
+.erro {
+  margin: 10px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c53030;
+}
+
+@media (max-width: 420px) {
+  .opcoes {
+    grid-template-columns: 1fr;
+  }
+
+  .metade,
+  .cidade,
+  .uf {
+    grid-column: span 6;
+  }
+}
+
+/* Taxa de entrega por feira */
+.frete {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-left: 4px solid #f76019;
+  border-radius: 12px;
+  background-color: #eef5f0;
+}
+
+.frete .legenda {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.frete .legenda svg {
+  color: #f76019;
+}
+
+.freteAviso {
+  margin: 0;
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.freteLista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.freteLista li {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: var(--fonte-pequena);
+}
+
+.freteLista li > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.freteLista small {
+  font-size: 12px;
+  color: #4a5568;
+}
+
+.freteLista li > strong {
+  white-space: nowrap;
+}
+
+.foraDoRaio {
+  color: #c53030;
+}
+
+.freteTabela {
+  margin: 10px 0 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #4a5568;
+}

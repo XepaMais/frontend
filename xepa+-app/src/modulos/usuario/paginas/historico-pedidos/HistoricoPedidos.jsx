@@ -1,11 +1,16 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ClipboardList, QrCode } from 'lucide-react';
+import { ClipboardList, Home, QrCode, Store } from 'lucide-react';
 import {
   carregarPedidos,
+  descreverRecebimento,
+  ENTREGA_CASA,
+  formaRecebimento,
   formatarDataHora,
   formatarMoeda,
   RETIRADO,
+  textoStatus,
+  textoTaxaEntrega,
 } from '@/compartilhado/servicos/pedidos';
 import { abrirConversaDoPedido } from '@/compartilhado/servicos/conversas';
 import base from '@/compartilhado/estilos/conta.module.css';
@@ -45,6 +50,8 @@ function HistoricoPedidos() {
           <div className={base.lista}>
             {pedidos.map((pedido) => {
               const aberto = pedidoAberto === pedido.numero;
+              const entrega = formaRecebimento(pedido) === ENTREGA_CASA;
+              const recebimento = descreverRecebimento(pedido);
 
               return (
                 <article className={base.card} key={pedido.numero}>
@@ -64,7 +71,7 @@ function HistoricoPedidos() {
                             {aberto && (
                               <>
                                 <span>{item.descricao}</span>
-                                <span>Retirada: {item.retirada}</span>
+                                {!entrega && <span>Retirada: {item.retirada}</span>}
                                 <span>Quantidade: {item.quantidade}</span>
                               </>
                             )}
@@ -76,21 +83,39 @@ function HistoricoPedidos() {
                       ))}
                     </ul>
 
-                    {/* Código para mostrar ao feirante na hora de retirar */}
+                    {/* Forma de recebimento escolhida na compra */}
+                    <div className={styles.recebimento}>
+                      {entrega ? (
+                        <Home size={22} aria-hidden="true" />
+                      ) : (
+                        <Store size={22} aria-hidden="true" />
+                      )}
+                      <div>
+                        <strong>{recebimento.titulo}</strong>
+                        {recebimento.detalhe && <span>{recebimento.detalhe}</span>}
+                        {recebimento.taxa != null && <span>{textoTaxaEntrega(recebimento)}</span>}
+                      </div>
+                    </div>
+
+                    {/* Código para mostrar ao feirante na hora de retirar ou receber */}
                     {pedido.codigo && pedido.status !== RETIRADO && (
                       <div className={styles.retirada}>
                         <QrCode size={88} aria-hidden="true" className={styles.qrCode} />
                         <div>
-                          <span>Código de retirada</span>
+                          <span>{entrega ? 'Código de entrega' : 'Código de retirada'}</span>
                           <strong className={styles.codigo}>{pedido.codigo}</strong>
-                          <p>Mostre este código ou o QR Code ao feirante para retirar o pedido.</p>
+                          <p>
+                            {entrega
+                              ? 'Mostre este código ou o QR Code a quem entregar o pedido.'
+                              : 'Mostre este código ou o QR Code ao feirante para retirar o pedido.'}
+                          </p>
                         </div>
                       </div>
                     )}
 
                     <div className={styles.rodape}>
                       <div className={styles.resumo}>
-                        <span className={base.status}>{pedido.status}</span>
+                        <span className={base.status}>{textoStatus(pedido)}</span>
                         <strong>Total: {formatarMoeda(pedido.total)}</strong>
                       </div>
 
