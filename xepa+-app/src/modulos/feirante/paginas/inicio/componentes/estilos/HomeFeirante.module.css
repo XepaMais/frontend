@@ -824,3 +824,12 @@
     display: none;
   }
 }
+
+/* Forma de recebimento do pedido (retirada na feira ou entrega em casa) */
+.pedido_info .pedido_recebimento {
+  color: #18552f;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

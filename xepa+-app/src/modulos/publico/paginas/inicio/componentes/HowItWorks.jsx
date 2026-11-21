@@ -96,7 +96,7 @@ export default function HowItWorks() {
 
       <div className="conteudo-funcionamento">
         <h2 data-revelar>
-          Mas como isso <Rabisco>funciona</Rabisco>?
+          Como a Xepa+ <Rabisco>funciona</Rabisco>?
         </h2>
 
         <div className="lista-etapas">

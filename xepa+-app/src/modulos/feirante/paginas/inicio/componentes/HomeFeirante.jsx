@@ -13,6 +13,7 @@ import ItemConversa from '@/modulos/feirante/paginas/historico-chat/componentes/
 import { dataDeHoje } from '@/compartilhado/servicos/datas';
 import {
   atualizarStatusPedido,
+  descreverRecebimento,
   carregarPedidos,
   formatarDataHora,
   formatarMoeda,
@@ -228,6 +229,12 @@ function HomeFeirante() {
                         {pedido.itens
                           .map((item) => `${item.quantidade}x ${item.nome}`)
                           .join(', ')}
+                      </span>
+                      {/* Retirada na feira ou entrega em casa (com o endereço) */}
+                      <span className={Styles.pedido_recebimento}>
+                        {descreverRecebimento(pedido).titulo}
+                        {descreverRecebimento(pedido).detalhe
+                          && `: ${descreverRecebimento(pedido).detalhe}`}
                       </span>
                     </div>
                     <div className={Styles.pedido_valores}>

@@ -243,7 +243,9 @@ function ChatHist({ perfil = 'feirante' }) {
                 <header>
                   <strong>Pedido nº {conversa.pedido.numero}</strong>
                   <span className={finalizada ? Styles.statusRetirado : Styles.statusAguardando}>
-                    {finalizada ? 'Retirado' : 'Aguardando retirada'}
+                    {conversa.pedido.recebimento?.titulo === 'Entrega em casa'
+                      ? (finalizada ? 'Entregue' : 'Aguardando entrega')
+                      : (finalizada ? 'Retirado' : 'Aguardando retirada')}
                   </span>
                 </header>
                 <dl>
@@ -255,11 +257,18 @@ function ChatHist({ perfil = 'feirante' }) {
                     <dt>Total</dt>
                     <dd>{formatarMoeda(conversa.pedido.total)}</dd>
                   </div>
-                  {conversa.pedido.retirada && (
+                  {conversa.pedido.recebimento ? (
                     <div>
-                      <dt>Retirada</dt>
-                      <dd>{conversa.pedido.retirada}</dd>
+                      <dt>{conversa.pedido.recebimento.titulo}</dt>
+                      <dd>{conversa.pedido.recebimento.detalhe || '-'}</dd>
                     </div>
+                  ) : (
+                    conversa.pedido.retirada && (
+                      <div>
+                        <dt>Retirada</dt>
+                        <dd>{conversa.pedido.retirada}</dd>
+                      </div>
+                    )
                   )}
                 </dl>
                 <ul>

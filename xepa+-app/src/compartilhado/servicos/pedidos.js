@@ -14,7 +14,71 @@ function gerarCodigoRetirada() {
   return String(Math.floor(Math.random() * 9000) + 1000);
 }
 
-export function registrarPedido({ itens, total }) {
+// Formas de o consumidor receber a xepa.
+export const RETIRADA_FEIRA = 'retirada';
+export const ENTREGA_CASA = 'entrega';
+
+// Endereço em uma linha só: "Rua X, 10 - apto 2 - Bairro, Cidade/UF - CEP 00000-000".
+export function formatarEndereco(endereco) {
+  if (!endereco) return '';
+
+  const rua = [endereco.logradouro, endereco.numero].filter(Boolean).join(', ');
+  const cidade = [endereco.cidade, endereco.uf].filter(Boolean).join('/');
+  const local = [endereco.bairro, cidade].filter(Boolean).join(', ');
+  const cep = endereco.cep ? `CEP ${endereco.cep}` : '';
+
+  return [rua, endereco.complemento, local, cep].filter(Boolean).join(' - ');
+}
+
+// Pedidos antigos (antes da escolha existir) eram sempre retirada na feira.
+export function formaRecebimento(pedido) {
+  return pedido.recebimento?.tipo === ENTREGA_CASA ? ENTREGA_CASA : RETIRADA_FEIRA;
+}
+
+// Título e detalhe da forma de recebimento, para mostrar nas listas de pedidos.
+export function descreverRecebimento(pedido) {
+  if (formaRecebimento(pedido) === ENTREGA_CASA) {
+    const frete = pedido.recebimento.frete;
+
+    return {
+      titulo: 'Entrega em casa',
+      detalhe: formatarEndereco(pedido.recebimento.endereco),
+      // Taxa e distância (pedidos de entrega antigos não têm).
+      taxa: frete ? frete.valor : null,
+      distancias: frete ? frete.entregas.map((entrega) => entrega.distanciaKm) : [],
+    };
+  }
+
+  // Um pedido pode ter itens de feiras diferentes: lista cada local uma vez só.
+  const locais = [...new Set(pedido.itens.map((item) => item.retirada).filter(Boolean))];
+
+  return {
+    titulo: 'Retirada na feira',
+    detalhe: locais.join(' • '),
+    taxa: null,
+    distancias: [],
+  };
+}
+
+// Taxa de entrega em uma linha: "Taxa de entrega R$ 6,79 (3,2 km)".
+export function textoTaxaEntrega(recebimento) {
+  if (recebimento.taxa == null) return '';
+
+  const km = recebimento.distancias
+    .map((distancia) => `${distancia.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} km`)
+    .join(' + ');
+
+  return `Taxa de entrega ${formatarMoeda(recebimento.taxa)}${km ? ` (${km})` : ''}`;
+}
+
+// O status salvo continua o mesmo; só o texto muda quando o pedido é entregue em casa.
+export function textoStatus(pedido) {
+  if (formaRecebimento(pedido) !== ENTREGA_CASA) return pedido.status;
+
+  return pedido.status === RETIRADO ? 'Entregue' : 'Aguardando entrega';
+}
+
+export function registrarPedido({ itens, total, recebimento }) {
   const pedidos = carregarPedidos();
 
   const novoPedido = {
@@ -24,6 +88,8 @@ export function registrarPedido({ itens, total }) {
     total,
     status: PENDENTE_RETIRADA,
     codigo: gerarCodigoRetirada(),
+    // { tipo: 'retirada' } ou { tipo: 'entrega', endereco: {...} }
+    recebimento: recebimento || { tipo: RETIRADA_FEIRA },
   };
 
   localStorage.setItem(CHAVE_PEDIDOS, JSON.stringify([novoPedido, ...pedidos]));

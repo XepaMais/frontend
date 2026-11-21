@@ -98,10 +98,11 @@ function MapaFeiras() {
   return (
     <section className="mapa-feiras" id="mapa">
       <div className="mapa-conteudo">
+        <h2 className="mapa-titulo" data-revelar>
+          Mapa de <Rabisco cor="#e4f04a">feiras</Rabisco>
+        </h2>
+
         <div className="mapa-texto" data-revelar>
-          <h2>
-            Mapa de <Rabisco cor="#e4f04a">feiras</Rabisco>
-          </h2>
           <p>
             Descubra feiras próximas, encontre novos produtos e conheça os feirantes da sua região.
           </p>

@@ -3,6 +3,7 @@
 .perguntas-frequentes {
   width: 100%;
   padding: clamp(56px, 7vw, 96px) var(--margem-lateral, 24px);
+  padding-top: clamp(32px, 3.5vw, 48px);
 
   background: #fff;
   color: #1f2a22;
@@ -16,7 +17,7 @@
 }
 
 .perguntas-cabecalho {
-  max-width: 520px;
+  max-width: 600px;
   margin: 0 auto clamp(32px, 4vw, 48px);
   text-align: center;
 }
@@ -32,10 +33,10 @@
 }
 
 .perguntas-cabecalho p {
-  max-width: 420px;
+  max-width: 540px;
   margin: 16px auto 0;
   color: #5f7166;
-  font-size: clamp(15px, 1.2vw, 16px);
+  font-size: clamp(17px, 1.35vw, 19px);
   line-height: 1.65;
 }
 
@@ -56,13 +57,6 @@
 .pergunta-item {
   border-radius: 16px;
   background: #f4f6ec;
-
-  transition: background 0.3s ease;
-}
-
-.pergunta-item:hover,
-.pergunta-item--aberta {
-  background: #ecf0de;
 }
 
 .pergunta-botao {
@@ -81,7 +75,7 @@
   text-align: left;
 
   font-family: inherit;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   line-height: 1.4;
   cursor: pointer;
@@ -103,9 +97,7 @@
   border-radius: 50%;
   background: #18552f;
 
-  transition:
-    background 0.3s ease,
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pergunta-sinal::before,
@@ -127,10 +119,6 @@
 
 .pergunta-sinal::after {
   rotate: 90deg;
-}
-
-.pergunta-botao:hover .pergunta-sinal {
-  background: #f76019;
 }
 
 .pergunta-item--aberta .pergunta-sinal {
@@ -158,7 +146,7 @@
   padding: 0 24px 22px;
 
   color: #5f7166;
-  font-size: 14.5px;
+  font-size: 16.5px;
   line-height: 1.7;
 
   opacity: 0;
@@ -179,7 +167,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pergunta-item,
   .pergunta-sinal,
   .pergunta-sinal::after,
   .pergunta-resposta,
@@ -202,10 +189,21 @@
 
   .pergunta-botao {
     padding: 16px 16px 16px 18px;
-    font-size: 15px;
+    font-size: 16.5px;
   }
 
   .pergunta-resposta p {
     padding: 0 18px 18px;
+  }
+}
+
+/* Computadores: seção com 650px de altura (cresce só se várias perguntas forem abertas) */
+@media (min-width: 761px) {
+  .perguntas-frequentes {
+    box-sizing: border-box;
+    min-height: 650px;
+    /* mesmo espaço em cima e embaixo com as perguntas fechadas */
+    padding-top: 111px;
+    padding-bottom: 111px;
   }
 }

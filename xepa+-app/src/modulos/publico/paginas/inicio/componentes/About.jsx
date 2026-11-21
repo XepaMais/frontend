@@ -15,7 +15,10 @@ export default function About() {
       <div className="sobre-container">
         <div className="sobre-conteudo">
           <h2 className="sobre-titulo" data-revelar>
-            Um projeto contra o <Rabisco>desperdício</Rabisco> nas feiras
+            <span className="sobre-titulo__linha">Um projeto contra o</span>{' '}
+            <span className="sobre-titulo__linha">
+              <Rabisco>desperdício</Rabisco> nas feiras
+            </span>
           </h2>
 
           <p className="sobre-texto" data-revelar style={{ '--atraso': '0.08s' }}>
