@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import '@/modulos/publico/paginas/sobre-nos/estilos/Time.css';
 import fotoMatheus from '@/assets/imagens/sobre-nos/matheus.jpeg';
 import fotoFernanda from '@/assets/imagens/sobre-nos/fernanda.jpeg';
@@ -11,6 +11,9 @@ import fotoMurilo from '@/assets/imagens/sobre-nos/murilo.jpg';
 import decoracaoCesta from '@/assets/imagens/sobre-nos/decoracao-cesta.png';
 
 const CORES = ['verde', 'laranja', 'amarelo'];
+// Começa a sequência de cores um card adiante: a Fernanda (3ª) fica verde e o resto segue
+// verde → laranja → amarelo a partir dela.
+const DESLOCAMENTO_COR = 1;
 
 const TIME = [
   {
@@ -117,7 +120,7 @@ function CardMembro({ membro, indice, clone }) {
 
   return (
     <li
-      className={`card-time card-time--${CORES[indice % CORES.length]}`}
+      className={`card-time card-time--${CORES[(indice + DESLOCAMENTO_COR) % CORES.length]}`}
       aria-hidden={clone || undefined}
     >
       <img className="card-time__decoracao" src={decoracaoCesta} alt="" aria-hidden="true" />
@@ -214,7 +217,8 @@ function Carrossel() {
 
     function aoRedimensionar() {
       const { elemento, passo } = medidas();
-      indiceAtual = ((Math.round(elemento.scrollLeft / passo) % TIME.length) + TIME.length) % TIME.length;
+      indiceAtual =
+        ((Math.round(elemento.scrollLeft / passo) % TIME.length) + TIME.length) % TIME.length;
       posicionar();
     }
 
@@ -307,16 +311,14 @@ export default function Time() {
   return (
     <section className="secao secao-time" id="time" aria-labelledby="sn-time">
       <div className="sn-cabecalho">
-        <p className="sn-eyebrow">Quem faz o Xepa+</p>
         <h2 id="sn-time" className="sn-titulo">
           Conheça nosso time
         </h2>
         <p className="sn-texto">
-          Estudantes de diferentes áreas com um mesmo objetivo: levar o alimento da feira à mesa, e
-          não ao lixo.
+          Estudantes unidos para levar o alimento da feira à mesa, e não ao lixo.
         </p>
       </div>
       <Carrossel />
     </section>
   );
-}
+}

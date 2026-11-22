@@ -75,6 +75,13 @@
   text-align: center;
 }
 
+/* Computadores: a frase de apresentação ocupa só 2 linhas */
+@media (min-width: 1001px) {
+  .sn-dados .sn-topo {
+    max-width: 920px;
+  }
+}
+
 /* ---------- Celulares: um cartão embaixo do outro ---------- */
 
 @media (max-width: 760px) {

@@ -341,4 +341,83 @@
   .ponto[aria-current='true'] {
     width: 24px;
   }
-}
+}
+/* Computadores: cards menores (4 por vez e foto mais baixa) para a seção caber nos 650px */
+@media (min-width: 1001px) {
+  .time {
+    --por-vista: 4;
+    --gap: 16px;
+  }
+
+  .card-time__topo {
+    padding: 6cqi 7cqi;
+  }
+
+  .card-time .card-time__nome {
+    margin-top: 5cqi;
+    font-size: 11cqi;
+  }
+
+  .card-time .card-time__descricao {
+    margin-top: 4cqi;
+    font-size: max(11px, 4.2cqi);
+  }
+
+  .time .card-time .card-time__foto {
+    aspect-ratio: 1 / 0.85;
+  }
+
+  .card-time__links {
+    bottom: 6cqi;
+  }
+
+  .card-time__links a {
+    min-height: 32px;
+  }
+
+  .secao-time .sn-cabecalho {
+    margin-bottom: 24px;
+  }
+
+  /* frase de apresentação em uma linha só */
+  .secao-time .sn-cabecalho .sn-texto {
+    max-width: none;
+    white-space: nowrap;
+  }
+
+  /* setas nas laterais do carrossel (sobra altura para as fotos); embaixo, só as bolinhas */
+  .time {
+    position: relative;
+  }
+
+  .time__controles {
+    margin-top: 14px;
+  }
+
+  .time__seta {
+    position: absolute;
+    z-index: 2;
+    top: calc(50% - 13px);
+    translate: 0 -50%;
+    box-shadow: 0 6px 16px rgba(24, 85, 47, 0.25);
+  }
+
+  .time__seta:first-child {
+    left: -22px;
+  }
+
+  .time__seta:last-child {
+    right: -22px;
+  }
+}
+
+/* Telas largas: setas inteiramente fora dos cards */
+@media (min-width: 1300px) {
+  .time__seta:first-child {
+    left: -64px;
+  }
+
+  .time__seta:last-child {
+    right: -64px;
+  }
+}

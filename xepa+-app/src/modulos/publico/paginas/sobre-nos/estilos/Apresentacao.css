@@ -5,6 +5,8 @@
   --escala: 1;
 
   position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   background: #fff3ec;
 }
@@ -13,15 +15,38 @@
   position: relative;
   z-index: 3;
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 16px;
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
 
-  padding: clamp(80px, 11vw, 160px) var(--margem-lateral, 24px)
-    calc(20cqw * var(--escala) + clamp(56px, 7vw, 112px));
+  /* embaixo, espaço reservado para as frutas */
+  padding: clamp(56px, 7vw, 72px) var(--margem-lateral, 24px) calc(20cqw * var(--escala) + 24px);
   text-align: center;
+}
+
+/* Computadores: a primeira dobra tem 650px, como as seções da Home
+   (mesmo padrão das páginas do rodapé, em PaginaFooter.module.css) */
+@media (min-width: 1001px) {
+  .sn-hero {
+    --frutas-max: 290px;
+    height: 650px;
+  }
+
+  .sn-hero__conteudo {
+    padding-top: 32px;
+    padding-bottom: calc(min(20cqw, var(--frutas-max)) + 24px);
+  }
+
+  /* As frutas mantêm o tamanho (encostadas umas nas outras). Em telas largas,
+     onde a fileira passaria de --frutas-max, ela desce e o pé da fileira da frente
+     fica cortado, para caber nos 650px. */
+  .sn-hero__frutas {
+    translate: 0 max(0px, 20cqw - var(--frutas-max));
+  }
 }
 
 .sn-hero__titulo {
@@ -31,7 +56,7 @@
   gap: 0.06em;
 
   font-family: 'Cal Sans', 'Poppins', sans-serif;
-  font-size: clamp(44px, 6vw, 84px);
+  font-size: clamp(36px, 5.2vw, 72px);
   font-weight: 400;
   line-height: 1.04;
   letter-spacing: 0.005em;

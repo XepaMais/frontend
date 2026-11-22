@@ -68,3 +68,23 @@
   outline: 3px solid #fff;
   outline-offset: 4px;
 }
+
+/* Computadores: frase em uma linha e vídeo do tamanho que cabe nos 650px da seção */
+@media (min-width: 1001px) {
+  .sn-feira .sn-topo {
+    max-width: none;
+    margin-bottom: 28px;
+  }
+
+  .sn-feira .sn-topo .sn-p {
+    white-space: nowrap;
+  }
+
+  .sn-feira__video {
+    flex: 1;
+    align-self: center;
+    width: auto;
+    min-height: 0;
+    max-width: 100%;
+  }
+}
