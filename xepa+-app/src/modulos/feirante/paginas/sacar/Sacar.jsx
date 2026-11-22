@@ -48,7 +48,7 @@ function Sacar() {
   }
 
   return (
-    <div className="pagina">
+    <div className={`pagina ${Styles.pagina}`}>
       <main className="conteudo">
         <section className="titulo">
           <div>

@@ -1,8 +1,9 @@
 .cardGrafico {
   padding: 22px 26px 20px;
-  border: 1px solid #a8c2ae;
-  border-radius: 22px;
+  border: 1.5px solid #d6e1d9;
+  border-radius: 16px;
   background: #fff;
+  box-shadow: 0 8px 24px rgba(24, 85, 47, 0.06);
 }
 
 .cabecalhoGrafico {

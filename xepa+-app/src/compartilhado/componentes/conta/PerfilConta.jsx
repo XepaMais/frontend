@@ -86,7 +86,7 @@ function PerfilConta({ tipo, campos, informacoesConta }) {
   }
 
   return (
-    <main className={base.pagina}>
+    <main className={`${base.pagina} ${styles.pagina}`}>
       <header className={base.cabecalho}>
         <div>
           <h1>Meus dados</h1>
