@@ -1,6 +1,5 @@
 import LayoutFooter from './LayoutFooter';
 import DocumentoLegal from './DocumentoLegal';
-import Styles from './estilos/TermosDeUso.module.css';
 
 const SECOES = [
   {
@@ -122,11 +121,11 @@ const SECOES = [
 function TermosDeUso() {
   return (
     <LayoutFooter
-      estilos={Styles}
-      titulo="Termos de uso"
+      titulo={['Termos', 'de uso']}
+      palavras={['Termos de uso', 'Xepa+', 'Transparência', 'Segurança', 'Respeito', 'Feira justa']}
       descricao="As regras para usar o Xepa+ com segurança e transparência, seja você consumidor ou feirante."
     >
-      <DocumentoLegal atualizadoEm="11 de novembro de 2026" secoes={SECOES} estilos={Styles} />
+      <DocumentoLegal atualizadoEm="11 de novembro de 2026" secoes={SECOES} />
     </LayoutFooter>
   );
 }

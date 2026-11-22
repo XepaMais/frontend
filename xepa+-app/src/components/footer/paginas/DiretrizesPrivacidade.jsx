@@ -1,6 +1,5 @@
 import LayoutFooter from './LayoutFooter';
 import DocumentoLegal from './DocumentoLegal';
-import Styles from './estilos/DiretrizesPrivacidade.module.css';
 
 const SECOES = [
   {
@@ -111,11 +110,18 @@ const SECOES = [
 function DiretrizesPrivacidade() {
   return (
     <LayoutFooter
-      estilos={Styles}
-      titulo="Diretrizes de Privacidade"
+      titulo={['Diretrizes de', 'privacidade']}
+      palavras={[
+        'Privacidade',
+        'Xepa+',
+        'Seus dados protegidos',
+        'Transparência',
+        'LGPD',
+        'Segurança',
+      ]}
       descricao="Como o Xepa+ coleta, usa e protege os seus dados pessoais."
     >
-      <DocumentoLegal atualizadoEm="11 de novembro de 2026" secoes={SECOES} estilos={Styles} />
+      <DocumentoLegal atualizadoEm="11 de novembro de 2026" secoes={SECOES} />
     </LayoutFooter>
   );
 }

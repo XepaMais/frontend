@@ -23,7 +23,7 @@ const PERFIS = [
   },
   {
     nome: 'Feirante - Plano Crescer',
-    descricao: 'Tudo do Grátis, com gestão financeira básica e Xep.AI.',
+    descricao: 'Tudo do Grátis, com gestão financeira básica e Xepinha.',
     Icone: Sprout,
     cor: Styles.amarelo,
     destino: '/demo/feirante',
@@ -31,7 +31,7 @@ const PERFIS = [
   },
   {
     nome: 'Feirante - Plano Pro',
-    descricao: 'Acesso a tudo: gestão financeira completa, planilhas e Xep.AI.',
+    descricao: 'Acesso a tudo: gestão financeira completa, planilhas e Xepinha.',
     Icone: Crown,
     cor: Styles.laranja,
     destino: '/demo/feirante',

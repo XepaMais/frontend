@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom';
+import juntarEstilos from './estilos/juntarEstilos';
+import EstilosDocumento from './estilos/DocumentoLegal.module.css';
+
+const Styles = juntarEstilos(EstilosDocumento);
 
 const EMAIL_CONTATO = 'xepamais8@gmail.com';
 
 // Corpo comum dos Termos de uso e das Diretrizes de Privacidade:
 // índice com links para cada seção + texto numerado.
 // Cada seção: { id, titulo, paragrafos?: string[], itens?: string[] }
-// "Styles" vem da página que usa o componente (cada uma tem o seu CSS em estilos/).
-function DocumentoLegal({ atualizadoEm, secoes, estilos: Styles }) {
+function DocumentoLegal({ atualizadoEm, secoes }) {
   function irParaSecao(evento, id) {
     evento.preventDefault();
     document.getElementById(id)?.scrollIntoView({ block: 'start' });
@@ -15,9 +18,11 @@ function DocumentoLegal({ atualizadoEm, secoes, estilos: Styles }) {
   return (
     <section className={Styles.secao}>
       <div className={Styles.documento}>
-        <p className={Styles.atualizacao}>Última atualização: {atualizadoEm}</p>
+        <p className={Styles.atualizacao} data-revelar>
+          Última atualização: {atualizadoEm}
+        </p>
 
-        <nav className={Styles.indice} aria-label="Índice">
+        <nav className={Styles.indice} aria-label="Índice" data-revelar>
           <h2>Nesta página</h2>
           <ol>
             {secoes.map((secao) => (
@@ -48,7 +53,7 @@ function DocumentoLegal({ atualizadoEm, secoes, estilos: Styles }) {
           </article>
         ))}
 
-        <aside className={Styles.contatoLegal}>
+        <aside className={Styles.contatoLegal} data-revelar>
           <h2>Ficou com alguma dúvida?</h2>
           <p>
             Escreva para <a href={`mailto:${EMAIL_CONTATO}`}>{EMAIL_CONTATO}</a> ou acesse a nossa{' '}

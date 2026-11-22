@@ -6,6 +6,8 @@
   --texto-suave: #716d6d;
 
   width: 100%;
+  min-height: 100vh;
+  background: #fafbfa;
   color: var(--verde-escuro);
   font-family: 'Poppins', sans-serif;
 }
@@ -30,13 +32,13 @@
   color: var(--verde);
   font-size: var(--fonte-titulo-pagina);
   font-weight: 700;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.03em;
   line-height: 1.12;
 }
 
 .subtitulo {
   margin: 8px 0 0;
-  color: var(--texto-suave);
+  color: #3c5a44;
   font-size: var(--fonte-texto);
 }
 
@@ -47,9 +49,10 @@
 }
 
 .card {
-  border: 1px solid #a8c2ae;
-  border-radius: 22px;
+  border: 1.5px solid #d6e1d9;
+  border-radius: 16px;
   background: #fff;
+  box-shadow: 0 8px 24px rgba(24, 85, 47, 0.06);
 }
 
 .cardPeso {
@@ -138,8 +141,9 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  border-radius: 20px;
-  background: rgba(225, 238, 228, 0.78);
+  border-left: 4px solid #9bc000;
+  border-radius: 16px;
+  background: #eef4d9;
 }
 
 .logoImpacto {

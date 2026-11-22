@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import Styles from '@/modulos/autenticacao/paginas/estilos/CriarContaF.module.css';
+import AceiteTermos from '@/modulos/autenticacao/paginas/AceiteTermos';
+import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function CriarContaF() {
   const navigate = useNavigate();
@@ -54,6 +55,8 @@ function CriarContaF() {
             <label htmlFor="grupo">Grupo de Comércio</label>
             <input type="text" id="grupo" name="grupo" required />
           </div>
+
+          <AceiteTermos />
 
           <button type="submit" className={Styles.btnEntrar}>
             Próxima etapa

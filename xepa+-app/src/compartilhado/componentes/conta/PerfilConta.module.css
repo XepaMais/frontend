@@ -1,3 +1,82 @@
+/* ---------- Visual da página Meus dados (padrão das telas de login/cadastro) ----------
+   A página usa as classes de conta.module.css, que valem para várias telas;
+   os ajustes abaixo ficam presos a .pagina e só mudam o Meus dados. */
+
+/* mesmo fundo da tela Produtos, ocupando a largura toda da tela */
+.pagina {
+  background: #fafbfa;
+  box-shadow: 0 0 0 100vmax #fafbfa;
+  clip-path: inset(0 -100vmax);
+}
+
+.pagina h1 {
+  letter-spacing: -0.03em;
+}
+
+.pagina header p {
+  color: #3c5a44;
+}
+
+.pagina h2 {
+  letter-spacing: -0.02em;
+}
+
+.pagina > section {
+  border: 1.5px solid #d6e1d9;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(24, 85, 47, 0.06);
+}
+
+/* botões principais (Editar perfil, Salvar alterações) em laranja, como na Home */
+.identificacao > button,
+.pagina form button[type='submit'] {
+  border-color: #f76019;
+  background: #f76019;
+  color: #fff;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.identificacao > button:hover,
+.pagina form button[type='submit']:hover {
+  border-color: #d94b19;
+  background: #d94b19;
+  transform: translateY(-2px);
+}
+
+.pagina form button[type='button'] {
+  border-radius: 8px;
+}
+
+.pagina form input {
+  height: 46px;
+  padding: 0 14px;
+  border: 1.5px solid #d6e1d9;
+  background: #fff;
+  font-family: inherit;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pagina form input:focus {
+  border-color: #18552f;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(155, 192, 0, 0.35);
+}
+
+.botaoRemoverFoto,
+.botaoFoto {
+  text-underline-offset: 3px;
+}
+
+.botaoFoto {
+  color: #f76019;
+}
+
 .identificacao {
   display: flex;
   flex-wrap: wrap;

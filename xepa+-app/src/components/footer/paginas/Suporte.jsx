@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Clock, Mail, Sparkles } from 'lucide-react';
 import LayoutFooter from './LayoutFooter';
-import Styles from './estilos/Suporte.module.css';
+import juntarEstilos from './estilos/juntarEstilos';
+import EstilosSuporte from './estilos/Suporte.module.css';
+
+const Styles = juntarEstilos(EstilosSuporte);
 
 const CANAIS = [
   {
@@ -57,16 +60,27 @@ function Suporte() {
 
   return (
     <LayoutFooter
-      estilos={Styles}
-      titulo="Como podemos ajudar?"
+      titulo={['Como podemos', 'ajudar?']}
+      palavras={[
+        'Estamos aqui',
+        'Xepa+',
+        'Fale com a gente',
+        'Dúvidas frequentes',
+        'Suporte',
+        'Xep.AI',
+      ]}
       descricao="Encontre respostas rápidas ou fale com a equipe do Xepa+. Estamos aqui para feirantes e consumidores."
     >
       <section className={Styles.secao}>
         <div className={Styles.conteudo}>
-          <h2 className={Styles.tituloSecao}>Canais de atendimento</h2>
-          <p className={Styles.subtituloSecao}>Escolha a forma mais prática para você.</p>
+          <h2 className={Styles.tituloSecao} data-revelar>
+            Canais de atendimento
+          </h2>
+          <p className={Styles.subtituloSecao} data-revelar>
+            Escolha a forma mais prática para você.
+          </p>
 
-          <div className={Styles.grade}>
+          <div className={Styles.grade} data-revelar style={{ '--atraso': '0.1s' }}>
             {CANAIS.map(({ icone: Icone, titulo, texto, email }) => (
               <article key={titulo} className={Styles.card}>
                 <span className={Styles.icone}>
@@ -87,10 +101,14 @@ function Suporte() {
 
       <section className={`${Styles.secao} ${Styles.secaoCreme}`}>
         <div className={Styles.conteudo}>
-          <h2 className={Styles.tituloSecao}>Dúvidas frequentes</h2>
-          <p className={Styles.subtituloSecao}>Talvez a sua resposta já esteja aqui.</p>
+          <h2 className={Styles.tituloSecao} data-revelar>
+            Dúvidas frequentes
+          </h2>
+          <p className={Styles.subtituloSecao} data-revelar>
+            Talvez a sua resposta já esteja aqui.
+          </p>
 
-          <div className={Styles.perguntas}>
+          <div className={Styles.perguntas} data-revelar style={{ '--atraso': '0.1s' }}>
             {PERGUNTAS.map((item) => (
               <details key={item.pergunta}>
                 <summary>{item.pergunta}</summary>
@@ -103,13 +121,15 @@ function Suporte() {
 
       <section className={Styles.secao}>
         <div className={Styles.conteudo}>
-          <h2 className={Styles.tituloSecao}>Envie uma mensagem</h2>
-          <p className={Styles.subtituloSecao}>
+          <h2 className={Styles.tituloSecao} data-revelar>
+            Envie uma mensagem
+          </h2>
+          <p className={Styles.subtituloSecao} data-revelar>
             Conte o que aconteceu e retornamos pelo e-mail informado. Se preferir, escreva direto
             para xepamais8@gmail.com.
           </p>
 
-          <form className={Styles.formulario} onSubmit={enviar}>
+          <form className={Styles.formulario} onSubmit={enviar} data-revelar>
             <div className={Styles.linha}>
               <div className={Styles.campo}>
                 <label htmlFor="suporte-nome">Nome</label>

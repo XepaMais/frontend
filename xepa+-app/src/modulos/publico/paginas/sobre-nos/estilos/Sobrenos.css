@@ -8,8 +8,9 @@
  */
 .sobre {
   --sn-eyebrow: var(--fonte-pequena, 14px);
-  --sn-titulo: var(--fonte-titulo-pagina, clamp(28px, 3vw, 40px));
-  --sn-texto: clamp(16px, 1.1vw, 18px);
+  /* mesmos tamanhos dos títulos e textos da Home */
+  --sn-titulo: clamp(28px, 3.4vw, 44px);
+  --sn-texto: clamp(17px, 1.35vw, 19px);
   --sn-nota: var(--fonte-pequena, 14px);
 
   --sn-creme: #fffaf7;
@@ -162,8 +163,8 @@
   margin: 0;
 
   color: #3c5a44;
-  font-size: clamp(15px, 1.2vw, 16px);
-  line-height: 1.75;
+  font-size: var(--sn-texto);
+  line-height: 1.7;
   text-wrap: pretty;
 }
 
@@ -213,4 +214,40 @@
 .sn-botao-login:focus-visible {
   outline: 2px solid #18552f;
   outline-offset: 3px;
+}
+
+/* =========================================================
+ * Computadores: todas as seções têm 650px de altura, como na Home.
+ * O conteúdo fica centralizado na altura da seção.
+ * ========================================================= */
+
+@media (min-width: 1001px) {
+  .sobre > section {
+    box-sizing: border-box;
+    height: 650px;
+  }
+
+  .sn-intro,
+  .sn-dados,
+  .sn-feira,
+  .secao-time,
+  .sn-agradecimento {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  /* em coluna flex, a margem automática encolheria os blocos: ocupam a largura toda */
+  .sn-intro > *,
+  .sn-dados > *,
+  .secao-time > *,
+  .sn-agradecimento > * {
+    width: 100%;
+  }
+
+  .secao-time:last-child {
+    padding-bottom: 48px;
+  }
 }

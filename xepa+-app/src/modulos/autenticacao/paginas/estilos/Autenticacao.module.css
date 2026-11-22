@@ -1,0 +1,337 @@
+/*
+ * Visual comum das telas de login e cadastro (Crumb, OpcaoLogin, CriarConta,
+ * CriarUsuarioF e CriarContaF), no padrão da Home e do Sobre nós:
+ * lado do formulário em creme, título verde, campos arredondados, botão laranja
+ * e links laranja. Os nomes das classes são os mesmos dos arquivos antigos.
+ */
+
+/* ================= Página ================= */
+
+.container {
+  --verde: #18552f;
+  --verde-texto: #3c5a44;
+  --limao: #9bc000;
+  --laranja: #f76019;
+  --laranja-escuro: #d94b19;
+  --creme: #fffaf7;
+  --borda: #d6e1d9;
+  --branco: #fff;
+
+  display: flex;
+  width: 100%;
+  height: 100dvh;
+  margin: 0;
+  overflow: hidden;
+  background: var(--creme);
+  color: var(--verde);
+  font-family: 'Poppins', sans-serif;
+}
+
+.container,
+.container * {
+  box-sizing: border-box;
+}
+
+/* ================= Lado da foto ================= */
+
+.ladoImagem {
+  flex: 1;
+  min-width: 0;
+  background:
+    linear-gradient(
+      to top,
+      rgba(24, 85, 47, 0.85) 0%,
+      rgba(24, 85, 47, 0.25) 55%,
+      rgba(24, 85, 47, 0.1) 100%
+    ),
+    url('../../../../assets/imagens/marca/feira.jpg') center / cover no-repeat;
+}
+
+/* ================= Lado do formulário ================= */
+
+.ladoForm {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  padding: clamp(24px, 4vh, 48px) clamp(20px, 4vw, 64px);
+  overflow-y: auto;
+  background: var(--creme);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 460px;
+  margin: auto;
+}
+
+/* título no tamanho dos títulos de seção da Home */
+.form h1 {
+  margin: 0 0 clamp(20px, 3vh, 32px);
+  color: var(--verde);
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+/* ---------- Campos ---------- */
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-bottom: clamp(10px, 1.8vh, 16px);
+}
+
+.linha {
+  display: flex;
+  gap: 14px;
+}
+
+.linha .campo {
+  flex: 1;
+}
+
+.form label {
+  margin-bottom: 6px;
+  color: var(--verde);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form input {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--borda);
+  border-radius: 8px;
+  background: var(--branco);
+  color: #161414;
+  font-family: inherit;
+  font-size: 15px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* no login os campos ficam direto no formulário, sem o bloco .campo */
+.form > input {
+  margin-bottom: clamp(10px, 1.8vh, 16px);
+}
+
+.form input:focus {
+  border-color: var(--verde);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(155, 192, 0, 0.35);
+}
+
+/* ---------- Aceite dos termos ---------- */
+
+.form .termos {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 4px 0 18px;
+  color: var(--verde-texto);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.form .termos input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  margin: 1px 0 0;
+  padding: 0;
+  accent-color: var(--verde);
+  cursor: pointer;
+}
+
+.termos a {
+  color: var(--laranja);
+  font-weight: 600;
+}
+
+/* ---------- Botões (iguais ao "Criar minha conta" da Home) ---------- */
+
+.btnEntrar,
+.btndemo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 6px;
+  padding: 0 24px;
+  border: 2px solid var(--laranja);
+  border-radius: 8px;
+  background: var(--laranja);
+  color: var(--branco);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btnEntrar:hover {
+  border-color: var(--laranja-escuro);
+  background: var(--laranja-escuro);
+  transform: translateY(-2px);
+}
+
+.btndemo {
+  margin-top: 12px;
+  border-color: var(--verde);
+  background: transparent;
+  color: var(--verde);
+}
+
+.btndemo:hover {
+  background: var(--verde);
+  color: var(--branco);
+  transform: translateY(-2px);
+}
+
+.btndemo svg {
+  font-size: 18px;
+}
+
+.btnEntrar:focus-visible,
+.btndemo:focus-visible {
+  outline: 3px solid var(--limao);
+  outline-offset: 3px;
+}
+
+/* ---------- Link de rodapé ---------- */
+
+.cadastro {
+  margin: clamp(14px, 2.4vh, 24px) 0 0;
+  color: var(--verde-texto);
+  font-size: 14px;
+  text-align: center;
+}
+
+.cadastro a {
+  color: var(--laranja);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cadastro a:hover,
+.termos a:hover {
+  text-decoration: underline;
+}
+
+/* ================= Escolha do perfil (OpcaoLogin) ================= */
+
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 24px;
+  border: 1.5px solid var(--borda);
+  border-radius: 16px;
+  background: var(--branco);
+  color: var(--verde);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.opcao:hover,
+.opcao:focus-visible {
+  border-color: var(--verde);
+  outline: none;
+  box-shadow: 0 12px 28px rgba(24, 85, 47, 0.12);
+  transform: translateY(-3px);
+}
+
+/* ícone num círculo, alternando verde e laranja como nas categorias da Home */
+.icone {
+  display: grid;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--verde);
+  color: var(--branco);
+  font-size: 28px;
+}
+
+.opcao:nth-of-type(even) .icone {
+  background: var(--laranja);
+}
+
+/* ================= Responsivo ================= */
+
+/* Tablet e celular: a foto vira uma faixa no topo e a página rola */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .ladoImagem {
+    flex: none;
+    height: 28dvh;
+    min-height: 180px;
+  }
+
+  .ladoForm {
+    flex: 1 0 auto;
+    overflow: visible;
+    padding: 28px 20px 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ladoImagem {
+    height: 22dvh;
+    min-height: 150px;
+  }
+
+  .linha {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* evita o zoom automático do iPhone ao focar no campo */
+  .form input {
+    font-size: 16px;
+  }
+
+  .opcao {
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btnEntrar,
+  .btndemo,
+  .opcao {
+    transition: none;
+  }
+}

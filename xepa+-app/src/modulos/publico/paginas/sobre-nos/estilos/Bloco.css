@@ -13,6 +13,7 @@
 
   width: 100%;
   min-height: clamp(460px, 40vw, 600px);
+  box-sizing: border-box;
 
   background: var(--painel-fundo);
   font-family: 'Poppins', sans-serif;

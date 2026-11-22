@@ -1,84 +1,119 @@
+/*
+ * Janela do Demo no padrão das telas de login/cadastro e da Home:
+ * fundo creme, cards brancos com ícone em círculo colorido e efeito ao passar o mouse.
+ * O Modal é compartilhado com outros pop-ups, então os ajustes ficam só nestas classes.
+ */
+
 .telaDesfocada {
   overflow: hidden;
   filter: blur(6px);
 }
 
+/* fundo verde translúcido em vez do cinza-azulado */
 .fundoDemo {
-  background: rgba(30, 35, 50, 0.78);
+  background: rgba(24, 85, 47, 0.55);
 }
 
 .janelaDemo {
   width: min(100%, 680px);
+  border-radius: 16px;
+  background: #fffaf7;
+  box-shadow: 0 24px 60px rgba(24, 85, 47, 0.3);
+}
+
+/* cabeçalho verde do Modal com título maior, como os títulos do site */
+.janelaDemo > header {
+  padding: 16px 16px 16px 28px;
+}
+
+.janelaDemo > header h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(20px, 2vw, 24px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.janelaDemo > div {
+  padding: 24px 28px 24px;
+}
+
+.janelaDemo > div > p:first-child {
+  margin-bottom: 20px;
+  color: #3c5a44;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .lista {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .opcao {
   display: flex;
   width: 100%;
   align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border: 1.5px solid var(--verde);
-  border-radius: var(--raio-card);
-  color: var(--verde);
-  font-family: inherit;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1.5px solid #d6e1d9;
+  border-radius: 16px;
+  background: #fff;
+  color: #18552f;
+  font-family: 'Poppins', sans-serif;
   text-align: left;
   cursor: pointer;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .opcao:hover {
-  box-shadow: var(--sombra-suave);
-  transform: translateY(-2px);
+  border-color: #18552f;
+  box-shadow: 0 12px 28px rgba(24, 85, 47, 0.12);
+  transform: translateY(-3px);
 }
 
 .opcao:focus-visible {
-  outline: 2px solid var(--verde);
+  border-color: #18552f;
+  outline: 3px solid #9bc000;
   outline-offset: 2px;
 }
 
-.verde {
-  border-color: var(--verde);
-  background: #f1faf5;
-}
-
-.limao {
-  border-color: var(--limao);
-  background: #f8fbe9;
-}
-
-.amarelo {
-  border-color: var(--amarelo);
-  background: #fffaea;
-}
-
-.laranja {
-  border-color: var(--laranja);
-  background: #fff4ee;
-}
-
+/* ícone em círculo com a cor de cada perfil (como as categorias da Home) */
 .icone {
-  display: flex;
-  width: 40px;
-  height: 40px;
+  display: grid;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--raio-botao);
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.verde .icone {
+  background: #18552f;
+}
+
+.limao .icone {
+  background: #9bc000;
+}
+
+.amarelo .icone {
+  background: #ffc927;
+  color: #18552f;
+}
+
+.laranja .icone {
+  background: #f76019;
 }
 
 .texto {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
 }
 
 .topo {
@@ -89,13 +124,13 @@
 }
 
 .topo strong {
-  font-size: var(--fonte-titulo-card);
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
 }
 
 .descricao {
-  color: var(--cinza);
-  font-size: var(--fonte-pequena);
+  color: #3c5a44;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -103,10 +138,45 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  margin: 12px 0 0;
-  padding-top: 8px;
-  border-top: 1px solid var(--cinza-claro);
-  color: var(--cinza);
-  font-size: var(--fonte-legenda);
+  margin: 20px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid #d6e1d9;
+  color: #3c5a44;
+  font-size: 13px;
   font-weight: 600;
+}
+
+/* bolinha laranja antes de "Projeto Xepa+", como as etiquetas da Home */
+.rodape span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rodape span:first-child::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f76019;
+}
+
+@media (max-width: 480px) {
+  .janelaDemo > header {
+    padding-left: 18px;
+  }
+
+  .janelaDemo > div {
+    padding: 18px;
+  }
+
+  .opcao {
+    padding: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opcao {
+    transition: none;
+  }
 }
