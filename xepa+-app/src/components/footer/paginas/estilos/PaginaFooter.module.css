@@ -1,0 +1,425 @@
+/*
+ * Visual comum das páginas abertas pelo rodapé (Xep.AI, Suporte, Seja parceiro,
+ * Termos de uso e Diretrizes de Privacidade). Segue o padrão da Home e do Sobre nós:
+ * fundo creme, título em faixas verdes com letras limão, fileira de frutas no pé,
+ * botões laranja e animações ao rolar.
+ * Cada página soma a este arquivo só o que é exclusivo dela (estilos/<Pagina>.module.css).
+ */
+
+/* ---------- Página: cores e base ---------- */
+
+.pagina {
+  --verde: #18552f;
+  --verde-texto: #3c5a44;
+  --limao: #9bc000;
+  --limao-claro: #eef4d9;
+  --amarelo-titulo: #e4f04a;
+  --laranja: #f76019;
+  --laranja-escuro: #d94b19;
+  --creme: #fff3ec;
+  --creme-claro: #fffaf7;
+  --cinza: #716d6d;
+  --borda: #d6e1d9;
+  --branco: #fff;
+  --espaco: clamp(48px, 7vw, 96px);
+
+  overflow-x: hidden;
+  background: var(--creme-claro);
+  color: var(--verde);
+  font-family: 'Poppins', sans-serif;
+}
+
+.pagina,
+.pagina * {
+  box-sizing: border-box;
+}
+
+/* ---------- Primeira dobra (igual ao Sobre nós) ---------- */
+
+/* Título no centro e a fileira de frutas encostada no pé (componente FrutasHero).
+   1cqw = 1% da largura da seção, então frutas e espaçamentos crescem juntos. */
+.hero {
+  container-type: inline-size;
+  --escala: 1;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--creme);
+}
+
+.heroConteudo {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  max-width: 760px;
+  margin: 0 auto;
+  /* embaixo, espaço reservado para as frutas */
+  padding: clamp(56px, 7vw, 72px) var(--margem-lateral, 24px) calc(20cqw * var(--escala) + 24px);
+  text-align: center;
+}
+
+/* Computadores: a primeira dobra tem 650px, como as seções da Home */
+@media (min-width: 1001px) {
+  .hero {
+    --frutas-max: 290px;
+    height: 650px;
+  }
+
+  .heroConteudo {
+    padding-top: 32px;
+    padding-bottom: calc(min(20cqw, var(--frutas-max)) + 24px);
+  }
+
+  /* As frutas mantêm o tamanho (e ficam encostadas umas nas outras). Em telas largas,
+     onde a fileira passaria de --frutas-max, ela desce e o pé da fileira da frente
+     fica cortado, para caber nos 650px sem abrir espaços entre as frutas. */
+  .hero :global(.sn-hero__frutas) {
+    translate: 0 max(0px, 20cqw - var(--frutas-max));
+  }
+}
+
+/* Tablets e celulares: frutas maiores, como no Sobre nós */
+@media (max-width: 900px) {
+  .hero {
+    --escala: 1.25;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero {
+    --escala: 1.6;
+  }
+}
+
+.titulo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.06em;
+  margin: 0;
+
+  font-family: 'Cal Sans', 'Poppins', sans-serif;
+  font-size: clamp(36px, 5.2vw, 72px);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+
+.tituloLinha {
+  padding: 0.04em 0.18em 0.02em;
+  background: var(--verde);
+  color: var(--amarelo-titulo);
+  animation: sobe 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tituloLinha:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.tituloLinha:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.descricao {
+  max-width: 48ch;
+  margin: 10px 0 0;
+  color: var(--verde);
+  font-size: clamp(16px, 1.3vw, 18px);
+  font-weight: 500;
+  line-height: 1.6;
+  text-wrap: balance;
+  animation: sobe 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+
+@keyframes sobe {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* ---------- Seções ---------- */
+
+.secao {
+  padding: var(--espaco) var(--margem-lateral, 24px);
+}
+
+.secaoCreme {
+  background: var(--creme);
+}
+
+.conteudo {
+  max-width: var(--largura-conteudo, 1120px);
+  margin: 0 auto;
+}
+
+.tituloSecao {
+  margin: 0 0 12px;
+  color: var(--verde);
+  font-size: var(--fonte-titulo-pagina, clamp(28px, 3vw, 40px));
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.subtituloSecao {
+  max-width: 640px;
+  margin: 0 auto clamp(32px, 4vw, 48px);
+  color: var(--verde-texto);
+  font-size: var(--fonte-texto, 16px);
+  line-height: 1.7;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+/* ---------- Cards ---------- */
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  padding: 28px 24px;
+  border: 1.5px solid var(--borda);
+  border-radius: var(--raio-card, 16px);
+  background: var(--branco);
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.card:hover {
+  border-color: var(--verde);
+  box-shadow: 0 12px 28px rgba(24, 85, 47, 0.12);
+  transform: translateY(-4px);
+}
+
+.card h3 {
+  margin: 18px 0 8px;
+  color: var(--verde);
+  font-size: var(--fonte-titulo-card, 18px);
+  font-weight: 700;
+}
+
+.card p {
+  margin: 0;
+  color: var(--verde-texto);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* ícone redondo, alternando verde e laranja como nas categorias da Home */
+.icone {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--verde);
+  color: var(--branco);
+}
+
+.card:nth-child(even) .icone {
+  background: var(--laranja);
+}
+
+/* ---------- Bloco imagem + texto ---------- */
+
+.duasColunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+}
+
+.duasColunas img {
+  width: 100%;
+  max-height: 440px;
+  border-radius: 24px;
+  object-fit: cover;
+}
+
+.duasColunas h2 {
+  margin: 0 0 16px;
+  color: var(--verde);
+  font-size: var(--fonte-titulo-pagina, clamp(28px, 3vw, 40px));
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.duasColunas p {
+  margin: 0 0 20px;
+  color: var(--verde-texto);
+  line-height: 1.75;
+}
+
+.lista {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.lista li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--verde);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.lista svg {
+  flex: none;
+  padding: 3px;
+  border-radius: 50%;
+  background: var(--limao-claro);
+  color: var(--verde);
+}
+
+/* ---------- Botões (iguais ao "Criar minha conta" da Home) ---------- */
+
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.botao,
+.botaoSecundario {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 30px;
+  border: 2px solid var(--laranja);
+  border-radius: var(--raio-botao, 8px);
+  background: var(--laranja);
+  color: var(--branco);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.botao:hover {
+  border-color: var(--laranja-escuro);
+  background: var(--laranja-escuro);
+  transform: translateY(-2px);
+}
+
+.botaoSecundario {
+  border-color: var(--verde);
+  background: transparent;
+  color: var(--verde);
+}
+
+.botaoSecundario:hover {
+  background: var(--verde);
+  color: var(--branco);
+  transform: translateY(-2px);
+}
+
+.botao:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+.botao:focus-visible,
+.botaoSecundario:focus-visible {
+  outline: 3px solid var(--limao);
+  outline-offset: 3px;
+}
+
+/* ---------- Chamada final (fundo verde, como o "Como funciona") ---------- */
+
+.chamada {
+  padding: var(--espaco) var(--margem-lateral, 24px);
+  background: var(--verde);
+  color: var(--branco);
+  text-align: center;
+}
+
+.chamada h2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  font-size: var(--fonte-titulo-pagina, clamp(28px, 3vw, 40px));
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.chamada h2 svg {
+  color: var(--amarelo-titulo);
+}
+
+.chamada p {
+  max-width: 600px;
+  margin: 0 auto 28px;
+  color: #f4f4f4;
+  line-height: 1.7;
+}
+
+.chamada .botaoSecundario {
+  border-color: var(--branco);
+  color: var(--branco);
+}
+
+.chamada .botaoSecundario:hover {
+  background: var(--branco);
+  color: var(--verde);
+}
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 800px) {
+  .duasColunas {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tituloLinha,
+  .descricao {
+    animation: none;
+  }
+
+  .card,
+  .botao,
+  .botaoSecundario {
+    transition: none;
+  }
+}

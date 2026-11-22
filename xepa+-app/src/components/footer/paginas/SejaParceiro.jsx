@@ -2,7 +2,10 @@ import { Link } from 'react-router-dom';
 import { Check, Leaf, MapPin, Store, TrendingUp, Users } from 'lucide-react';
 import imagemFeirante from '@/assets/imagens/sobre-nos/Feirante.jpg';
 import LayoutFooter from './LayoutFooter';
-import Styles from './estilos/SejaParceiro.module.css';
+import juntarEstilos from './estilos/juntarEstilos';
+import EstilosParceiro from './estilos/SejaParceiro.module.css';
+
+const Styles = juntarEstilos(EstilosParceiro);
 
 const VANTAGENS = [
   {
@@ -49,16 +52,26 @@ const PASSOS = [
 function SejaParceiro() {
   return (
     <LayoutFooter
-      estilos={Styles}
-      etiqueta="Para vender"
-      titulo="Seja um feirante parceiro do Xepa+"
+      titulo={['Seja um feirante', 'parceiro']}
+      palavras={[
+        'Divulgue sua banca',
+        'Xepa+',
+        'Venda mais',
+        'Clientes da região',
+        'Menos desperdício',
+        'Preço justo',
+      ]}
       descricao="Leve sua barraca para o digital, conquiste novos clientes e transforme o fim da feira em lucro, não em desperdício."
     >
       <section className={Styles.secao}>
         <div className={`${Styles.conteudo} ${Styles.duasColunas}`}>
-          <img src={imagemFeirante} alt="Feirante sorrindo em sua barraca de frutas e legumes" />
+          <img
+            data-revelar="esquerda"
+            src={imagemFeirante}
+            alt="Feirante sorrindo em sua barraca de frutas e legumes"
+          />
 
-          <div>
+          <div data-revelar="direita">
             <h2>A feira de sempre, agora com mais alcance</h2>
             <p>
               O Xepa+ conecta feirantes a consumidores que valorizam alimentos frescos e querem
@@ -87,14 +100,16 @@ function SejaParceiro() {
         </div>
       </section>
 
-      <section className={Styles.secao}>
+      <section className={`${Styles.secao} ${Styles.secaoCreme}`}>
         <div className={Styles.conteudo}>
-          <h2 className={Styles.tituloSecao}>Por que vender com o Xepa+</h2>
-          <p className={Styles.subtituloSecao}>
+          <h2 className={Styles.tituloSecao} data-revelar>
+            Por que vender com o Xepa+
+          </h2>
+          <p className={Styles.subtituloSecao} data-revelar>
             Benefícios pensados para a rotina de quem vive da feira.
           </p>
 
-          <div className={Styles.grade}>
+          <div className={Styles.grade} data-revelar style={{ '--atraso': '0.1s' }}>
             {VANTAGENS.map(({ icone: Icone, titulo, texto }) => (
               <article key={titulo} className={Styles.card}>
                 <span className={Styles.icone}>
@@ -108,12 +123,16 @@ function SejaParceiro() {
         </div>
       </section>
 
-      <section className={`${Styles.secao} ${Styles.secaoCreme}`}>
+      <section className={Styles.secao}>
         <div className={Styles.conteudo}>
-          <h2 className={Styles.tituloSecao}>Como começar</h2>
-          <p className={Styles.subtituloSecao}>Em poucos minutos sua barraca já está no Xepa+.</p>
+          <h2 className={Styles.tituloSecao} data-revelar>
+            Como começar
+          </h2>
+          <p className={Styles.subtituloSecao} data-revelar>
+            Em poucos minutos sua barraca já está no Xepa+.
+          </p>
 
-          <ol className={Styles.passos}>
+          <ol className={Styles.passos} data-revelar style={{ '--atraso': '0.1s' }}>
             {PASSOS.map((passo) => (
               <li key={passo.titulo} className={Styles.passo}>
                 <h3>{passo.titulo}</h3>
@@ -124,7 +143,7 @@ function SejaParceiro() {
         </div>
       </section>
 
-      <section className={Styles.chamada}>
+      <section className={Styles.chamada} data-revelar>
         <h2>Vamos juntos fazer a feira render mais?</h2>
         <p>Cadastre sua barraca agora e escolha o plano ideal para o seu negócio.</p>
         <div className={Styles.botoes}>

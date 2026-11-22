@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Check, ChefHat, MessageCircle, Sparkles, TrendingUp, Wallet } from 'lucide-react';
 import imagemIA from '@/assets/imagens/marca/ia.png';
 import LayoutFooter from './LayoutFooter';
-import Styles from './estilos/XepAI.module.css';
+import Styles from './estilos/PaginaFooter.module.css';
 
 const RECURSOS = [
   {
@@ -31,15 +31,26 @@ const RECURSOS = [
 function XepAI() {
   return (
     <LayoutFooter
-      estilos={Styles}
-      titulo="Conheça a Xep.AI"
+      titulo={['Conheça', 'a Xep.AI']}
+      palavras={[
+        'Xep.AI',
+        'Xepinha',
+        'Assistente da feira',
+        'Finanças simples',
+        'Menos desperdício',
+        'Xepa+',
+      ]}
       descricao="A assistente virtual do Xepa+ que ajuda o feirante a cuidar da barraca, das finanças e a reduzir o desperdício de alimentos."
     >
       <section className={Styles.secao}>
         <div className={`${Styles.conteudo} ${Styles.duasColunas}`}>
-          <img src={imagemIA} alt="Ilustração da Xepinha, a assistente virtual Xep.AI" />
+          <img
+            data-revelar="esquerda"
+            src={imagemIA}
+            alt="Ilustração da Xepinha, a assistente virtual Xep.AI"
+          />
 
-          <div>
+          <div data-revelar="direita">
             <h2>Uma ajudante de bolso para a sua barraca</h2>
             <p>
               A Xep.AI, carinhosamente chamada de Xepinha, é uma inteligência artificial pensada
@@ -66,12 +77,14 @@ function XepAI() {
 
       <section className={`${Styles.secao} ${Styles.secaoCreme}`}>
         <div className={Styles.conteudo}>
-          <h2 className={Styles.tituloSecao}>O que a Xep.AI faz por você</h2>
-          <p className={Styles.subtituloSecao}>
+          <h2 className={Styles.tituloSecao} data-revelar>
+            O que a Xep.AI faz por você
+          </h2>
+          <p className={Styles.subtituloSecao} data-revelar>
             Tudo o que você precisa para tomar decisões melhores, sem planilhas complicadas.
           </p>
 
-          <div className={Styles.grade}>
+          <div className={Styles.grade} data-revelar style={{ '--atraso': '0.1s' }}>
             {RECURSOS.map(({ icone: Icone, titulo, texto }) => (
               <article key={titulo} className={Styles.card}>
                 <span className={Styles.icone}>
@@ -85,7 +98,7 @@ function XepAI() {
         </div>
       </section>
 
-      <section className={Styles.chamada}>
+      <section className={Styles.chamada} data-revelar>
         <h2>
           <Sparkles size={24} aria-hidden="true" /> Pronto para conversar com a Xepinha?
         </h2>

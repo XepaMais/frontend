@@ -1,9 +1,23 @@
 import { useEffect } from 'react';
 import Header from '@/modulos/publico/paginas/inicio/componentes/Header.jsx';
+import FaixaXepa from '@/modulos/publico/paginas/inicio/componentes/FaixaXepa.jsx';
+import useRevelarAoRolar from '@/modulos/publico/paginas/inicio/ganchos/useRevelarAoRolar.js';
+import '@/modulos/publico/paginas/inicio/estilos/Animacoes.css';
+import FrutasHero from '@/modulos/publico/paginas/sobre-nos/componentes/FrutasHero.jsx';
+import Base from './estilos/PaginaFooter.module.css';
 
-// Estrutura comum das páginas abertas pelo rodapé: cabeçalho público + faixa de título.
-// "estilos" é o CSS da página (estilos/<Pagina>.module.css), que inclui a faixa de título.
-function LayoutFooter({ etiqueta, titulo, descricao, estilos: Styles, children }) {
+const PALAVRAS_PADRAO = [
+  'Xepa+',
+  'Menos desperdício',
+  'Feira fresquinha',
+  'Preço justo',
+  'Mais comida na mesa',
+];
+
+// Estrutura comum das páginas abertas pelo rodapé, no mesmo padrão do Sobre nós:
+// cabeçalho público + primeira dobra com título em faixas + faixa de palavras em carrossel.
+// "titulo" pode ser um texto ou uma lista de linhas (cada linha vira uma faixa verde).
+function LayoutFooter({ titulo, descricao, palavras = PALAVRAS_PADRAO, children }) {
   // Sempre começa do topo (html e body têm overflow-x: hidden, então zeramos os três).
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -11,18 +25,32 @@ function LayoutFooter({ etiqueta, titulo, descricao, estilos: Styles, children }
     document.body.scrollTop = 0;
   }, []);
 
+  // Liga as animações de entrada (data-revelar), como na Home
+  useRevelarAoRolar();
+
+  const linhas = Array.isArray(titulo) ? titulo : [titulo];
+
   return (
     <>
       <Header />
 
-      <main className={Styles.pagina}>
-        <section className={Styles.hero}>
-          <div className={Styles.heroConteudo}>
-            {etiqueta && <span className={Styles.etiqueta}>{etiqueta}</span>}
-            <h1>{titulo}</h1>
-            {descricao && <p>{descricao}</p>}
+      <main className={Base.pagina}>
+        <section className={Base.hero}>
+          <div className={Base.heroConteudo}>
+            <h1 className={Base.titulo} aria-label={linhas.join(' ')}>
+              {linhas.map((linha) => (
+                <span key={linha} className={Base.tituloLinha} aria-hidden="true">
+                  {linha}
+                </span>
+              ))}
+            </h1>
+            {descricao && <p className={Base.descricao}>{descricao}</p>}
           </div>
+
+          <FrutasHero />
         </section>
+
+        <FaixaXepa palavras={palavras} />
 
         {children}
       </main>
