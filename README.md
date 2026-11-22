@@ -25,6 +25,8 @@ Este repositório guarda o **front-end** do Xepa+: o site que consumidores e fei
 <img align="center" src="https://img.shields.io/badge/Google_Maps-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white" alt="Google Maps" title="Google Maps">
 <img align="center" src="https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini" title="Gemini">
 
+<br>
+
 | Biblioteca | Para que serve no Xepa+ |
 | --- | --- |
 | `react-router-dom` | Navegação entre as páginas |
@@ -110,4 +112,4 @@ Cada plano de feirante libera recursos diferentes, como a Xepinha e a gestão fi
 
 ### Publicação
 
-O site é publicado na **Vercel**. O arquivo [`vercel.json`](xepa+-app/vercel.json) manda todas as rotas para o `index.html`, para que o React Router funcione ao abrir ou recarregar qualquer página.
+O site é publicado no **Vercel**. O arquivo [`vercel.json`](xepa+-app/vercel.json) manda todas as rotas para o `index.html`, para que o React Router funcione ao abrir ou recarregar qualquer página.
