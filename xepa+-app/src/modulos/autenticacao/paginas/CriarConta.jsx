@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import Styles from '@/modulos/autenticacao/paginas/estilos/CriarConta.module.css';
+import AceiteTermos from '@/modulos/autenticacao/paginas/AceiteTermos';
+import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function CriarConta() {
   const navigate = useNavigate();
@@ -47,6 +48,8 @@ function CriarConta() {
             <label htmlFor="senha">Senha</label>
             <input type="password" id="senha" name="senha" required />
           </div>
+
+          <AceiteTermos />
 
           <button type="submit" className={Styles.btnEntrar}>
             Próxima etapa

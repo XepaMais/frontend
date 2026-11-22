@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import Styles from '@/modulos/autenticacao/paginas/estilos/OpcaoLogin.module.css';
+import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function EscolherPerfil() {
   const navigate = useNavigate();

@@ -15,7 +15,7 @@ const links = [
   { texto: 'Feiras', destino: '/adicionar-feira' },
   { texto: 'Financeiro', destino: '/financeiro', recurso: 'financeiro' },
   { texto: 'Chat', destino: '/HistoricoChat' },
-  { texto: 'Xep.AI', destino: '/chat-ia', recurso: 'ia' },
+  { texto: 'Xepinha', destino: '/chat-ia', recurso: 'ia' },
 ];
 
 const itensConta = [

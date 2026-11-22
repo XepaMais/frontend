@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import Styles from '@/modulos/autenticacao/paginas/estilos/Crumb.module.css';
+import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function Crumb() {
   const navigate = useNavigate();
