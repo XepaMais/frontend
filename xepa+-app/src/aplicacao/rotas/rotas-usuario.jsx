@@ -1,10 +1,9 @@
-import { Route } from 'react-router-dom';
+import { Navigate, Route } from 'react-router-dom';
 
 import HomeUsuario from '@/modulos/usuario/paginas/inicio/Home';
 import Mapa from '@/modulos/usuario/paginas/mapa/componentes/MapaU';
 import DetalheProduto from '@/modulos/usuario/paginas/detalhe-produto/DetalheProduto';
 
-import ChatFeirante from '@/modulos/usuario/paginas/chat-feirante/ChatFeirante';
 import { Impacto } from '@/modulos/usuario/paginas/impacto/ImpactoU';
 import Cozinha from '@/modulos/usuario/paginas/cozinha/componentes/Cozy';
 import Pagamento from '@/modulos/usuario/paginas/pagamento/pagamento/pagamento';
@@ -25,8 +24,13 @@ export const rotasUsuario = [
 
   <Route key="detalhe-produto" path="/Verduras" element={<DetalheProduto />} />,
 
-  <Route key="chat-consumidor" path="/chat-consumidor" element={<ChatFeirante />} />,
-  <Route key="chat-feirante" path="/chat-feirante" element={<ChatFeirante />} />,
+  // Endereços da tela antiga de chat: levam para as conversas de verdade.
+  <Route
+    key="chat-consumidor"
+    path="/chat-consumidor"
+    element={<Navigate to="/HistoricoChatUsuario" replace />}
+  />,
+  <Route key="chat-feirante" path="/chat-feirante" element={<Navigate to="/HistoricoChat" replace />} />,
 
   <Route key="impacto" path="/impacto" element={<Impacto />} />,
   <Route key="pagamento" path="/pagamento" element={<Pagamento />} />,

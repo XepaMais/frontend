@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { Receipt } from 'lucide-react';
 import {
-  atualizarStatusPedido,
   carregarPedidos,
   descreverRecebimento,
   formatarDataHora,
   formatarMoeda,
   PENDENTE_RETIRADA,
-  RETIRADO,
   textoStatus,
   textoTaxaEntrega,
 } from '@/compartilhado/servicos/pedidos';
+import PopUpConfirmarEntrega from '@/modulos/feirante/componentes/PopUpConfirmarEntrega';
 import base from '@/compartilhado/estilos/conta.module.css';
 import styles from './estilos/HistoricoVendas.module.css';
 
@@ -27,9 +26,11 @@ function contarItens(venda) {
 function HistoricoVendas() {
   const [vendas, setVendas] = useState(carregarPedidos);
 
-  // O feirante confirma que o cliente retirou o pedido.
-  function confirmarEntrega(numero) {
-    atualizarStatusPedido(numero, RETIRADO);
+  // O feirante confirma que o cliente retirou o pedido: o pop-up pede o código do cliente.
+  const [pedidoParaConfirmar, setPedidoParaConfirmar] = useState(null);
+
+  function aoConfirmarEntrega() {
+    setPedidoParaConfirmar(null);
     setVendas(carregarPedidos());
   }
 
@@ -131,7 +132,7 @@ function HistoricoVendas() {
                         <button
                           type="button"
                           className={base.botaoPrincipal}
-                          onClick={() => confirmarEntrega(venda.numero)}
+                          onClick={() => setPedidoParaConfirmar(venda)}
                         >
                           Confirmar entrega
                         </button>
@@ -145,6 +146,14 @@ function HistoricoVendas() {
             </table>
           </div>
         </>
+      )}
+
+      {pedidoParaConfirmar && (
+        <PopUpConfirmarEntrega
+          pedido={pedidoParaConfirmar}
+          onFechar={() => setPedidoParaConfirmar(null)}
+          onConfirmado={aoConfirmarEntrega}
+        />
       )}
     </main>
   );

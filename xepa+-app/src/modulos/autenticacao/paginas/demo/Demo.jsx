@@ -57,7 +57,6 @@ function Demo() {
       </div>
 
       <Modal
-        classeFundo={Styles.fundoDemo}
         classeJanela={Styles.janelaDemo}
         titulo="Demonstração do Xepa+"
         descricao="Escolha um perfil para conhecer a plataforma. Cada plano de feirante libera recursos diferentes."
@@ -66,7 +65,7 @@ function Demo() {
         <div className={Styles.lista}>
           {PERFIS.map((perfil) => (
             <button
-              key={perfil.etiqueta}
+              key={perfil.nome}
               type="button"
               className={`${Styles.opcao} ${perfil.cor}`}
               onClick={() => entrar(perfil)}
@@ -78,18 +77,12 @@ function Demo() {
               <span className={Styles.texto}>
                 <span className={Styles.topo}>
                   <strong>{perfil.nome}</strong>
-                  <span className={Styles.etiqueta}>{perfil.etiqueta}</span>
                 </span>
                 <span className={Styles.descricao}>{perfil.descricao}</span>
               </span>
             </button>
           ))}
         </div>
-
-        <p className={Styles.rodape}>
-          <span>Projeto Xepa+</span>
-          <span>Modo demonstração</span>
-        </p>
       </Modal>
     </>
   );

@@ -12,7 +12,6 @@ function NavbarUsuarioGlobal() {
     '/impacto',
     '/carrinho',
     '/perfil',
-    '/chat-consumidor',
     '/Verduras',
     '/HistoricoChatUsuario',
     '/pagamento',

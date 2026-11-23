@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CircleCheck, ChevronDown } from 'lucide-react';
 import '@/modulos/feirante/paginas/financeiro/financeiro.css';
+import Modal from '@/compartilhado/componentes/modal/Modal';
 import base from '@/compartilhado/componentes/modal/Modal.module.css';
 import { formatarDataHora, formatarMoeda } from '@/compartilhado/servicos/pedidos';
 import {
@@ -26,6 +27,8 @@ function Sacar() {
   const [valor, setValor] = useState('');
   const [erro, setErro] = useState('');
   const [ultimoSaque, setUltimoSaque] = useState(null);
+  // Saque validado esperando a confirmação no pop-up.
+  const [saquePendente, setSaquePendente] = useState(null);
 
   const saldo = calcularSaldo(saques);
   const exemplo = TIPOS_CHAVE_PIX.find((item) => item.valor === tipoChave).exemplo;
@@ -40,11 +43,16 @@ function Sacar() {
     if (!valorNumero || valorNumero <= 0) return setErro('Informe um valor maior que zero.');
     if (valorNumero > saldo.disponivel) return setErro('O valor é maior que o seu saldo disponível.');
 
-    const saque = registrarSaque({ valor: valorNumero, tipoChave, chave });
+    setErro('');
+    setSaquePendente({ valor: valorNumero, tipoChave, chave: chave.trim() });
+  }
+
+  function confirmarSaque() {
+    const saque = registrarSaque(saquePendente);
     setSaques([saque, ...saques]);
     setUltimoSaque(saque);
+    setSaquePendente(null);
     setValor('');
-    setErro('');
   }
 
   return (
@@ -183,6 +191,31 @@ function Sacar() {
           )}
         </section>
       </main>
+
+      {saquePendente && (
+        <Modal titulo="Confirmar saque" aoFechar={() => setSaquePendente(null)}>
+          <p className={base.descricao}>
+            Sacar <strong>{formatarMoeda(saquePendente.valor)}</strong> para a chave Pix{' '}
+            {rotuloDoTipo(saquePendente.tipoChave)} <strong>{saquePendente.chave}</strong>?
+          </p>
+          <p className={base.descricao}>
+            Confira a chave antes de confirmar. Depois de enviado, o saque não pode ser desfeito.
+          </p>
+
+          <div className={base.acoes}>
+            <button
+              type="button"
+              className={base.secundario}
+              onClick={() => setSaquePendente(null)}
+            >
+              Cancelar
+            </button>
+            <button type="button" className={base.principal} onClick={confirmarSaque}>
+              Confirmar saque
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

@@ -1,12 +1,23 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { CircleCheck } from 'lucide-react';
+import Modal from '@/compartilhado/componentes/modal/Modal';
+import estiloModal from '@/compartilhado/componentes/modal/Modal.module.css';
 import AceiteTermos from '@/modulos/autenticacao/paginas/AceiteTermos';
+import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function CriarConta() {
   const navigate = useNavigate();
+  const [contaCriada, setContaCriada] = useState(false);
 
+  // Mostra o aviso de conta criada; o login abre quando a pessoa fecha o pop-up.
   function proximaEtapa(event) {
     event.preventDefault();
+    setContaCriada(true);
+  }
+
+  function irParaLogin() {
     navigate('/Crumb');
   }
 
@@ -16,6 +27,8 @@ function CriarConta() {
 
       <section className={Styles.ladoForm}>
         <form className={Styles.form} onSubmit={proximaEtapa}>
+          <BotaoVoltar destino="/OpcaoLogin" />
+
           <h1>Crie sua conta</h1>
 
           <div className={Styles.campo}>
@@ -60,6 +73,26 @@ function CriarConta() {
           </p>
         </form>
       </section>
+
+      {contaCriada && (
+        <Modal titulo="Conta criada!" aoFechar={irParaLogin}>
+          <p className={estiloModal.descricao}>
+            <CircleCheck
+              size={20}
+              aria-hidden="true"
+              style={{ verticalAlign: 'text-bottom', marginRight: 6 }}
+            />
+            Sua conta de consumidor foi criada com sucesso. Entre com o seu e-mail e senha para
+            começar a encontrar xepas perto de você.
+          </p>
+
+          <div className={estiloModal.acoes}>
+            <button type="button" className={estiloModal.principal} onClick={irParaLogin}>
+              Ir para o login
+            </button>
+          </div>
+        </Modal>
+      )}
     </main>
   );
 }

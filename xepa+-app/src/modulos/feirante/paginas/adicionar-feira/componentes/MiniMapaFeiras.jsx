@@ -18,8 +18,8 @@ function MiniMapaFeiras({ feiras }) {
       position: { lat: feira.latitude, lng: feira.longitude },
     }));
 
-  // TODO 2: o caminho (rota) da página do mapa grande
-  const abrirMapa = () => navigate('/mapa');
+  // Mapa completo dentro da área do feirante (mantém o menu do feirante no topo).
+  const abrirMapa = () => navigate('/mapa-feirante');
 
   if (!isLoaded) return <p>Carregando mapa...</p>;
 

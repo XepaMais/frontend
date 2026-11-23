@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function CriarConta() {
@@ -16,6 +17,8 @@ function CriarConta() {
 
       <section className={Styles.ladoForm}>
         <form className={Styles.form} onSubmit={proximaEtapa}>
+          <BotaoVoltar destino="/OpcaoLogin" />
+
           <h1>Cadastre-se</h1>
 
           <div className={Styles.campo}>

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import AceiteTermos from '@/modulos/autenticacao/paginas/AceiteTermos';
+import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function CriarContaF() {
@@ -17,6 +18,8 @@ function CriarContaF() {
 
       <section className={Styles.ladoForm}>
         <form className={Styles.form} onSubmit={proximaEtapa}>
+          <BotaoVoltar destino="/CriarUsuarioF" />
+
           <h1>Cadastre sua conta</h1>
 
           <div className={Styles.linha}>

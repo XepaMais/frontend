@@ -11,8 +11,44 @@
   cursor: pointer;
 }
 
+/* Botão secundário: contorno verde, no padrão dos botões da área do feirante */
 .botaoMapa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
   margin-top: 0.75rem;
+  padding: 0 22px;
+  border: 1.5px solid var(--verde);
+  border-radius: 8px;
+  background: var(--branco, #fff);
+  color: var(--verde);
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.botaoMapa:hover {
+  background: var(--verde);
+  color: var(--branco, #fff);
+  transform: translateY(-1px);
+}
+
+.botaoMapa:focus-visible {
+  outline: 2px solid var(--laranja, #f76019);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .botaoMapa {
+    width: 100%;
+  }
 }
 
 /* "Suas Feiras no Mapa:" igual a "Minhas Feiras Cadastradas:" */

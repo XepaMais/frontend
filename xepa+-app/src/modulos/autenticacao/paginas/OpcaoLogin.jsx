@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function EscolherPerfil() {
@@ -9,6 +10,8 @@ function EscolherPerfil() {
 
       <section className={Styles.ladoForm}>
         <div className={Styles.form}>
+          <BotaoVoltar destino="/Crumb" />
+
           <h1>Como deseja entrar?</h1>
 
           <button type="button" className={Styles.opcao} onClick={() => navigate('/CriarUsuarioF')}>

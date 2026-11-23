@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function Crumb() {
@@ -10,6 +11,8 @@ function Crumb() {
 
       <section className={Styles.ladoForm}>
         <form className={Styles.form}>
+          <BotaoVoltar destino="/" texto="Voltar ao início" />
+
           <h1>Entrar na conta</h1>
 
           <label htmlFor="email">Digite seu Email</label>
