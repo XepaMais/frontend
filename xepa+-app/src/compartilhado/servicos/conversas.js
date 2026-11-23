@@ -259,3 +259,16 @@ export function finalizarConversa(id) {
 
   return conversa;
 }
+
+// "Confirmar entrega" na Home e no Histórico de vendas: marca o pedido como retirado
+// e move a conversa dele para Finalizadas, igual ao botão "Pedido retirado" do chat.
+export function confirmarEntregaDoPedido(numero) {
+  const id = `pedido-${numero}`;
+  const conversa = carregarConversas().find((item) => item.id === id);
+
+  if (conversa && conversa.status !== STATUS_CONVERSA.finalizada) {
+    finalizarConversa(id);
+  }
+
+  atualizarStatusPedido(numero, 'Retirado');
+}

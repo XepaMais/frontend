@@ -181,6 +181,32 @@
   font-weight: 600;
 }
 
+/* Mensagem de erro dentro do pop-up */
+.erro {
+  margin: 0;
+  color: #c0392b;
+  font-size: var(--fonte-pequena);
+  font-weight: 600;
+}
+
+/* Lista simples de dados (ex.: resumo do pedido ou do saque) */
+.resumo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 4px;
+  padding: 12px 14px;
+  border-radius: var(--raio-botao);
+  background: #f3f7f4;
+  color: var(--verde);
+  font-size: var(--fonte-pequena);
+  line-height: 1.4;
+}
+
+.resumo strong {
+  font-weight: 600;
+}
+
 /* Botões */
 .acoes {
   display: flex;
@@ -208,7 +234,12 @@
   color: var(--branco);
 }
 
-.principal:hover {
+.principal:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.principal:not(:disabled):hover {
   border-color: #287447;
   background: #287447;
 }

@@ -12,14 +12,13 @@ import { mensagensNaoLidas, STATUS_CONVERSA } from '@/compartilhado/servicos/con
 import ItemConversa from '@/modulos/feirante/paginas/historico-chat/componentes/ItemConversa';
 import { dataDeHoje } from '@/compartilhado/servicos/datas';
 import {
-  atualizarStatusPedido,
   descreverRecebimento,
   carregarPedidos,
   formatarDataHora,
   formatarMoeda,
   PENDENTE_RETIRADA,
-  RETIRADO,
 } from '@/compartilhado/servicos/pedidos';
+import PopUpConfirmarEntrega from '@/modulos/feirante/componentes/PopUpConfirmarEntrega';
 import useFinanceiro from '@/modulos/feirante/hooks/useFinanceiro';
 import usePlano from '@/modulos/feirante/hooks/usePlano';
 import RecursoPlano from '@/modulos/feirante/componentes/RecursoPlano';
@@ -84,9 +83,11 @@ function HomeFeirante() {
   const pedidosPendentes = pedidos.filter((pedido) => pedido.status === PENDENTE_RETIRADA);
   const pedidosRetirados = pedidos.length - pedidosPendentes.length;
 
-  // O feirante confirma a entrega direto da home, sem abrir o histórico.
-  function confirmarEntrega(numero) {
-    atualizarStatusPedido(numero, RETIRADO);
+  // O feirante confirma a entrega direto da home: o pop-up pede o código do cliente.
+  const [pedidoParaConfirmar, setPedidoParaConfirmar] = useState(null);
+
+  function aoConfirmarEntrega() {
+    setPedidoParaConfirmar(null);
     setPedidos(carregarPedidos());
   }
   const { lancamentos, doMes, total } = useFinanceiro();
@@ -244,7 +245,7 @@ function HomeFeirante() {
                     <button
                       type="button"
                       className={Styles.botao_verde}
-                      onClick={() => confirmarEntrega(pedido.numero)}
+                      onClick={() => setPedidoParaConfirmar(pedido)}
                     >
                       Confirmar entrega
                     </button>
@@ -443,6 +444,14 @@ function HomeFeirante() {
           </section>
         </div>
       </main>
+
+      {pedidoParaConfirmar && (
+        <PopUpConfirmarEntrega
+          pedido={pedidoParaConfirmar}
+          onFechar={() => setPedidoParaConfirmar(null)}
+          onConfirmado={aoConfirmarEntrega}
+        />
+      )}
     </div>
   );
 }
