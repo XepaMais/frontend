@@ -161,13 +161,13 @@
   }
 }
 
-/* Computadores: seção com altura fixa de 650px, conteúdo centralizado */
+/* Computadores: seção com --altura-secao (650px ou a tela inteira), conteúdo centralizado */
 @media (min-width: 901px) {
   .secao-sobre {
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    height: 650px;
+    height: var(--altura-secao);
     padding-block: 0;
   }
 

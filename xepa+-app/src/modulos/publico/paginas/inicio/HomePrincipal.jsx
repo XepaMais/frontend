@@ -10,7 +10,9 @@ import PerguntasFrequentes from '@/modulos/publico/paginas/inicio/componentes/Pe
 import Propaganda from '@/modulos/publico/paginas/inicio/componentes/Propaganda.jsx';
 import FaixaXepa from '@/modulos/publico/paginas/inicio/componentes/FaixaXepa.jsx';
 import useRevelarAoRolar from '@/modulos/publico/paginas/inicio/ganchos/useRevelarAoRolar.js';
+import useEscalaTela from '@/modulos/publico/paginas/inicio/ganchos/useEscalaTela.js';
 import '@/modulos/publico/paginas/inicio/estilos/Animacoes.css';
+import '@/modulos/publico/paginas/inicio/estilos/EscalaTela.css';
 
 // Palavras da faixa laranja, entre a propaganda e os planos
 const PALAVRAS_FEIRANTE = [
@@ -28,6 +30,9 @@ function HomePrincipal() {
 
   // Liga as animações de entrada de todas as seções da Home
   useRevelarAoRolar();
+
+  // No computador, o conteúdo das seções cresce para preencher monitores maiores
+  useEscalaTela();
 
   return (
     <>

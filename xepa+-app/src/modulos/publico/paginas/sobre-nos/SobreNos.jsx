@@ -12,8 +12,10 @@ import Agradecimento from '@/modulos/publico/paginas/sobre-nos/componentes/Agrad
 // Peças reaproveitadas da Home: faixa em carrossel e animações ao rolar
 import FaixaXepa from '@/modulos/publico/paginas/inicio/componentes/FaixaXepa.jsx';
 import useRevelarAoRolar from '@/modulos/publico/paginas/inicio/ganchos/useRevelarAoRolar.js';
+import useEscalaTela from '@/modulos/publico/paginas/inicio/ganchos/useEscalaTela.js';
 import '@/modulos/publico/paginas/inicio/estilos/Animacoes.css';
 import '@/modulos/publico/paginas/sobre-nos/estilos/Sobrenos.css';
+import '@/modulos/publico/paginas/inicio/estilos/EscalaTela.css';
 
 const PALAVRAS_TOPO = [
   'Quem somos',
@@ -45,6 +47,9 @@ function SobreNos() {
 
   // Liga as animações de entrada (data-revelar), como na Home
   useRevelarAoRolar();
+
+  // No computador, o conteúdo das seções cresce para preencher monitores maiores
+  useEscalaTela();
 
   return (
     <>

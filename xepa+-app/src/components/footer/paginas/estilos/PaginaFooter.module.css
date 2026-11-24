@@ -21,7 +21,8 @@
   --cinza: #716d6d;
   --borda: #d6e1d9;
   --branco: #fff;
-  --espaco: clamp(48px, 7vw, 96px);
+  /* respiro em cima e embaixo de cada seção (antes ia até 96px e sobrava espaço entre elas) */
+  --espaco: clamp(40px, 4vw, 64px);
 
   overflow-x: hidden;
   background: var(--creme-claro);
@@ -65,11 +66,12 @@
   text-align: center;
 }
 
-/* Computadores: a primeira dobra tem 650px, como as seções da Home */
+/* Computadores: a primeira dobra tem --altura-dobra (650px ou a tela inteira menos a faixa) */
 @media (min-width: 1001px) {
   .hero {
-    --frutas-max: 290px;
-    height: 650px;
+    /* 290px numa dobra de 650px; cresce junto com a dobra em monitores maiores */
+    --frutas-max: calc(var(--altura-dobra) * 0.446);
+    height: var(--altura-dobra);
   }
 
   .heroConteudo {
@@ -79,7 +81,7 @@
 
   /* As frutas mantêm o tamanho (e ficam encostadas umas nas outras). Em telas largas,
      onde a fileira passaria de --frutas-max, ela desce e o pé da fileira da frente
-     fica cortado, para caber nos 650px sem abrir espaços entre as frutas. */
+     fica cortado, para caber na altura da dobra sem abrir espaços entre as frutas. */
   .hero :global(.sn-hero__frutas) {
     translate: 0 max(0px, 20cqw - var(--frutas-max));
   }

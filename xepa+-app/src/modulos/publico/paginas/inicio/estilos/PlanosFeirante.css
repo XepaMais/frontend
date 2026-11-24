@@ -179,11 +179,11 @@
   outline-offset: 3px;
 }
 
-/* ---------- Computadores: seção com 650px de altura ---------- */
+/* ---------- Computadores: seção com --altura-secao (650px ou a tela inteira) ---------- */
 
 @media (min-width: 961px) {
   .planos-feirante {
-    height: 650px;
+    height: var(--altura-secao);
     padding-block: 0;
   }
 }

@@ -1,3 +1,32 @@
+:root {
+  /* Medidas usadas para as seções ocuparem a tela inteira no computador */
+  --altura-cabecalho: 70px;
+  --altura-faixa: clamp(44px, 4vw, 56px);
+  --altura-janela: 100vh;
+  --altura-tela: calc(var(--altura-janela) - var(--altura-cabecalho));
+
+  /* Altura das seções da Home e do Sobre nós e da primeira dobra (sem a faixa) */
+  --altura-secao: 650px;
+  --altura-dobra: 650px;
+}
+
+@supports (height: 100svh) {
+  :root {
+    --altura-janela: 100svh;
+    --altura-tela: calc(var(--altura-janela) - var(--altura-cabecalho));
+  }
+}
+
+/* Computadores: no mínimo 650px, mas em monitores maiores ocupam a tela inteira.
+   A primeira dobra desconta o cabeçalho; as outras seções aparecem quando ele já
+   saiu da tela ao rolar, então usam a altura inteira da janela. */
+@media (min-width: 1001px) {
+  :root {
+    --altura-secao: max(650px, var(--altura-janela));
+    --altura-dobra: max(650px, calc(var(--altura-tela) - var(--altura-faixa)));
+  }
+}
+
 html,
 body {
   margin: 0;

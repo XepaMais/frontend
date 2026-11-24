@@ -222,10 +222,9 @@
   }
 }
 
-/* Computadores: apresentação + faixa = 650px */
+/* Computadores: apresentação + faixa = 650px no mínimo; em monitores maiores, a tela inteira */
 @media (min-width: 1001px) {
   .secao-inicio {
-    height: 594px;
+    height: max(594px, calc(var(--altura-tela) - var(--altura-faixa)));
   }
-
 }
