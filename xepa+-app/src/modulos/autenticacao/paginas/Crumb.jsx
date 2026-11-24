@@ -1,15 +1,35 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { entrar } from '@/compartilhado/servicos/autenticacao';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function Crumb() {
   const navigate = useNavigate();
+  const [erro, setErro] = useState('');
+  const [carregando, setCarregando] = useState(false);
+
+  async function fazerLogin(evento) {
+    evento.preventDefault();
+    setErro('');
+    setCarregando(true);
+    const formulario = new FormData(evento.currentTarget);
+
+    try {
+      const conta = await entrar({ email: formulario.get('email'), senha: formulario.get('senha') });
+      navigate(conta.tipo === 'FEIRANTE' ? '/homeF' : conta.tipo === 'CONSUMIDOR' ? '/homeU' : '/');
+    } catch (erroApi) {
+      setErro(erroApi.message);
+    } finally {
+      setCarregando(false);
+    }
+  }
 
   return (
     <main className={Styles.container}>
       <section className={Styles.ladoImagem}></section>
 
       <section className={Styles.ladoForm}>
-        <form className={Styles.form}>
+        <form className={Styles.form} onSubmit={fazerLogin}>
           <h1>Entrar na conta</h1>
 
           <label htmlFor="email">Digite seu Email</label>
@@ -18,9 +38,10 @@ function Crumb() {
           <label htmlFor="senha">Senha</label>
           <input type="password" id="senha" name="senha" required />
 
-          <button type="button" className={Styles.btnEntrar} onClick={() => navigate('/')}>
-            Entrar
+          <button type="submit" className={Styles.btnEntrar} disabled={carregando}>
+            {carregando ? 'Entrando...' : 'Entrar'}
           </button>
+          {erro && <p role="alert">{erro}</p>}
 
           <button type="button" className={Styles.btndemo} onClick={() => navigate('/demo')}>
             <svg

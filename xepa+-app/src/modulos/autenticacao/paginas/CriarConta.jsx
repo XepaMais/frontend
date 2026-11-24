@@ -1,13 +1,30 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { cadastrarConsumidor } from '@/compartilhado/servicos/autenticacao';
 import AceiteTermos from '@/modulos/autenticacao/paginas/AceiteTermos';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function CriarConta() {
   const navigate = useNavigate();
+  const [erro, setErro] = useState('');
+  const [carregando, setCarregando] = useState(false);
 
-  function proximaEtapa(event) {
-    event.preventDefault();
-    navigate('/Crumb');
+  async function cadastrar(evento) {
+    evento.preventDefault();
+    setErro('');
+    setCarregando(true);
+    const formulario = new FormData(evento.currentTarget);
+    const dados = Object.fromEntries(['nome', 'cpf', 'telefone', 'email', 'senha']
+      .map((campo) => [campo, formulario.get(campo)]));
+
+    try {
+      await cadastrarConsumidor(dados);
+      navigate('/Crumb', { state: { mensagem: 'Conta criada. Entre com seu email e senha.' } });
+    } catch (erroApi) {
+      setErro(erroApi.message);
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
@@ -15,7 +32,7 @@ function CriarConta() {
       <section className={Styles.ladoImagem}></section>
 
       <section className={Styles.ladoForm}>
-        <form className={Styles.form} onSubmit={proximaEtapa}>
+        <form className={Styles.form} onSubmit={cadastrar}>
           <h1>Crie sua conta</h1>
 
           <div className={Styles.campo}>
@@ -51,9 +68,10 @@ function CriarConta() {
 
           <AceiteTermos />
 
-          <button type="submit" className={Styles.btnEntrar}>
-            Próxima etapa
+          <button type="submit" className={Styles.btnEntrar} disabled={carregando}>
+            {carregando ? 'Salvando...' : 'Criar conta'}
           </button>
+          {erro && <p role="alert">{erro}</p>}
 
           <p className={Styles.cadastro}>
             Já tem conta? <Link to="/Crumb">Entrar</Link>
