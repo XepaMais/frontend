@@ -16,6 +16,7 @@ import DispositivosFeirante from '@/modulos/feirante/paginas/dispositivos/Dispos
 import Planos from '@/modulos/feirante/paginas/planos/Planos';
 import Planilhas from '@/modulos/feirante/paginas/planilhas/Planilhas';
 import Sacar from '@/modulos/feirante/paginas/sacar/Sacar';
+import Mapa from '@/modulos/usuario/paginas/mapa/componentes/MapaU';
 
 export const rotasFeirante = [
   <Route key="demo-feirante" path="/demo/feirante" element={<HomeFeirante />} />,
@@ -74,13 +75,8 @@ export const rotasFeirante = [
       </RecursoPlano>
     }
   />,
-  <Route
-    key="sacar"
-    path="/sacar"
-    element={
-      <RecursoPlano recurso="financeiro">
-        <Sacar />
-      </RecursoPlano>
-    }
-  />,
+  // Sacar fica liberado em todos os planos: o Grátis também vende pela plataforma.
+  <Route key="sacar" path="/sacar" element={<Sacar />} />,
+  // Mesmo mapa do consumidor, mas dentro da área do feirante (mantém o menu do feirante).
+  <Route key="mapa-feirante" path="/mapa-feirante" element={<Mapa />} />,
 ];

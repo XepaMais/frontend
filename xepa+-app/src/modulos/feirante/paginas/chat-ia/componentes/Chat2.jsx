@@ -148,12 +148,6 @@ function Chat2() {
 
   return (
     <section className={Styles.chatContainer}>
-      <div className={Styles.chatTopo}>
-        <button type="button" className={Styles.btnSair}>
-          Sair da conversa
-        </button>
-      </div>
-
       <div className={Styles.chatPerfil}>
         <img src={IA} alt="Foto de perfil da Xepinha" className={Styles.profileAvatar} />
         <h2 className={Styles.profileName}>Xepinha</h2>

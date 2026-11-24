@@ -66,6 +66,35 @@
   margin: auto;
 }
 
+/* ---------- Botão Voltar (BotaoVoltar.jsx) ---------- */
+
+.voltar {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 clamp(12px, 2vh, 20px);
+  padding: 6px 10px 6px 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--verde);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.voltar:hover {
+  background: rgba(24, 85, 47, 0.08);
+}
+
+.voltar:focus-visible {
+  outline: 3px solid var(--limao);
+  outline-offset: 2px;
+}
+
 /* título no tamanho dos títulos de seção da Home */
 .form h1 {
   margin: 0 0 clamp(20px, 3vh, 32px);

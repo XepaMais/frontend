@@ -9,11 +9,11 @@ export const CAMINHOS_FEIRANTE = [
   ...CAMINHOS_FINANCEIRO,
   '/HistoricoChat',
   '/chat-ia',
-  '/chat-feirante',
   '/perfil-feirante',
   '/historico-vendas',
   '/historico-produtos',
   '/sacar',
   '/dispositivos-feirante',
   '/planos',
+  '/mapa-feirante',
 ];

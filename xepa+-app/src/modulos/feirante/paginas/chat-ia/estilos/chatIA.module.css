@@ -10,17 +10,6 @@
   min-height: 520px;
 }
 
-.btnSair {
-  background-color: #18552f;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
 .chatPerfil {
   display: flex;
   flex-direction: row;
@@ -138,8 +127,3 @@
   }
 }
 
-.chatTopo {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 8px;
-}
