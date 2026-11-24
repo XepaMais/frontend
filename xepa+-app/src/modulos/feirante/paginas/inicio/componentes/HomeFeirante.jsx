@@ -25,7 +25,6 @@ import RecursoPlano from '@/modulos/feirante/componentes/RecursoPlano';
 import { PLANOS } from '@/compartilhado/dados/planos';
 import { carregarProdutos } from '@/modulos/feirante/servicos/produtosFeirante';
 import {
-  carregarGastos,
   calcularTotaisDeGastos,
   gastosDoMesPorCategoria,
 } from '@/modulos/feirante/servicos/gastosFeirante';
@@ -90,7 +89,7 @@ function HomeFeirante() {
     setPedidoParaConfirmar(null);
     setPedidos(carregarPedidos());
   }
-  const { lancamentos, doMes, total } = useFinanceiro();
+  const { lancamentos, gastos: todosOsGastos, doMes, total } = useFinanceiro();
   // Só conversas recentes (pedidos ainda não retirados), as mais novas primeiro.
   // As que têm pedido novo ou mensagem não lida aparecem no topo.
   const conversasRecentes = useConversas()
@@ -103,7 +102,6 @@ function HomeFeirante() {
   for (const conversa of conversasRecentes) {
     totalNovas += mensagensNaoLidas(conversa, 'feirante').length;
   }
-  const todosOsGastos = carregarGastos();
   const gastos = calcularTotaisDeGastos(todosOsGastos);
   const ganhoMensal = total(doMes, 'renda');
   const gastoMensal = gastos.mes + total(doMes, 'compra');

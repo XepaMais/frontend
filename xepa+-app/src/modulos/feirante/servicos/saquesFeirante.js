@@ -1,5 +1,8 @@
 // Saques via Pix dos lucros do Xepa+. É só uma simulação: nenhum dinheiro é transferido.
+// Com login, o saldo é conferido e o saque gravado no banco (tb_saque); sem login, neste navegador.
+import { enviarJson, requisicaoApi } from '@/compartilhado/servicos/api';
 import { carregarLancamentosFinanceiros } from './lancamentosFinanceiros.js';
+import { caminhoFinanceiro, contaDoFeirante } from './financeiroApi.js';
 
 const CHAVE_SAQUES = 'saquesFeirante';
 const ORIGEM_XEPA = 'Venda de xepa pelo Xepa+';
@@ -55,6 +58,47 @@ export function validarChavePix(tipo, chave) {
   if (tipo === 'aleatoria' && texto.length < 20) return 'A chave aleatória parece incompleta.';
 
   return '';
+}
+
+function numeros(saldo) {
+  return {
+    recebido: Number(saldo.recebido),
+    sacado: Number(saldo.sacado),
+    disponivel: Number(saldo.disponivel),
+  };
+}
+
+function saqueDaApi(saque) {
+  return { ...saque, valor: Number(saque.valor) };
+}
+
+// Devolve { saldo, saques } para a tela de saque.
+export async function carregarDadosDeSaque() {
+  const conta = contaDoFeirante();
+
+  if (!conta) {
+    const saques = carregarSaques();
+    return { saldo: calcularSaldo(saques), saques };
+  }
+
+  const [saldo, saques] = await Promise.all([
+    requisicaoApi(caminhoFinanceiro(conta, '/saldo')),
+    requisicaoApi(caminhoFinanceiro(conta, '/saques')),
+  ]);
+  return { saldo: numeros(saldo), saques: saques.map(saqueDaApi) };
+}
+
+// O backend confere o saldo de novo antes de aceitar: o valor nunca passa do disponível.
+export async function solicitarSaque(dados) {
+  const conta = contaDoFeirante();
+  if (!conta) return registrarSaque(dados);
+
+  const saque = await enviarJson(caminhoFinanceiro(conta, '/saques'), {
+    valor: dados.valor,
+    tipoChave: dados.tipoChave,
+    chave: dados.chave.trim(),
+  });
+  return saqueDaApi(saque);
 }
 
 export function registrarSaque({ valor, tipoChave, chave }) {

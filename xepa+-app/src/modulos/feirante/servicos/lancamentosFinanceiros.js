@@ -1,6 +1,9 @@
+// Rendas (lucros) do feirante. Com login, ficam no banco (tb_renda); no modo demonstração, neste navegador.
 import { dataEmTexto } from '@/compartilhado/servicos/datas';
+import { enviarJson, excluirNaApi, requisicaoApi } from '@/compartilhado/servicos/api';
 import { taxaDoPlano } from './planoFeirante.js';
 import { registrarTaxaDoPedido } from './gastosFeirante.js';
+import { caminhoFinanceiro, contaDoFeirante } from './financeiroApi.js';
 
 const CHAVE_LANCAMENTOS = 'lancamentosFinanceiros';
 
@@ -23,7 +26,67 @@ export function salvarLancamentosFinanceiros(lancamentos) {
   localStorage.setItem(CHAVE_LANCAMENTOS, JSON.stringify(lancamentos));
 }
 
-// Chamada quando o consumidor confirma o pagamento.
+// ---------- Funções usadas pelas páginas (API com login, navegador sem login) ----------
+
+function rendaDaApi(renda) {
+  return {
+    id: renda.id,
+    tipo: 'renda',
+    descricao: renda.descricao,
+    valor: Number(renda.valor),
+    data: renda.data,
+    categoria: renda.categoria,
+    feira: renda.feira || '',
+    pedido: renda.pedido,
+  };
+}
+
+export async function listarRendas() {
+  const conta = contaDoFeirante();
+  if (!conta) return carregarLancamentosFinanceiros();
+
+  const rendas = await requisicaoApi(caminhoFinanceiro(conta, '/rendas'));
+  return rendas.map(rendaDaApi);
+}
+
+// Cria a renda ou, se jaExiste, atualiza a que tem o mesmo id. Devolve a renda salva.
+export async function salvarRenda(lancamento, jaExiste) {
+  const conta = contaDoFeirante();
+
+  if (!conta) {
+    const lancamentos = carregarLancamentosFinanceiros();
+    salvarLancamentosFinanceiros(
+      jaExiste
+        ? lancamentos.map((item) => (item.id === lancamento.id ? lancamento : item))
+        : [...lancamentos, lancamento],
+    );
+    return lancamento;
+  }
+
+  const corpo = {
+    origem: lancamento.categoria,
+    descricao: lancamento.descricao,
+    valor: lancamento.valor,
+    data: lancamento.data,
+  };
+  const salva = jaExiste
+    ? await enviarJson(caminhoFinanceiro(conta, `/rendas/${lancamento.id}`), corpo, 'PUT')
+    : await enviarJson(caminhoFinanceiro(conta, '/rendas'), corpo);
+  return rendaDaApi(salva);
+}
+
+export async function removerRenda(id) {
+  const conta = contaDoFeirante();
+
+  if (!conta) {
+    salvarLancamentosFinanceiros(carregarLancamentosFinanceiros().filter((item) => item.id !== id));
+    return;
+  }
+
+  await excluirNaApi(caminhoFinanceiro(conta, `/rendas/${id}`));
+}
+
+// Chamada quando o consumidor confirma o pagamento (modo demonstração: pedidos ainda no navegador).
 // A comissão do plano vai para Despesas e só o valor líquido entra nos lucros.
 export function registrarVendaNoFinanceiro(pedido) {
   const lancamentos = carregarLancamentosFinanceiros();

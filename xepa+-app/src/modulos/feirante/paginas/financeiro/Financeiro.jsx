@@ -14,8 +14,11 @@ function Financeiro() {
   // null = fechado; { lancamento } = aberto para adicionar (vazio) ou editar
   const [modal, setModal] = useState(null);
   const [rendaParaExcluir, setRendaParaExcluir] = useState(null);
+  const [erroAcao, setErroAcao] = useState('');
   const {
     lancamentos,
+    carregando,
+    erro,
     salvarLancamento,
     excluirLancamento,
     custosDaSemana,
@@ -25,9 +28,25 @@ function Financeiro() {
     total,
   } = useFinanceiro();
 
-  function salvar(lancamento) {
-    salvarLancamento(lancamento);
-    setModal(null);
+  async function salvar(lancamento) {
+    try {
+      await salvarLancamento(lancamento);
+      setErroAcao('');
+      setModal(null);
+    } catch (falha) {
+      setErroAcao(falha.message);
+      setModal(null);
+    }
+  }
+
+  async function excluir(renda) {
+    setRendaParaExcluir(null);
+    try {
+      await excluirLancamento(renda.id);
+      setErroAcao('');
+    } catch (falha) {
+      setErroAcao(falha.message);
+    }
   }
 
   return (
@@ -45,6 +64,11 @@ function Financeiro() {
             </button>
           </div>
         </section>
+
+        {carregando && <p className="aviso-financeiro carregando">Carregando seus lucros...</p>}
+        {(erro || erroAcao) && (
+          <p role="alert" className="aviso-financeiro">{erroAcao || erro}</p>
+        )}
 
         <Renda
           hoje={total(doDia, 'renda')}
@@ -71,10 +95,7 @@ function Financeiro() {
           titulo="Excluir renda"
           nome={rendaParaExcluir.descricao}
           onFechar={() => setRendaParaExcluir(null)}
-          onConfirmar={() => {
-            excluirLancamento(rendaParaExcluir.id);
-            setRendaParaExcluir(null);
-          }}
+          onConfirmar={() => excluir(rendaParaExcluir)}
         />
       )}
 

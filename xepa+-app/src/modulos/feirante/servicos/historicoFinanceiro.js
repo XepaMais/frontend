@@ -1,7 +1,10 @@
 // Junta os registros que já existem (rendas, compras e gastos) em uma única lista.
+// Com login, a lista e a planilha vêm do backend; sem login, deste navegador.
 import { dataEmTexto, formatarData } from '@/compartilhado/servicos/datas';
+import { baixarArquivoDaApi, requisicaoApi, salvarArquivo } from '@/compartilhado/servicos/api';
 import { carregarLancamentosFinanceiros } from './lancamentosFinanceiros.js';
 import { carregarGastos, CATEGORIAS_GASTO } from './gastosFeirante.js';
+import { caminhoFinanceiro, contaDoFeirante, parametros } from './financeiroApi.js';
 
 export const FILTROS_VAZIOS = {
   inicio: '',
@@ -47,6 +50,80 @@ export function carregarHistoricoFinanceiro() {
   }));
 
   return [...lancamentos, ...gastos].sort((a, b) => b.data.localeCompare(a.data));
+}
+
+export async function listarHistoricoFinanceiro() {
+  const conta = contaDoFeirante();
+  if (!conta) return carregarHistoricoFinanceiro();
+
+  const historico = await requisicaoApi(caminhoFinanceiro(conta, '/historico'));
+  return historico.registros.map((registro) => ({
+    ...registro,
+    valor: Number(registro.valor),
+    feira: registro.feira || '',
+  }));
+}
+
+const NOME_PLANILHA = 'historico-financeiro.csv';
+const BOM = String.fromCharCode(0xfeff);
+const QUEBRA_LINHA = String.fromCharCode(13, 10);
+
+// Planilha no formato do Excel em português (";" e vírgula decimal). Com login, gerada pelo backend.
+export async function baixarPlanilha({ filtros, registros, totais, nomeFeirante }) {
+  const conta = contaDoFeirante();
+
+  if (conta) {
+    const filtrosApi = {
+      inicio: filtros.inicio,
+      fim: filtros.fim,
+      tipo: filtros.tipo,
+      categoria: filtros.categoria,
+      busca: filtros.busca.trim(),
+    };
+    await baixarArquivoDaApi(caminhoFinanceiro(conta, `/planilha${parametros(filtrosApi)}`), NOME_PLANILHA);
+    return;
+  }
+
+  salvarArquivo(
+    new Blob([montarCsv({ registros, totais, nomeFeirante })], { type: 'text/csv;charset=utf-8' }),
+    NOME_PLANILHA,
+  );
+}
+
+function campoCsv(valor) {
+  let texto = String(valor ?? '');
+  // Impede que o Excel trate o texto como fórmula.
+  if (/^[=+\-@\t\r]/.test(texto) && !/^-?\d+(,\d+)?$/.test(texto)) texto = `'${texto}`;
+  if (/[;"\r\n]/.test(texto)) texto = `"${texto.replace(/"/g, '""')}"`;
+  return texto;
+}
+
+function numeroCsv(valor) {
+  return Number(valor).toFixed(2).replace('.', ',');
+}
+
+function montarCsv({ registros, totais, nomeFeirante }) {
+  const linhas = [
+    ['Histórico financeiro - Xepa+'],
+    ['Feirante', nomeFeirante],
+    [],
+    ['Data', 'Descrição', 'Categoria', 'Tipo', 'Feira', 'Valor (R$)'],
+    ...registros.map((registro) => [
+      formatarData(registro.data),
+      registro.descricao,
+      registro.categoria,
+      ROTULOS_TIPO[registro.tipo],
+      registro.feira,
+      numeroCsv(registro.valor),
+    ]),
+    [],
+    ['Total de lucros', '', '', '', '', numeroCsv(totais.lucros)],
+    ['Total de despesas', '', '', '', '', numeroCsv(totais.gastos)],
+    ['Saldo do período', '', '', '', '', numeroCsv(totais.saldo)],
+  ];
+
+  // O BOM faz o Excel abrir os acentos corretamente.
+  return BOM + linhas.map((linha) => linha.map(campoCsv).join(';')).join(QUEBRA_LINHA);
 }
 
 function passaNosFiltros(registro, filtros) {
