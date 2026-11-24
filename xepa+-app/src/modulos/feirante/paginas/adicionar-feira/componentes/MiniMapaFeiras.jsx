@@ -10,13 +10,15 @@ function MiniMapaFeiras({ feiras }) {
   const navigate = useNavigate();
   const { isLoaded } = useJsApiLoader(GOOGLE_MAPS_LOADER);
 
-  // TODO 1: só as feiras que têm coordenada
+  // Só as feiras que a API conseguiu localizar pelo CEP + número.
   const feirasNoMapa = feiras
-    .filter((feira) => feira.latitude != null)
+    .filter((feira) => feira.latitude != null && feira.longitude != null)
     .map((feira) => ({
       ...feira,
-      position: { lat: feira.latitude, lng: feira.longitude },
+      position: { lat: Number(feira.latitude), lng: Number(feira.longitude) },
     }));
+  // Centraliza na feira cadastrada por último, bem perto da rua (como no Google Maps).
+  const ultimaFeira = feirasNoMapa[feirasNoMapa.length - 1];
 
   // Mapa completo dentro da área do feirante (mantém o menu do feirante no topo).
   const abrirMapa = () => navigate('/mapa-feirante');
@@ -30,8 +32,8 @@ function MiniMapaFeiras({ feiras }) {
       <div className={styles.miniMapa}>
         <GoogleMap
           mapContainerStyle={{ width: '100%', height: '100%' }}
-          center={feirasNoMapa[0]?.position ?? CENTRO_PADRAO}
-          zoom={12}
+          center={ultimaFeira?.position ?? CENTRO_PADRAO}
+          zoom={ultimaFeira ? 16 : 12}
           onClick={abrirMapa}
           options={{
             disableDefaultUI: true,   // esconde botões de zoom etc.
@@ -44,9 +46,11 @@ function MiniMapaFeiras({ feiras }) {
               key={feira.id}
               position={feira.position}
               onClick={abrirMapa}
+              title={feira.nome}
               icon={{
                 url: logoXepa,
-                scaledSize: new window.google.maps.Size(36, 36),
+                scaledSize: new window.google.maps.Size(48, 48),
+                anchor: new window.google.maps.Point(24, 24),
               }}
             />
           ))}

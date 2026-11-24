@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { carregarFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
+import { useEffect, useState } from 'react';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import logoXepa from '@/assets/imagens/gerais/logo-colorida.png';
+import { GOOGLE_MAPS_LOADER } from '@/compartilhado/servicos/googleMaps';
+import { buscarFeirasDoMapa } from '@/modulos/feirante/servicos/feirasFeirante';
 import { buscarCep, geocodificarEndereco } from '@/compartilhado/servicos/localizacao';
 import '@/modulos/publico/paginas/inicio/estilos/MapaFeiras.css';
 import Rabisco from '@/modulos/publico/paginas/inicio/componentes/Rabisco.jsx';
@@ -33,7 +36,23 @@ function MapaFeiras() {
   const [mensagem, setMensagem] = useState(
     'Digite seu CEP para ver as feiras cadastradas perto de você.',
   );
-  const [feiras] = useState(() => carregarFeiras().filter((feira) => feira.latitude != null));
+  const [feiras, setFeiras] = useState([]);
+  const { isLoaded } = useJsApiLoader(GOOGLE_MAPS_LOADER);
+
+  // Feiras cadastradas pelos feirantes, vindas da API (banco na nuvem).
+  useEffect(() => {
+    buscarFeirasDoMapa()
+      .then((lista) =>
+        setFeiras(
+          lista.map((feira) => ({
+            ...feira,
+            latitude: Number(feira.latitude),
+            longitude: Number(feira.longitude),
+          })),
+        ),
+      )
+      .catch(() => {});
+  }, []);
 
   async function pesquisarFeiras() {
     const termo = busca.trim();
@@ -122,13 +141,29 @@ function MapaFeiras() {
         </div>
 
         <div className="mapa-visual" data-revelar="zoom" style={{ '--atraso': '0.2s' }}>
-          <iframe
-            title={`Mapa próximo de ${centro.lat}, ${centro.lng}`}
-            src={`https://maps.google.com/maps?q=${centro.lat},${centro.lng}&output=embed`}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-          />
+          {isLoaded ? (
+            <GoogleMap
+              mapContainerStyle={{ width: '100%', height: '100%' }}
+              center={centro}
+              zoom={14}
+              options={{ clickableIcons: false, streetViewControl: false, mapTypeControl: false }}
+            >
+              {feiras.map((feira) => (
+                <Marker
+                  key={feira.id}
+                  position={{ lat: feira.latitude, lng: feira.longitude }}
+                  title={feira.nome}
+                  icon={{
+                    url: logoXepa,
+                    scaledSize: new window.google.maps.Size(48, 48),
+                    anchor: new window.google.maps.Point(24, 24),
+                  }}
+                />
+              ))}
+            </GoogleMap>
+          ) : (
+            <p>Carregando mapa...</p>
+          )}
         </div>
 
         <p className="mapa-observacao" aria-live="polite">

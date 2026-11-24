@@ -1,35 +1,54 @@
-// Feiras do feirante. Sem backend, ficam neste navegador.
-const CHAVE_FEIRAS = 'feirasFeirante';
+// Feiras ficam no banco da API (nuvem). Rua, cidade e coordenadas do mapa são
+// descobertas pelo servidor a partir do CEP e do número.
+import { requisicaoApi } from '@/compartilhado/servicos/api';
+import { carregarContaDaSessao } from '@/compartilhado/servicos/autenticacao';
 
-// Feiras de exemplo que o projeto já usava.
-const feirasIniciais = [
-  {
-    id: 1,
-    nome: 'Rocinha do tio',
-    endereco: 'Rua Tito',
-    dias: ['Ter', 'Qui'],
-    funcionarios: ['Gabriel', 'Hadson'],
-  },
-  {
-    id: 2,
-    nome: 'BemBom',
-    endereco: 'Rua Borboletas Psicodélicas',
-    dias: ['Sex', 'Sáb'],
-    funcionarios: ['Jamilly', 'Henrique'],
-  },
-  {
-    id: 3,
-    nome: 'Fazendinha',
-    endereco: 'Rua Encontros e Despedidas',
-    dias: ['Seg', 'Qua'],
-    funcionarios: ['Murilo', 'Igor'],
-  },
-];
+// Cópia em memória da última lista buscada, para telas que precisam do valor na hora
+// (ex.: select de feira, frete). Some ao recarregar a página: a fonte é sempre a API.
+let feirasEmMemoria = [];
 
+function contaId() {
+  const conta = carregarContaDaSessao();
+  if (!conta?.id) throw new Error('Entre na sua conta de feirante para gerenciar feiras.');
+  return conta.id;
+}
+
+// Feiras do feirante logado.
+export async function buscarMinhasFeiras() {
+  feirasEmMemoria = await requisicaoApi(`/feiras/conta/${contaId()}`);
+  return feirasEmMemoria;
+}
+
+// Todas as feiras com lugar no mapa (públicas).
+export async function buscarFeirasDoMapa() {
+  const feiras = await requisicaoApi('/feiras');
+  if (feirasEmMemoria.length === 0) feirasEmMemoria = feiras;
+  return feiras;
+}
+
+export function criarFeira(dados) {
+  return requisicaoApi(`/feiras/conta/${contaId()}`, {
+    method: 'POST',
+    body: JSON.stringify(dados),
+  });
+}
+
+export function atualizarFeira(id, dados) {
+  return requisicaoApi(`/feiras/conta/${contaId()}/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(dados),
+  });
+}
+
+export function excluirFeira(id) {
+  return requisicaoApi(`/feiras/conta/${contaId()}/${id}`, { method: 'DELETE' });
+}
+
+// Última lista já buscada (síncrono).
 export function carregarFeiras() {
-  return JSON.parse(localStorage.getItem(CHAVE_FEIRAS)) || feirasIniciais;
+  return feirasEmMemoria;
 }
 
-export function salvarFeiras(feiras) {
-  localStorage.setItem(CHAVE_FEIRAS, JSON.stringify(feiras));
-}
+// Já deixa a lista pronta para quem usa carregarFeiras().
+const contaAtual = carregarContaDaSessao();
+(contaAtual?.tipo === 'FEIRANTE' ? buscarMinhasFeiras() : buscarFeirasDoMapa()).catch(() => {});

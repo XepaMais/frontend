@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { carregarFeiras, salvarFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
+import {
+  atualizarFeira,
+  buscarMinhasFeiras,
+  criarFeira,
+  excluirFeira as excluirFeiraNaApi,
+} from '@/modulos/feirante/servicos/feirasFeirante';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import '@/modulos/feirante/paginas/financeiro/financeiro.css';
 import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa';
@@ -28,33 +33,41 @@ function textoDaBusca(feira) {
 function AddFeira() {
   const [busca, setBusca] = useState('');
   const [modal, setModal] = useState(null);
-  const [feiras, setFeiras] = useState(carregarFeiras);
+  const [feiras, setFeiras] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [aviso, setAviso] = useState('');
 
+  // As feiras vêm do banco na nuvem, não deste navegador.
   useEffect(() => {
-    salvarFeiras(feiras);
-  }, [feiras]);
+    buscarMinhasFeiras()
+      .then(setFeiras)
+      .catch((falha) => setAviso(falha.message))
+      .finally(() => setCarregando(false));
+  }, []);
 
-  function adicionarFeira(dados) {
-    setFeiras([...feiras, { id: Date.now(), ...dados }]);
+  // A API devolve a feira já com rua, cidade e coordenadas: ela aparece no mapa na hora.
+  // Se der erro, o formulário mostra a mensagem e continua aberto.
+  async function adicionarFeira(dados) {
+    const feira = await criarFeira(dados);
+    setFeiras((atuais) => [...atuais, feira]);
     setModal(null);
   }
 
-  function editarFeira(dados) {
-    const novasFeiras = feiras.map((feira) => {
-      if (feira.id === modal.feira.id) {
-        return { ...feira, ...dados };
-      }
-
-      return feira;
-    });
-
-    setFeiras(novasFeiras);
+  async function editarFeira(dados) {
+    const feiraAtualizada = await atualizarFeira(modal.feira.id, dados);
+    setFeiras((atuais) => atuais.map((feira) => (feira.id === feiraAtualizada.id ? feiraAtualizada : feira)));
     setModal(null);
   }
 
-  function excluirFeira() {
-    setFeiras(feiras.filter((feira) => feira.id !== modal.feira.id));
+  async function excluirFeira() {
+    const id = modal.feira.id;
     setModal(null);
+    try {
+      await excluirFeiraNaApi(id);
+      setFeiras((atuais) => atuais.filter((feira) => feira.id !== id));
+    } catch (falha) {
+      setAviso(falha.message);
+    }
   }
 
   const termo = busca.trim().toLocaleLowerCase('pt-BR');
@@ -133,9 +146,18 @@ function AddFeira() {
                 </div>
               </article>
             ))}
+            {aviso && (
+              <p role="alert" className={styles.semResultados}>
+                {aviso}
+              </p>
+            )}
             {feirasFiltradas.length === 0 && (
               <p className={styles.semResultados}>
-                {feiras.length === 0 ? 'Nenhuma feira cadastrada.' : 'Nenhuma feira encontrada.'}
+                {carregando
+                  ? 'Carregando feiras...'
+                  : feiras.length === 0
+                    ? 'Nenhuma feira cadastrada.'
+                    : 'Nenhuma feira encontrada.'}
               </p>
             )}
           </div>

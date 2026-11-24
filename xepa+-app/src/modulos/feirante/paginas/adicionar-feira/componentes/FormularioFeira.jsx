@@ -4,7 +4,7 @@ import pinIcon from '@/assets/imagens/gerais/PinIcon.png';
 import Modal from '@/compartilhado/componentes/modal/Modal';
 import base from '@/compartilhado/componentes/modal/Modal.module.css';
 import styles from '../estilos/PopUpAdicionarFeira.module.css';
-import { buscarCep, geocodificarEndereco } from '@/compartilhado/servicos/localizacao';
+import { buscarCep } from '@/compartilhado/servicos/localizacao';
 
 const diasDaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
@@ -47,11 +47,6 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
   const [funcionarios, setFuncionarios] = useState(funcionariosIniciais(feira));
   const estaEditando = modo === 'editar';
 
-  // O horário só é salvo quando início e fim foram preenchidos.
-  let horario = '';
-  if (horarioInicio && horarioFim) {
-    horario = `${horarioInicio} às ${horarioFim}`;
-  }
   // Formata o CEP e, quando ele fica completo, preenche o endereço sozinho pelo ViaCEP.
   async function alterarCep(valor) {
     const cepFormatado = formatarCep(valor);
@@ -94,37 +89,21 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
     setErro('');
     setSalvando(true);
 
-    const endereco = `${rua}, ${numero.trim()}`;
-    // Junta rua, número, cidade e país num texto só, para o geocodificador achar o lugar certo.
-    const enderecoCompleto = [endereco, cidade, 'Brasil'].filter(Boolean).join(', ');
-
+    // Só CEP e número vão para a API: ela acha a rua e as coordenadas e já põe a feira no mapa.
     try {
-      const localizacao = await geocodificarEndereco(enderecoCompleto);
-
-      if (!localizacao) {
-        setErro('Não encontramos esse endereço no mapa. Confira a rua e o CEP.');
-        return;
-      }
-
-      onSalvar({
+      await onSalvar({
         nome: nome.trim(),
-        endereco,
-        rua,
-        numero: numero.trim(),
         cep,
-        cidade,
-        latitude: localizacao.latitude,
-        longitude: localizacao.longitude,
+        numero: numero.trim(),
         dias,
         horarioInicio,
         horarioFim,
-        horario,
         funcionarios: funcionarios
           .map((funcionario) => funcionario.trim())
           .filter((funcionario) => funcionario !== ''),
       });
-    } catch {
-      setErro('Não foi possível localizar o endereço agora. Tente novamente.');
+    } catch (falha) {
+      setErro(falha.message || 'Não foi possível salvar a feira agora. Tente novamente.');
     } finally {
       setSalvando(false);
     }

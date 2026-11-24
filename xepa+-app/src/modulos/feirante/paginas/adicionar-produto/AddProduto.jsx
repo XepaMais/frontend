@@ -1,14 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarDays, Clock, History, MapPin, Plus, Store } from 'lucide-react';
 import '@/modulos/feirante/paginas/financeiro/financeiro.css';
-import { carregarFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
+import { buscarMinhasFeiras, carregarFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
 import PopUpAdicionarProduto from '@/modulos/feirante/paginas/adicionar-produto/componentes/PopUpAdicionarProduto.jsx';
 import base from '@/compartilhado/estilos/conta.module.css';
 import styles from '@/modulos/feirante/paginas/adicionar-produto/estilos/AddProduto.module.css';
 
 function AddProduto() {
-  const [feiras] = useState(carregarFeiras);
+  const [feiras, setFeiras] = useState(carregarFeiras);
+
+  // Atualiza com as feiras salvas na API.
+  useEffect(() => {
+    buscarMinhasFeiras().then(setFeiras).catch(() => {});
+  }, []);
   const [feiraSelecionada, setFeiraSelecionada] = useState(null);
   const [feiraDoUltimoProduto, setFeiraDoUltimoProduto] = useState(null);
 

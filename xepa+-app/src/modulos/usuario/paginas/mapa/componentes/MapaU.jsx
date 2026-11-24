@@ -6,36 +6,36 @@ import logoXepa from '@/assets/imagens/gerais/logo-colorida.png'
 import { GOOGLE_MAPS_LOADER } from '@/compartilhado/servicos/googleMaps'
 import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa';
 
-// Simulação das feiras cadastradas no sistema
-const FEIRAS_CADASTRADAS = [
-  {
-    id: 1,
-    nome: "Feira Livre da Lapa",
-    descricao: "Frutas frescas, pastéis e vegetais orgânicos.",
-    horario: "Terça a Domingo - 07h às 13h",
-    position: { lat: -23.5228, lng: -46.7012 }
-  },
-  {
-    id: 2,
-    nome: "Feira de Pinheiros",
-    descricao: "Tradicional feira com grande variedade de queijos e pescados.",
-    horario: "Quarta e Sábado - 06h às 14h",
-    position: { lat: -23.5594, lng: -46.6856 }
-  },
-  {
-    id: 3,
-    nome: "Feira Xepa Central",
-    descricao: "Ponto original parceiro do app Xepa.",
-    horario: "Diariamente - 08h às 17h",
-    position: { lat: -23.5280859, lng: -46.6917602 }
-  }
-];
+import { buscarFeirasDoMapa } from '@/modulos/feirante/servicos/feirasFeirante';
+
+// Texto do balão: dias e horário que o feirante cadastrou.
+function descreverFuncionamento(feira) {
+  return [feira.dias?.join(', '), feira.horario].filter(Boolean).join(' · ');
+}
 
 function MapPage() {
   const { isLoaded } = useJsApiLoader(GOOGLE_MAPS_LOADER);
 
   const [cep, setCep] = useState('');
   const [aviso, setAviso] = useState('');
+  // Feiras cadastradas pelos feirantes (banco na nuvem), já com coordenadas.
+  const [feirasCadastradas, setFeirasCadastradas] = useState([]);
+
+  useEffect(() => {
+    buscarFeirasDoMapa()
+      .then((feiras) =>
+        setFeirasCadastradas(
+          feiras.map((feira) => ({
+            ...feira,
+            descricao: [feira.endereco, feira.cidade].filter(Boolean).join(', '),
+            horario: descreverFuncionamento(feira),
+            position: { lat: Number(feira.latitude), lng: Number(feira.longitude) },
+          })),
+        ),
+      )
+      .catch(() => setAviso('Não foi possível carregar as feiras agora.'));
+  }, []);
+
   const [feiraSelecionada, setFeiraSelecionada] = useState(null);
   
   // O centro do mapa começa na posição padrão, mas mudará para a do usuário
@@ -131,7 +131,7 @@ function MapPage() {
             )}
 
             {/* MARCADORES DAS FEIRAS (Logos da Xepa) */}
-            {FEIRAS_CADASTRADAS.map((feira) => (
+            {feirasCadastradas.map((feira) => (
               <Marker
                 key={feira.id}
                 position={feira.position}
