@@ -1,15 +1,40 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { cadastrarFeirante } from '@/compartilhado/servicos/autenticacao';
 import AceiteTermos from '@/modulos/autenticacao/paginas/AceiteTermos';
 import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function CriarContaF() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const dadosConta = location.state;
+  const [erro, setErro] = useState('');
+  const [carregando, setCarregando] = useState(false);
 
-  function proximaEtapa(event) {
-    event.preventDefault();
-    const dados = Object.fromEntries(new FormData(event.target));
-    navigate('/CriarContaF2', { state: dados }); //
+  async function proximaEtapa(evento) {
+    evento.preventDefault();
+    setErro('');
+    setCarregando(true);
+    const formulario = new FormData(evento.currentTarget);
+    const cadastro = Object.fromEntries(
+      ['nome', 'cpf', 'telefone', 'email', 'senha'].map((campo) => [campo, dadosConta?.[campo] || '']),
+    );
+    cadastro.nomeFantasia = formulario.get('fantasia');
+    cadastro.cnpj = formulario.get('cnpj');
+    cadastro.ccm = formulario.get('ccm');
+    cadastro.matricula = formulario.get('matricula');
+    cadastro.grupoComercio = formulario.get('grupo');
+
+    try {
+      if (!cadastro.email) throw new Error('Volte à etapa anterior e preencha os dados da conta.');
+      await cadastrarFeirante(cadastro);
+      navigate('/Crumb', { state: { mensagem: 'Cadastro concluído. Entre com seu email e senha.' } });
+    } catch (erroApi) {
+      setErro(erroApi.message);
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
@@ -61,9 +86,10 @@ function CriarContaF() {
 
           <AceiteTermos />
 
-          <button type="submit" className={Styles.btnEntrar}>
-            Próxima etapa
+          <button type="submit" className={Styles.btnEntrar} disabled={carregando}>
+            {carregando ? 'Salvando...' : 'Criar conta'}
           </button>
+          {erro && <p role="alert">{erro}</p>}
 
           <p className={Styles.cadastro}>
             Já tem conta? <Link to="/Crumb">Entrar</Link>

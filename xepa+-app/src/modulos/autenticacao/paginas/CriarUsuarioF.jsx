@@ -8,7 +8,7 @@ function CriarConta() {
   function proximaEtapa(event) {
     event.preventDefault();
     const dados = Object.fromEntries(new FormData(event.target));
-    navigate('/CriarContaC2', { state: dados }); // ajuste para a sua próxima rota
+    navigate('/CriarContaF', { state: dados });
   }
 
   return (
@@ -52,11 +52,7 @@ function CriarConta() {
             <input type="password" id="senha" name="senha" required />
           </div>
 
-          <button
-            type="button"
-            className={Styles.btnEntrar}
-            onClick={() => navigate('/CriarContaF')}
-          >
+          <button type="submit" className={Styles.btnEntrar}>
             Próxima etapa
           </button>
 

@@ -1,24 +1,31 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CircleCheck } from 'lucide-react';
-import Modal from '@/compartilhado/componentes/modal/Modal';
-import estiloModal from '@/compartilhado/componentes/modal/Modal.module.css';
+import { cadastrarConsumidor } from '@/compartilhado/servicos/autenticacao';
 import AceiteTermos from '@/modulos/autenticacao/paginas/AceiteTermos';
 import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function CriarConta() {
   const navigate = useNavigate();
-  const [contaCriada, setContaCriada] = useState(false);
+  const [erro, setErro] = useState('');
+  const [carregando, setCarregando] = useState(false);
 
-  // Mostra o aviso de conta criada; o login abre quando a pessoa fecha o pop-up.
-  function proximaEtapa(event) {
-    event.preventDefault();
-    setContaCriada(true);
-  }
+  async function cadastrar(evento) {
+    evento.preventDefault();
+    setErro('');
+    setCarregando(true);
+    const formulario = new FormData(evento.currentTarget);
+    const dados = Object.fromEntries(['nome', 'cpf', 'telefone', 'email', 'senha']
+      .map((campo) => [campo, formulario.get(campo)]));
 
-  function irParaLogin() {
-    navigate('/Crumb');
+    try {
+      await cadastrarConsumidor(dados);
+      navigate('/Crumb', { state: { mensagem: 'Conta criada. Entre com seu email e senha.' } });
+    } catch (erroApi) {
+      setErro(erroApi.message);
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
@@ -26,9 +33,7 @@ function CriarConta() {
       <section className={Styles.ladoImagem}></section>
 
       <section className={Styles.ladoForm}>
-        <form className={Styles.form} onSubmit={proximaEtapa}>
-          <BotaoVoltar destino="/OpcaoLogin" />
-
+        <form className={Styles.form} onSubmit={cadastrar}>
           <h1>Crie sua conta</h1>
 
           <div className={Styles.campo}>
@@ -64,9 +69,10 @@ function CriarConta() {
 
           <AceiteTermos />
 
-          <button type="submit" className={Styles.btnEntrar}>
-            Próxima etapa
+          <button type="submit" className={Styles.btnEntrar} disabled={carregando}>
+            {carregando ? 'Salvando...' : 'Criar conta'}
           </button>
+          {erro && <p role="alert">{erro}</p>}
 
           <p className={Styles.cadastro}>
             Já tem conta? <Link to="/Crumb">Entrar</Link>

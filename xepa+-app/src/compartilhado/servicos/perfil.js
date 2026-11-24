@@ -1,3 +1,5 @@
+import { carregarContaDaSessao } from '@/compartilhado/servicos/autenticacao';
+
 const CHAVES = {
   usuario: 'perfilUsuario',
   feirante: 'perfilFeirante',
@@ -27,7 +29,17 @@ export const EVENTO_PERFIL = 'perfil-atualizado';
 
 export function carregarPerfil(tipo) {
   const salvo = JSON.parse(localStorage.getItem(CHAVES[tipo]));
-  return { ...PERFIS_INICIAIS[tipo], ...salvo };
+  const perfil = { ...PERFIS_INICIAIS[tipo], ...salvo };
+  const conta = carregarContaDaSessao();
+  const tipoEsperado = tipo === 'feirante' ? 'FEIRANTE' : 'CONSUMIDOR';
+
+  if (conta?.tipo !== tipoEsperado) return perfil;
+
+  return {
+    ...perfil,
+    nome: conta.nome || perfil.nome,
+    email: conta.email || perfil.email,
+  };
 }
 
 export function salvarPerfil(tipo, dados) {
