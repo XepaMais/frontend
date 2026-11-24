@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import {
-  carregarLancamentosFinanceiros,
-  salvarLancamentosFinanceiros,
+  listarRendas,
+  removerRenda,
+  salvarRenda,
 } from '@/modulos/feirante/servicos/lancamentosFinanceiros';
-import { carregarGastos, somarGastosDaSemana } from '@/modulos/feirante/servicos/gastosFeirante';
+import { listarGastos, somarGastosDaSemana } from '@/modulos/feirante/servicos/gastosFeirante';
 import { dataDeHoje, estaNaSemanaAtual, estaNoMesAtual } from '@/compartilhado/servicos/datas';
 
 // Soma os lançamentos de um tipo: 'renda' ou 'compra'.
@@ -24,12 +25,29 @@ function lerData(item) {
   return new Date(item.data + 'T12:00:00');
 }
 
+// Rendas e gastos do feirante: do backend (com login) ou deste navegador (demonstração).
 export default function useFinanceiro() {
-  const [lancamentos, setLancamentos] = useState(carregarLancamentosFinanceiros);
+  const [lancamentos, setLancamentos] = useState([]);
+  const [gastos, setGastos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState('');
 
   useEffect(() => {
-    salvarLancamentosFinanceiros(lancamentos);
-  }, [lancamentos]);
+    let ativo = true;
+
+    Promise.all([listarRendas(), listarGastos()])
+      .then(([rendas, listaGastos]) => {
+        if (!ativo) return;
+        setLancamentos(rendas);
+        setGastos(listaGastos);
+      })
+      .catch((falha) => ativo && setErro(falha.message))
+      .finally(() => ativo && setCarregando(false));
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
 
   const hoje = dataDeHoje();
   const doDia = lancamentos.filter((item) => item.data === hoje);
@@ -37,25 +55,30 @@ export default function useFinanceiro() {
   const doMes = lancamentos.filter((item) => estaNoMesAtual(lerData(item)));
 
   // Custos da semana: gastos cadastrados na página de Gastos + compras antigas já registradas.
-  const custosDaSemana = somarGastosDaSemana(carregarGastos()) + total(daSemana, 'compra');
+  const custosDaSemana = somarGastosDaSemana(gastos) + total(daSemana, 'compra');
 
   // Adiciona a renda nova ou substitui a que está sendo editada.
-  function salvarLancamento(lancamento) {
+  async function salvarLancamento(lancamento) {
     const jaExiste = lancamentos.some((item) => item.id === lancamento.id);
+    const salvo = await salvarRenda(lancamento, jaExiste);
 
-    if (jaExiste) {
-      setLancamentos(lancamentos.map((item) => (item.id === lancamento.id ? lancamento : item)));
-    } else {
-      setLancamentos([...lancamentos, lancamento]);
-    }
+    setLancamentos((atuais) => (
+      jaExiste
+        ? atuais.map((item) => (item.id === lancamento.id ? salvo : item))
+        : [...atuais, salvo]
+    ));
   }
 
-  function excluirLancamento(id) {
-    setLancamentos(lancamentos.filter((item) => item.id !== id));
+  async function excluirLancamento(id) {
+    await removerRenda(id);
+    setLancamentos((atuais) => atuais.filter((item) => item.id !== id));
   }
 
   return {
     lancamentos,
+    gastos,
+    carregando,
+    erro,
     salvarLancamento,
     excluirLancamento,
     custosDaSemana,

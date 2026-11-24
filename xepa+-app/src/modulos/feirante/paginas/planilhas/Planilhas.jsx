@@ -1,15 +1,16 @@
-import { useState } from 'react';
-import { Download, FileSpreadsheet } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Download, FileSpreadsheet, Sheet } from 'lucide-react';
 import usePerfil from '@/compartilhado/hooks/usePerfil';
 import { formatarData } from '@/compartilhado/servicos/datas';
 import { formatarMoeda } from '@/compartilhado/servicos/pedidos';
 import {
   FILTROS_VAZIOS,
   ROTULOS_TIPO,
+  baixarPlanilha,
   calcularTotais,
-  carregarHistoricoFinanceiro,
   descreverPeriodo,
   filtrarHistorico,
+  listarHistoricoFinanceiro,
 } from '@/modulos/feirante/servicos/historicoFinanceiro';
 import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa';
 import base from '@/compartilhado/estilos/conta.module.css';
@@ -32,8 +33,24 @@ function listarCategorias(registros) {
 
 function Planilhas() {
   const { perfil } = usePerfil('feirante');
-  const [registros] = useState(carregarHistoricoFinanceiro);
+  const [registros, setRegistros] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState('');
+  const [baixando, setBaixando] = useState(false);
   const [filtros, setFiltros] = useState(FILTROS_VAZIOS);
+
+  useEffect(() => {
+    let ativo = true;
+
+    listarHistoricoFinanceiro()
+      .then((lista) => ativo && setRegistros(lista))
+      .catch((falha) => ativo && setErro(falha.message))
+      .finally(() => ativo && setCarregando(false));
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
 
   const categorias = listarCategorias(registros);
   const filtrados = filtrarHistorico(registros, filtros);
@@ -56,6 +73,19 @@ function Planilhas() {
     });
   }
 
+  // Planilha (CSV) que abre no Excel e no Google Planilhas, com os mesmos filtros da tela.
+  async function baixarExcel() {
+    setBaixando(true);
+    try {
+      await baixarPlanilha({ filtros, registros: filtrados, totais, nomeFeirante: perfil.nome });
+      setErro('');
+    } catch (falha) {
+      setErro(falha.message);
+    } finally {
+      setBaixando(false);
+    }
+  }
+
   return (
     <div className="pagina pagina-financeiro">
       <main className="conteudo">
@@ -65,12 +95,23 @@ function Planilhas() {
             <p>Histórico completo das suas rendas, compras e despesas.</p>
           </div>
           <div className="botoes">
+            <button
+              type="button"
+              onClick={baixarExcel}
+              disabled={filtrados.length === 0 || baixando}
+            >
+              <Sheet size={18} aria-hidden="true" />
+              {baixando ? 'Gerando...' : 'Baixar planilha (Excel)'}
+            </button>
             <button type="button" onClick={baixarPdf} disabled={filtrados.length === 0}>
               <Download size={18} aria-hidden="true" />
               Baixar PDF
             </button>
           </div>
         </section>
+
+        {carregando && <p className="aviso-financeiro carregando">Carregando seu histórico...</p>}
+        {erro && <p role="alert" className="aviso-financeiro">{erro}</p>}
 
         <form className={styles.filtros} onSubmit={(evento) => evento.preventDefault()}>
           <div className={base.campo}>

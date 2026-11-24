@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CircleCheck, ChevronDown } from 'lucide-react';
 import '@/modulos/feirante/paginas/financeiro/financeiro.css';
 import Modal from '@/compartilhado/componentes/modal/Modal';
@@ -6,9 +6,8 @@ import base from '@/compartilhado/componentes/modal/Modal.module.css';
 import { formatarDataHora, formatarMoeda } from '@/compartilhado/servicos/pedidos';
 import {
   TIPOS_CHAVE_PIX,
-  calcularSaldo,
-  carregarSaques,
-  registrarSaque,
+  carregarDadosDeSaque,
+  solicitarSaque,
   validarChavePix,
 } from '@/modulos/feirante/servicos/saquesFeirante';
 import Styles from './estilos/Sacar.module.css';
@@ -21,7 +20,10 @@ function rotuloDoTipo(tipo) {
 
 // Tela fictícia de saque: o feirante transfere para o Pix o que recebeu pelas vendas no Xepa+.
 function Sacar() {
-  const [saques, setSaques] = useState(carregarSaques);
+  const [saques, setSaques] = useState([]);
+  const [saldo, setSaldo] = useState({ recebido: 0, sacado: 0, disponivel: 0 });
+  const [carregando, setCarregando] = useState(true);
+  const [enviando, setEnviando] = useState(false);
   const [tipoChave, setTipoChave] = useState('cpf');
   const [chave, setChave] = useState('');
   const [valor, setValor] = useState('');
@@ -30,7 +32,30 @@ function Sacar() {
   // Saque validado esperando a confirmação no pop-up.
   const [saquePendente, setSaquePendente] = useState(null);
 
-  const saldo = calcularSaldo(saques);
+  function atualizarDados() {
+    return carregarDadosDeSaque().then((dados) => {
+      setSaldo(dados.saldo);
+      setSaques(dados.saques);
+    });
+  }
+
+  useEffect(() => {
+    let ativo = true;
+
+    carregarDadosDeSaque()
+      .then((dados) => {
+        if (!ativo) return;
+        setSaldo(dados.saldo);
+        setSaques(dados.saques);
+      })
+      .catch((falha) => ativo && setErro(falha.message))
+      .finally(() => ativo && setCarregando(false));
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
+
   const exemplo = TIPOS_CHAVE_PIX.find((item) => item.valor === tipoChave).exemplo;
 
   function sacar(evento) {
@@ -47,12 +72,21 @@ function Sacar() {
     setSaquePendente({ valor: valorNumero, tipoChave, chave: chave.trim() });
   }
 
-  function confirmarSaque() {
-    const saque = registrarSaque(saquePendente);
-    setSaques([saque, ...saques]);
-    setUltimoSaque(saque);
-    setSaquePendente(null);
-    setValor('');
+  async function confirmarSaque() {
+    setEnviando(true);
+    try {
+      const saque = await solicitarSaque(saquePendente);
+      setUltimoSaque(saque);
+      setValor('');
+      setErro('');
+      // Recarrega saldo e histórico como o servidor calculou.
+      await atualizarDados();
+    } catch (falha) {
+      setErro(falha.message);
+    } finally {
+      setEnviando(false);
+      setSaquePendente(null);
+    }
   }
 
   return (
@@ -64,6 +98,8 @@ function Sacar() {
             <p>Transfira para o seu Pix o que você recebeu pelas vendas de xepa no Xepa+.</p>
           </div>
         </section>
+
+        {carregando && <p className="aviso-financeiro carregando">Carregando seu saldo...</p>}
 
         <section className={Styles.saldos}>
           <article className={`${Styles.card} ${Styles.destaque}`}>
@@ -210,8 +246,13 @@ function Sacar() {
             >
               Cancelar
             </button>
-            <button type="button" className={base.principal} onClick={confirmarSaque}>
-              Confirmar saque
+            <button
+              type="button"
+              className={base.principal}
+              onClick={confirmarSaque}
+              disabled={enviando}
+            >
+              {enviando ? 'Enviando...' : 'Confirmar saque'}
             </button>
           </div>
         </Modal>

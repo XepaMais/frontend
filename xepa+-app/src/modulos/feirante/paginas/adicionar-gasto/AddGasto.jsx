@@ -4,10 +4,12 @@ import '@/modulos/feirante/paginas/financeiro/financeiro.css';
 import Renda from '@/modulos/feirante/paginas/financeiro/componentes/Renda.jsx';
 import GraficoBarras from '@/modulos/feirante/paginas/financeiro/componentes/GraficoBarras.jsx';
 import {
-  carregarGastos,
-  salvarGastos,
+  atualizarGasto,
   calcularTotaisDeGastos,
+  criarGasto,
   gastosDoMesPorCategoria,
+  listarGastos,
+  removerGasto,
 } from '@/modulos/feirante/servicos/gastosFeirante';
 import Styles from '@/modulos/feirante/paginas/adicionar-gasto/estilos/graficoGastos.module.css';
 import HistoricoGastos from '@/modulos/feirante/paginas/adicionar-gasto/componentes/resumoGasto.jsx';
@@ -18,57 +20,66 @@ import PopUpExcluir from '@/modulos/feirante/componentes/PopUpExcluir.jsx';
 
 const filtrosVazios = { categoria: '', ordemQuantidade: '', ordemPreco: '' };
 
-// O próximo id é sempre uma unidade maior que o maior id da lista.
-function criarId(gastos) {
-  let maiorId = 0;
-
-  for (const gasto of gastos) {
-    if (gasto.id > maiorId) {
-      maiorId = gasto.id;
-    }
-  }
-
-  return maiorId + 1;
-}
-
 function AddGasto() {
-  const [gastos, setGastos] = useState(carregarGastos);
+  const [gastos, setGastos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState('');
   const [filtros, setFiltros] = useState(filtrosVazios);
   const [modal, setModal] = useState(null);
   const tipoModal = modal ? modal.tipo : null;
 
   useEffect(() => {
-    salvarGastos(gastos);
-  }, [gastos]);
+    let ativo = true;
+
+    listarGastos()
+      .then((lista) => ativo && setGastos(lista))
+      .catch((falha) => ativo && setErro(falha.message))
+      .finally(() => ativo && setCarregando(false));
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
 
   const totais = calcularTotaisDeGastos(gastos);
 
   // Em "Cadastrar outra despesa", manterAberto é true e o pop-up continua na tela.
-  function adicionarGasto(dados, manterAberto) {
-    const novoGasto = { id: criarId(gastos), data: new Date(), ...dados };
-    setGastos([novoGasto, ...gastos]);
-
-    if (!manterAberto) {
+  async function adicionarGasto(dados, manterAberto) {
+    try {
+      const novoGasto = await criarGasto(dados);
+      setGastos((atuais) => [novoGasto, ...atuais]);
+      setErro('');
+      if (!manterAberto) setModal(null);
+    } catch (falha) {
+      setErro(falha.message);
       setModal(null);
     }
   }
 
-  function editarGasto(dados) {
-    const novosGastos = gastos.map((gasto) => {
-      if (gasto.id === modal.gasto.id) {
-        return { ...gasto, ...dados };
-      }
-
-      return gasto;
-    });
-
-    setGastos(novosGastos);
+  async function editarGasto(dados) {
+    const gastoEditado = modal.gasto;
     setModal(null);
+
+    try {
+      const salvo = await atualizarGasto(gastoEditado, dados);
+      setGastos((atuais) => atuais.map((gasto) => (gasto.id === gastoEditado.id ? salvo : gasto)));
+      setErro('');
+    } catch (falha) {
+      setErro(falha.message);
+    }
   }
 
-  function excluirGasto() {
-    setGastos(gastos.filter((gasto) => gasto.id !== modal.gasto.id));
+  async function excluirGasto() {
+    const gastoExcluido = modal.gasto;
     setModal(null);
+
+    try {
+      await removerGasto(gastoExcluido);
+      setGastos((atuais) => atuais.filter((gasto) => gasto.id !== gastoExcluido.id));
+      setErro('');
+    } catch (falha) {
+      setErro(falha.message);
+    }
   }
 
   function aplicarFiltros(novosFiltros) {
@@ -93,6 +104,9 @@ function AddGasto() {
             </button>
           </div>
         </section>
+
+        {carregando && <p className="aviso-financeiro carregando">Carregando suas despesas...</p>}
+        {erro && <p role="alert" className="aviso-financeiro">{erro}</p>}
 
         <Renda
           rotulo="Despesa"
