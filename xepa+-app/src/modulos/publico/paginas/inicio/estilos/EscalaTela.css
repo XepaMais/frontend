@@ -1,0 +1,38 @@
+/*
+ * Computadores: em monitores maiores, o conteúdo das seções (menos a primeira dobra)
+ * cresce junto com a tela, em vez de deixar espaço vazio em volta.
+ * --escala-tela vem de useEscalaTela.js (1 no notebook de referência).
+ *
+ * O zoom também aumentaria a altura da própria seção, por isso ela é dividida
+ * pela escala: no fim, a seção continua com --altura-secao na tela.
+ * Usado pela Home e pelo Sobre nós (importar depois dos estilos das seções).
+ */
+
+@media (min-width: 1001px) {
+  main .secao-sobre,
+  main .secao-funcionamento,
+  main .secao-beneficios,
+  main .propaganda,
+  main .planos-feirante,
+  main .mapa-feiras,
+  main .perguntas-frequentes,
+  .sobre > section:not(.sn-hero) {
+    zoom: var(--escala-tela, 1);
+  }
+
+  /* seções com altura fixa */
+  main .secao-sobre,
+  main .secao-beneficios,
+  main .planos-feirante,
+  main .mapa-feiras,
+  .sobre > section:not(.sn-hero) {
+    height: calc(var(--altura-secao) / var(--escala-tela, 1));
+  }
+
+  /* seções que podem crescer (ex.: perguntas abertas) */
+  main .secao-funcionamento,
+  main .propaganda,
+  main .perguntas-frequentes {
+    min-height: calc(var(--altura-secao) / var(--escala-tela, 1));
+  }
+}

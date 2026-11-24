@@ -28,12 +28,13 @@
   text-align: center;
 }
 
-/* Computadores: a primeira dobra tem 650px, como as seções da Home
+/* Computadores: a primeira dobra tem --altura-dobra (650px ou a tela inteira menos a faixa)
    (mesmo padrão das páginas do rodapé, em PaginaFooter.module.css) */
 @media (min-width: 1001px) {
   .sn-hero {
-    --frutas-max: 290px;
-    height: 650px;
+    /* 290px numa dobra de 650px; cresce junto com a dobra em monitores maiores */
+    --frutas-max: calc(var(--altura-dobra) * 0.446);
+    height: var(--altura-dobra);
   }
 
   .sn-hero__conteudo {
@@ -43,7 +44,7 @@
 
   /* As frutas mantêm o tamanho (encostadas umas nas outras). Em telas largas,
      onde a fileira passaria de --frutas-max, ela desce e o pé da fileira da frente
-     fica cortado, para caber nos 650px. */
+     fica cortado, para caber na altura da dobra. */
   .sn-hero__frutas {
     translate: 0 max(0px, 20cqw - var(--frutas-max));
   }

@@ -224,11 +224,11 @@
   }
 }
 
-/* Computadores: todas as seções da Home têm 650px de altura */
+/* Computadores: todas as seções da Home têm --altura-secao (650px ou a tela inteira) */
 @media (min-width: 1001px) {
   .secao-funcionamento {
     display: flex;
-    min-height: 650px;
+    min-height: var(--altura-secao);
     align-items: center;
   }
 

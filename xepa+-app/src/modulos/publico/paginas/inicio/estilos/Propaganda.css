@@ -167,3 +167,10 @@
     text-align: center;
   }
 }
+
+/* Computadores: mesma altura das outras seções da Home (650px ou a tela inteira) */
+@media (min-width: 1001px) {
+  .propaganda {
+    min-height: var(--altura-secao);
+  }
+}

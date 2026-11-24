@@ -217,14 +217,20 @@
 }
 
 /* =========================================================
- * Computadores: todas as seções têm 650px de altura, como na Home.
+ * Computadores: todas as seções têm --altura-secao, como na Home
+ * (650px, ou a tela inteira em monitores maiores).
  * O conteúdo fica centralizado na altura da seção.
  * ========================================================= */
 
 @media (min-width: 1001px) {
   .sobre > section {
     box-sizing: border-box;
-    height: 650px;
+    height: var(--altura-secao);
+  }
+
+  /* a primeira dobra desconta a faixa que vem logo abaixo (Apresentacao.css) */
+  .sobre > .sn-hero {
+    height: var(--altura-dobra);
   }
 
   .sn-intro,

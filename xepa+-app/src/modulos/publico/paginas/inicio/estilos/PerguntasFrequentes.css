@@ -197,11 +197,11 @@
   }
 }
 
-/* Computadores: seção com 650px de altura (cresce só se várias perguntas forem abertas) */
+/* Computadores: seção com --altura-secao (650px ou a tela inteira; cresce só se várias perguntas forem abertas) */
 @media (min-width: 761px) {
   .perguntas-frequentes {
     box-sizing: border-box;
-    min-height: 650px;
+    min-height: var(--altura-secao);
     /* mesmo espaço em cima e embaixo com as perguntas fechadas */
     padding-top: 111px;
     padding-bottom: 111px;

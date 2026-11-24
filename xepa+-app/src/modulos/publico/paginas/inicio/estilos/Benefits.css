@@ -7,10 +7,10 @@
   color: #111;
 }
 
-/* Computadores: todas as seções da Home têm 650px de altura */
+/* Computadores: todas as seções da Home têm --altura-secao (650px ou a tela inteira) */
 @media (min-width: 1001px) {
   .secao-beneficios {
-    height: 650px;
+    height: var(--altura-secao);
     padding-bottom: 24px;
   }
 }
