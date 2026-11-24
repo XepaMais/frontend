@@ -1,4 +1,4 @@
-// Padrão "/api": no dev o Vite faz proxy para localhost:8080; na Vercel o
+// Padrão "/api": no dev o Vite faz proxy para o backend na AWS; na Vercel o
 // vercel.json repassa para o backend na AWS. Defina VITE_API_URL só se quiser
 // chamar o backend direto (ex.: https://api.seudominio.com/api).
 const API_URL = import.meta.env.VITE_API_URL || '/api';
