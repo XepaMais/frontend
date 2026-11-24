@@ -9,7 +9,7 @@ export default defineConfig({
     // Vercel usa no vercel.json), evitando CORS.
     proxy: {
       '/api': {
-        target: 'http://52.73.232.44:8080',
+        target: 'http://13.184.82.8:8080',
         changeOrigin: true,
       },
     },
