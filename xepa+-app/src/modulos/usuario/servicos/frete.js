@@ -3,7 +3,7 @@
 // Futuramente a entrega será feita pela API do Uber: basta trocar o cálculo de calcularFrete pela cotação do Uber, mantendo o mesmo formato de retorno
 // ({ chave, entregas: [{ feira, distanciaKm, valor, tempo, foraDoRaio }], valor, foraDoRaio }).
 import { geocodificarEndereco } from '@/compartilhado/servicos/localizacao';
-import { carregarFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
+import { carregarTodasFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
 
 // Tabela fictícia de frete.
 export const TABELA_FRETE = {
@@ -95,7 +95,7 @@ function feirasDoCarrinho(itens) {
 
 async function coordenadasDaFeira(feira, endereco) {
   // Primeiro tenta a feira cadastrada (já tem latitude e longitude).
-  const cadastrada = carregarFeiras().find(
+  const cadastrada = carregarTodasFeiras().find(
     (atual) => atual.nome === feira.nome && atual.latitude != null,
   );
 

@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react';
-import { carregarConversas, EVENTO_CONVERSAS } from '@/compartilhado/servicos/conversas';
+import {
+  carregarConversas,
+  carregarConversasDoFeirante,
+  EVENTO_CONVERSAS,
+} from '@/compartilhado/servicos/conversas';
 
-export default function useConversas() {
-  const [conversas, setConversas] = useState(carregarConversas);
+// perfil 'feirante': só as conversas do feirante logado; senão, todas (consumidor).
+export default function useConversas(perfil) {
+  const carregar = perfil === 'feirante' ? carregarConversasDoFeirante : carregarConversas;
+  const [conversas, setConversas] = useState(carregar);
 
   useEffect(() => {
     function atualizar() {
-      setConversas(carregarConversas());
+      setConversas(carregar());
     }
 
     window.addEventListener(EVENTO_CONVERSAS, atualizar);
@@ -16,7 +22,7 @@ export default function useConversas() {
       window.removeEventListener(EVENTO_CONVERSAS, atualizar);
       window.removeEventListener('storage', atualizar);
     };
-  }, []);
+  }, [carregar]);
 
   return conversas;
 }

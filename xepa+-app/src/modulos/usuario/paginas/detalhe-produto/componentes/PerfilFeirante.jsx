@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { abrirConversaDaXepa } from '@/compartilhado/servicos/conversas';
 import { carregarPerfil } from '@/compartilhado/servicos/perfil';
-import { carregarFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
+import { carregarTodasFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
 import styles from '@/modulos/usuario/paginas/detalhe-produto/estilos/PerfilFeirante.module.css';
 
 const NOMES_DIAS = {
@@ -46,7 +46,7 @@ function PerfilFeirante({ xepa }) {
   const foto = perfil.nome === nomeFeirante ? perfil.foto : '';
   const barraca = xepa.barraca || (perfil.nome === nomeFeirante ? perfil.barraca : '');
 
-  const feira = carregarFeiras().find((item) => item.nome === xepa.feira);
+  const feira = carregarTodasFeiras().find((item) => item.nome === xepa.feira);
   const funcionarios = (feira?.funcionarios || []).filter(Boolean).map(capitalizar);
   const dias = descreverDias(xepa.dias || feira?.dias);
   const horario = xepa.horario || feira?.horario || '';
