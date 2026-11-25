@@ -4,7 +4,7 @@
 export const PLANOS = [
   {
     id: 'gratis',
-    nome: 'Grátis',
+    nome: 'Semente',
     preco: 'R$ 0,00',
     periodo: '',
     taxa: 0.15,
@@ -18,7 +18,7 @@ export const PLANOS = [
   },
   {
     id: 'crescer',
-    nome: 'Crescer',
+    nome: 'Broto',
     preco: 'R$ 29,90',
     periodo: '/mês',
     taxa: 0.08,
@@ -33,7 +33,7 @@ export const PLANOS = [
   },
   {
     id: 'pro',
-    nome: 'Pro',
+    nome: 'Colheita',
     preco: 'R$ 59,90',
     periodo: '/mês',
     taxa: 0.05,

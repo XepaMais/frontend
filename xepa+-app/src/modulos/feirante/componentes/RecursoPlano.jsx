@@ -7,15 +7,15 @@ import styles from './RecursoPlano.module.css';
 const MENSAGENS = {
   financeiro: {
     titulo: 'Gestão financeira não incluída no seu plano',
-    texto: 'Faça upgrade para o plano Crescer ou Pro para acompanhar lucros e despesas.',
+    texto: 'Faça upgrade para o plano Broto ou Colheita para acompanhar lucros e despesas.',
   },
   planilhas: {
     titulo: 'Planilhas não incluídas no seu plano',
-    texto: 'Faça upgrade para o plano Pro para ver o histórico completo e baixar o PDF.',
+    texto: 'Faça upgrade para o plano Colheita para ver o histórico completo e baixar o PDF.',
   },
   ia: {
     titulo: 'Xep.AI não incluída no seu plano',
-    texto: 'Faça upgrade para o plano Crescer ou Pro para conversar com a Xepinha.',
+    texto: 'Faça upgrade para o plano Broto ou Colheita para conversar com a Xepinha.',
   },
 };
 

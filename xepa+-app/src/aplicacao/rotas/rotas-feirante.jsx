@@ -75,7 +75,7 @@ export const rotasFeirante = [
       </RecursoPlano>
     }
   />,
-  // Sacar fica liberado em todos os planos: o Grátis também vende pela plataforma.
+  // Sacar fica liberado em todos os planos: o Semente também vende pela plataforma.
   <Route key="sacar" path="/sacar" element={<Sacar />} />,
   // Mesmo mapa do consumidor, mas dentro da área do feirante (mantém o menu do feirante).
   <Route key="mapa-feirante" path="/mapa-feirante" element={<Mapa />} />,
