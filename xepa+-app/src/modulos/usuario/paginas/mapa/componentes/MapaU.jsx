@@ -4,32 +4,22 @@ import Styles from '../estilos/MapU.module.css'
 import Modal from '@/compartilhado/componentes/modal/Modal'
 import logoXepa from '@/assets/imagens/gerais/logo-colorida.png'
 import { GOOGLE_MAPS_LOADER } from '@/compartilhado/servicos/googleMaps'
-import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa';
+import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa'
+import { buscarFeirasProximas } from '@/modulos/usuario/servicos/feiras'
 
-// Simulação das feiras cadastradas no sistema
-const FEIRAS_CADASTRADAS = [
-  {
-    id: 1,
-    nome: "Feira Livre da Lapa",
-    descricao: "Frutas frescas, pastéis e vegetais orgânicos.",
-    horario: "Terça a Domingo - 07h às 13h",
-    position: { lat: -23.5228, lng: -46.7012 }
-  },
-  {
-    id: 2,
-    nome: "Feira de Pinheiros",
-    descricao: "Tradicional feira com grande variedade de queijos e pescados.",
-    horario: "Quarta e Sábado - 06h às 14h",
-    position: { lat: -23.5594, lng: -46.6856 }
-  },
-  {
-    id: 3,
-    nome: "Feira Xepa Central",
-    descricao: "Ponto original parceiro do app Xepa.",
-    horario: "Diariamente - 08h às 17h",
-    position: { lat: -23.5280859, lng: -46.6917602 }
-  }
-];
+// A API manda latitude/longitude e horários "07:00:00"; o mapa usa position e "07:00".
+function feiraParaMapa(feira) {
+  const inicio = feira.horarioInicio?.slice(0, 5);
+  const fim = feira.horarioFim?.slice(0, 5);
+
+  return {
+    id: feira.id,
+    nome: feira.nome,
+    descricao: [feira.endereco, feira.cidade].filter(Boolean).join(' - '),
+    horario: inicio && fim ? `${inicio} às ${fim}` : '',
+    position: { lat: Number(feira.latitude), lng: Number(feira.longitude) },
+  };
+}
 
 function MapPage() {
   const { isLoaded } = useJsApiLoader(GOOGLE_MAPS_LOADER);
@@ -46,6 +36,26 @@ function MapPage() {
 
   // ESTADO NOVO: Armazena a posição GPS real capturada do usuário
   const [userPosition, setUserPosition] = useState(null);
+
+    // Feiras vindas da API, perto do centro do mapa (GPS do usuário ou CEP buscado).
+  const [feiras, setFeiras] = useState([]);
+
+  useEffect(() => {
+    let ativo = true;
+
+    buscarFeirasProximas(mapCenter.lat, mapCenter.lng)
+      .then((lista) => {
+        if (ativo) setFeiras(lista.map(feiraParaMapa));
+      })
+      .catch((erro) => {
+        if (ativo) setAviso(erro.message);
+      });
+
+    // Se o centro mudar antes da resposta chegar, ignora a resposta antiga.
+    return () => {
+      ativo = false;
+    };
+  }, [mapCenter]);
 
   // PEGAR A POSIÇÃO ATUAL AUTOMATICAMENTE AO ABRIR A TELA
   useEffect(() => {
@@ -131,8 +141,8 @@ function MapPage() {
             )}
 
             {/* MARCADORES DAS FEIRAS (Logos da Xepa) */}
-            {FEIRAS_CADASTRADAS.map((feira) => (
-              <Marker
+            {feiras.map((feira) => (
+              <Marker 
                 key={feira.id}
                 position={feira.position}
                 onClick={() => setFeiraSelecionada(feira)}
