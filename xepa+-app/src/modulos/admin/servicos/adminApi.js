@@ -55,3 +55,7 @@ export function atualizarLinha(nome, id, valores) {
 export function excluirLinha(nome, id) {
   return chamar(`${tabela(nome)}/${encodeURIComponent(id)}`, { method: 'DELETE' });
 }
+
+export function listarUsuarios() {
+  return chamar('/admin/usuarios');
+}
