@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Database, LogOut, Pencil, Plus, RefreshCw, Search, Trash2, X } from 'lucide-react';
+import { Database, LogOut, Pencil, Plus, RefreshCw, Search, Trash2, Users, X } from 'lucide-react';
 import {
   SESSAO_EXPIRADA,
   atualizarLinha,
@@ -9,6 +9,7 @@ import {
   listarTabelas,
   sairAdmin,
 } from '@/modulos/admin/servicos/adminApi';
+import UsuariosAdmin from './UsuariosAdmin';
 import estilos from './Admin.module.css';
 
 const TAMANHO_PAGINA = 25;
@@ -47,10 +48,7 @@ function PainelAdmin({ aoSair }) {
 
   const carregarTabelas = useCallback(() => {
     listarTabelas()
-      .then((lista) => {
-        setTabelas(lista);
-        setTabelaAtual((atual) => atual || lista[0]?.nome || '');
-      })
+      .then(setTabelas)
       .catch(tratarErro);
   }, [tratarErro]);
 
@@ -133,6 +131,15 @@ function PainelAdmin({ aoSair }) {
           <Database size={20} />
           <span>Xepa+ Admin</span>
         </div>
+        <button
+          type="button"
+          className={`${estilos.itemTabela} ${estilos.itemUsuarios} ${!tabelaAtual ? estilos.itemAtivo : ''}`}
+          onClick={() => escolherTabela('')}
+        >
+          <span className={estilos.itemIcone}>
+            <Users size={16} /> Usuários
+          </span>
+        </button>
         <p className={estilos.rotuloLateral}>Tabelas ({tabelas.length})</p>
         <nav className={estilos.listaTabelas}>
           {tabelas.map((t) => (
@@ -153,6 +160,20 @@ function PainelAdmin({ aoSair }) {
       </aside>
 
       <main className={estilos.conteudo}>
+        {!tabelaAtual ? (
+          <>
+            {erro && (
+              <div className={estilos.faixaErro}>
+                {erro}
+                <button type="button" onClick={() => setErro('')} aria-label="Fechar">
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+            <UsuariosAdmin aoErro={tratarErro} />
+          </>
+        ) : (
+          <>
         <header className={estilos.topo}>
           <div>
             <h1>{tabelaAtual || 'Selecione uma tabela'}</h1>
@@ -272,6 +293,8 @@ function PainelAdmin({ aoSair }) {
               Próxima
             </button>
           </footer>
+        )}
+          </>
         )}
       </main>
 

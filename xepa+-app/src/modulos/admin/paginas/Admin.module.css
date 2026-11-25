@@ -513,3 +513,85 @@
     width: 140px;
   }
 }
+
+/* ---------- Usuários ---------- */
+.itemUsuarios {
+  margin-top: 16px;
+}
+
+.itemIcone {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.cartao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 2px solid transparent;
+  border-left: 5px solid #18552f;
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.cartao:hover {
+  border-top-color: #d6e1d9;
+  border-right-color: #d6e1d9;
+  border-bottom-color: #d6e1d9;
+}
+
+.cartaoAtivo,
+.cartaoAtivo:hover {
+  border-top-color: #18552f;
+  border-right-color: #18552f;
+  border-bottom-color: #18552f;
+}
+
+.cartaoRotulo {
+  font-size: 0.8rem;
+  color: #716d6d;
+}
+
+.cartaoNumero {
+  font-size: 1.8rem;
+  line-height: 1.1;
+  color: #18552f;
+  font-variant-numeric: tabular-nums;
+}
+
+.cartaoDica {
+  font-size: 0.7rem;
+  color: #8a8a8a;
+}
+
+.cartaoCOMPARTILHADO { border-left-color: #9bc000; }
+.cartaoFEIRANTE { border-left-color: #f76019; }
+.cartaoCONSUMIDOR { border-left-color: #287447; }
+.cartaoSEM_TIPO { border-left-color: #b0b0b0; }
+
+.selo {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #eee;
+  color: #555;
+}
+
+.seloCOMPARTILHADO { background: #eef5d6; color: #4a5c00; }
+.seloFEIRANTE { background: #fde8dc; color: #a33d07; }
+.seloCONSUMIDOR { background: #e3efe7; color: #18552f; }
