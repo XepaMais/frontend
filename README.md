@@ -1,6 +1,10 @@
 <div align="center">
 
-<img src="xepa+-app/src/assets/imagens/marca/logo-texto-colorida.png" alt="Xepa+" width="320" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="xepa+-app/src/assets/imagens/marca/logo-texto-escura.png" />
+  <source media="(prefers-color-scheme: light)" srcset="xepa+-app/src/assets/imagens/marca/logo-texto-colorida.png" />
+  <img src="xepa+-app/src/assets/imagens/marca/logo-texto-colorida.png" alt="Xepa+" width="320" />
+</picture>
 
 <br /><br />
 
