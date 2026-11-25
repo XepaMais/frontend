@@ -1,0 +1,515 @@
+/* ---------- Login ---------- */
+.telaLogin {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #18552f 0%, #0f3a20 100%);
+  padding: 24px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.cartaoLogin {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.cartaoLogin h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #18552f;
+  text-align: center;
+}
+
+.iconeLogin {
+  align-self: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e3e9e5;
+  color: #18552f;
+  display: grid;
+  place-items: center;
+}
+
+.subtitulo {
+  margin: 0;
+  color: #716d6d;
+  font-size: 0.85rem;
+}
+
+.cartaoLogin .subtitulo {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.campo small {
+  font-weight: 400;
+  color: #8a8a8a;
+}
+
+.campo input {
+  padding: 10px 12px;
+  border: 1px solid #d6e1d9;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 400;
+}
+
+.campo input:focus {
+  outline: 2px solid #9bc000;
+  border-color: transparent;
+}
+
+.erro {
+  margin: 0;
+  color: #b3261e;
+  font-size: 0.85rem;
+}
+
+/* ---------- Botões ---------- */
+.botaoPrimario,
+.botaoSecundario,
+.botaoPerigo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.botaoPrimario {
+  background: #18552f;
+  color: #fff;
+}
+
+.botaoPrimario:hover:not(:disabled) {
+  background: #287447;
+}
+
+.botaoPrimario:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.botaoSecundario {
+  background: #e3e9e5;
+  color: #18552f;
+}
+
+.botaoPerigo {
+  background: #b3261e;
+  color: #fff;
+}
+
+.botaoIcone {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1px solid #d6e1d9;
+  background: #fff;
+  color: #18552f;
+  cursor: pointer;
+}
+
+/* ---------- Painel ---------- */
+.painel {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background: #f5f7f5;
+  color: #222;
+}
+
+.lateral {
+  background: #18552f;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 12px;
+  min-height: 0;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 0 8px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.rotuloLateral {
+  margin: 16px 8px 8px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.listaTabelas {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.itemTabela {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.86rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.itemTabela:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.itemAtivo {
+  background: #9bc000;
+  color: #10361e;
+  font-weight: 600;
+}
+
+.itemAtivo:hover {
+  background: #9bc000;
+}
+
+.contagem {
+  font-size: 0.75rem;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+
+.botaoSair {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 24px 28px;
+  gap: 14px;
+}
+
+.topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.topo h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #18552f;
+}
+
+.acoesTopo {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.busca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  height: 38px;
+  border: 1px solid #d6e1d9;
+  border-radius: 8px;
+  background: #fff;
+  color: #716d6d;
+}
+
+.busca input {
+  border: none;
+  outline: none;
+  font: inherit;
+  font-size: 0.88rem;
+  width: 240px;
+}
+
+.faixaErro,
+.faixaAviso {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+}
+
+.faixaErro {
+  background: #fdecea;
+  color: #8c1d18;
+}
+
+.faixaErro button {
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.faixaAviso {
+  background: #eaf4d3;
+  color: #3d5200;
+}
+
+.areaTabela {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #e3e9e5;
+  border-radius: 10px;
+}
+
+.tabela {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.84rem;
+}
+
+.tabela th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f0f4f1;
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 600;
+  color: #18552f;
+  border-bottom: 1px solid #d6e1d9;
+  white-space: nowrap;
+}
+
+.tipo {
+  display: block;
+  font-weight: 400;
+  font-size: 0.7rem;
+  color: #8a8a8a;
+}
+
+.chave {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: #f76019;
+  color: #fff;
+  font-size: 0.65rem;
+  vertical-align: middle;
+}
+
+.tabela td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f0f2f0;
+  white-space: nowrap;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tabela tbody tr:hover {
+  background: #f8faf8;
+}
+
+.nulo {
+  color: #b0b0b0;
+  font-style: italic;
+  font-size: 0.75rem;
+}
+
+.colunaAcoes {
+  position: sticky;
+  right: 0;
+  background: inherit;
+  width: 1%;
+  text-align: right;
+}
+
+.tabela tbody .colunaAcoes {
+  background: #fff;
+}
+
+.botaoLinha {
+  border: none;
+  background: none;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: #18552f;
+  cursor: pointer;
+}
+
+.botaoLinha:hover {
+  background: #e3e9e5;
+}
+
+.perigo {
+  color: #b3261e;
+}
+
+.perigo:hover {
+  background: #fdecea;
+}
+
+.vazio {
+  text-align: center;
+  color: #8a8a8a;
+  padding: 32px;
+}
+
+.paginacao {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: #716d6d;
+}
+
+.paginacao button {
+  padding: 6px 12px;
+  border: 1px solid #d6e1d9;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.paginacao button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---------- Modais ---------- */
+.fundoModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 50;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.modalLargo {
+  max-width: 720px;
+}
+
+.modal h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #18552f;
+}
+
+.modal p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.gradeCampos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.dica {
+  color: #716d6d;
+  font-size: 0.8rem !important;
+}
+
+.acoesModal {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 800px) {
+  .painel {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .listaTabelas {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .itemTabela {
+    flex-shrink: 0;
+  }
+
+  .busca input {
+    width: 140px;
+  }
+}
