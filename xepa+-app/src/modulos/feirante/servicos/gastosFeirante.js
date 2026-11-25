@@ -19,28 +19,8 @@ export const CATEGORIAS_GASTO = [
   { valor: 'outros', rotulo: 'Outras despesas', cor: '#161414' },
 ];
 
-// Dados de exemplo (Depois vou trocar pelos dados da API, so pra n esquecer)
-const gastosIniciais = [
-  {
-    id: 1,
-    descricao: 'Compra de alface',
-    quantidade: 10,
-    valorUnitario: 3,
-    categoria: 'mercadoria',
-    data: new Date(),
-  },
-  {
-    id: 2,
-    descricao: 'Ajudante 1 dia',
-    quantidade: 1,
-    valorUnitario: 80,
-    categoria: 'ajudantes',
-    data: new Date(),
-  },
-];
-
 export function carregarGastos() {
-  return JSON.parse(localStorage.getItem(CHAVE_GASTOS)) || gastosIniciais;
+  return JSON.parse(localStorage.getItem(CHAVE_GASTOS)) || [];
 }
 
 export function salvarGastos(gastos) {

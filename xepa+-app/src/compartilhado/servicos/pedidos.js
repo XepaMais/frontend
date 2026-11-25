@@ -1,8 +1,15 @@
 // Pedidos registrados ao confirmar o pagamento. 
 const CHAVE_PEDIDOS = 'pedidosXepa';
 
+import { ehDoFeiranteAtual } from '@/compartilhado/servicos/autenticacao';
+
 export function carregarPedidos() {
   return JSON.parse(localStorage.getItem(CHAVE_PEDIDOS)) || [];
+}
+
+// Área do feirante: só os pedidos com alguma xepa dele. Conta nova: lista vazia.
+export function carregarVendasDoFeirante() {
+  return carregarPedidos().filter((pedido) => pedido.itens.some(ehDoFeiranteAtual));
 }
 
 // Status usados na retirada do pedido.

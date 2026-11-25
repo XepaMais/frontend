@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Styles from './footer.module.css';
 import logo from '@/assets/imagens/gerais/logo-branca.png';
 import { CAMINHOS_FEIRANTE } from '@/modulos/feirante/componentes/navegacao/caminhosFeirante';
-import { carregarPedidos, PENDENTE_RETIRADA } from '@/compartilhado/servicos/pedidos';
+import { carregarVendasDoFeirante, PENDENTE_RETIRADA } from '@/compartilhado/servicos/pedidos';
 
 // Colunas do rodapé do site público.
 const COLUNAS_PUBLICAS = [
@@ -131,7 +131,7 @@ function Footer() {
   const areaFeirante = CAMINHOS_FEIRANTE.includes(pathname);
   const colunas = areaFeirante ? COLUNAS_FEIRANTE : COLUNAS_PUBLICAS;
   const pendentes = areaFeirante
-    ? carregarPedidos().filter((pedido) => pedido.status === PENDENTE_RETIRADA).length
+    ? carregarVendasDoFeirante().filter((pedido) => pedido.status === PENDENTE_RETIRADA).length
     : 0;
 
   return (

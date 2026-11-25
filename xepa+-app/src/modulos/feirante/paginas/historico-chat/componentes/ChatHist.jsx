@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CheckCircle2, MessageCircle, PackageCheck } from 'lucide-react';
 import Styles from '@/modulos/feirante/paginas/historico-chat/estilos/ChatHist.module.css';
@@ -39,12 +39,8 @@ function ChatHist({ perfil = 'feirante' }) {
   const location = useLocation();
   const conversaPedida = location.state?.conversa;
 
-  const todasConversas = useConversas();
-  // O consumidor só vê as conversas dos próprios pedidos (as de demonstração são do feirante).
-  const conversas = useMemo(
-    () => (ehFeirante ? todasConversas : todasConversas.filter((conversa) => !conversa.demo)),
-    [ehFeirante, todasConversas],
-  );
+  // O feirante vê só as conversas sobre as xepas dele.
+  const conversas = useConversas(perfil);
 
   const [abaEscolhida, setAba] = useState(STATUS_CONVERSA.recente);
   const [contatoAtivo, setContatoAtivo] = useState(conversaPedida || null);
