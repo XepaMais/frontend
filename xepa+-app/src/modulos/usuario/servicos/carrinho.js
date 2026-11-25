@@ -1,18 +1,27 @@
 // Carrinho do consumidor. Guarda só o id e a quantidade; o resto vem da xepa.
 import { carregarXepasDisponiveis } from '@/compartilhado/servicos/xepas';
 import { ENTREGA_CASA, RETIRADA_FEIRA } from '@/compartilhado/servicos/pedidos';
+import { carregarContaDaSessao } from '@/compartilhado/servicos/autenticacao';
 
 const CHAVE_CARRINHO = 'carrinhoXepa';
 const CHAVE_RECEBIMENTO = 'recebimentoXepa';
 
 export const EVENTO_CARRINHO = 'carrinho-atualizado';
 
+// Cada consumidor logado tem o próprio carrinho: conta nova começa vazia.
+// Sem login (demonstração), vale a chave antiga.
+function chaveDaConta(chave) {
+  const conta = carregarContaDaSessao();
+
+  return conta?.tipo === 'CONSUMIDOR' ? `${chave}:${conta.id}` : chave;
+}
+
 export function carregarCarrinho() {
-  return JSON.parse(localStorage.getItem(CHAVE_CARRINHO)) || [];
+  return JSON.parse(localStorage.getItem(chaveDaConta(CHAVE_CARRINHO))) || [];
 }
 
 function salvarCarrinho(itens) {
-  localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(itens));
+  localStorage.setItem(chaveDaConta(CHAVE_CARRINHO), JSON.stringify(itens));
   window.dispatchEvent(new Event(EVENTO_CARRINHO));
 }
 
@@ -98,7 +107,7 @@ export const ENDERECO_VAZIO = {
 };
 
 export function carregarRecebimento() {
-  const salvo = JSON.parse(localStorage.getItem(CHAVE_RECEBIMENTO)) || {};
+  const salvo = JSON.parse(localStorage.getItem(chaveDaConta(CHAVE_RECEBIMENTO))) || {};
 
   return {
     tipo: salvo.tipo === ENTREGA_CASA ? ENTREGA_CASA : RETIRADA_FEIRA,
@@ -109,7 +118,7 @@ export function carregarRecebimento() {
 }
 
 export function salvarRecebimento(recebimento) {
-  localStorage.setItem(CHAVE_RECEBIMENTO, JSON.stringify(recebimento));
+  localStorage.setItem(chaveDaConta(CHAVE_RECEBIMENTO), JSON.stringify(recebimento));
 }
 
 // Campos obrigatórios para entregar em casa.
