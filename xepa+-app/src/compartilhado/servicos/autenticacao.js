@@ -16,6 +16,11 @@ export async function entrar(dados) {
   return conta;
 }
 
+// "Sair" e a demonstração: a conta deixa de estar logada neste navegador.
+export function encerrarSessao() {
+  sessionStorage.removeItem(CHAVE_SESSAO);
+}
+
 export function carregarContaDaSessao() {
   return JSON.parse(sessionStorage.getItem(CHAVE_SESSAO) || 'null');
 }

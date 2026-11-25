@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
+import { encerrarSessao } from '@/compartilhado/servicos/autenticacao';
 import styles from './MenuConta.module.css';
 
 // Menu que abre ao clicar no nome, no cabeçalho do usuário e do feirante.
@@ -33,6 +34,11 @@ function MenuConta({ nome, itens, className = '', children }) {
     setAberto(false);
   }
 
+  function sair() {
+    encerrarSessao();
+    fechar();
+  }
+
   return (
     <div className={`${styles.menuConta} ${className}`} ref={menuRef}>
       <button
@@ -55,7 +61,7 @@ function MenuConta({ nome, itens, className = '', children }) {
             </Link>
           ))}
 
-          <Link to="/" className={styles.item} onClick={fechar}>
+          <Link to="/" className={styles.item} onClick={sair}>
             <LogOut size={18} aria-hidden="true" />
             Sair
           </Link>

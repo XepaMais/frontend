@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Crown, ShoppingBasket, Sprout, Store } from 'lucide-react';
 import Modal from '@/compartilhado/componentes/modal/Modal';
 import Crumb from '@/modulos/autenticacao/paginas/Crumb';
+import { encerrarSessao } from '@/compartilhado/servicos/autenticacao';
 import { salvarPlanoSelecionado } from '@/modulos/feirante/servicos/planoFeirante';
 import Styles from '@/modulos/autenticacao/paginas/demo/demo.module.css';
 
@@ -43,6 +44,8 @@ function Demo() {
   const navigate = useNavigate();
 
   function entrar(perfil) {
+    encerrarSessao();
+
     if (perfil.plano) {
       salvarPlanoSelecionado(perfil.plano);
     }

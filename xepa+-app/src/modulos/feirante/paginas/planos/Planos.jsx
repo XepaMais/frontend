@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { PLANOS } from '@/compartilhado/dados/planos';
 import {
@@ -9,11 +10,16 @@ import base from '@/compartilhado/estilos/conta.module.css';
 import styles from './estilos/Planos.module.css';
 
 function Planos() {
+  const navigate = useNavigate();
+  // Logo após o cadastro (ou no primeiro login), o feirante escolhe o plano antes de entrar.
+  const primeiroAcesso = Boolean(useLocation().state?.primeiroAcesso);
   const [selecionado, setSelecionado] = useState(carregarPlanoSelecionado);
 
   function selecionar(idPlano) {
     salvarPlanoSelecionado(idPlano);
     setSelecionado(idPlano);
+
+    if (primeiroAcesso) navigate('/homeF', { replace: true });
   }
 
   return (
@@ -24,6 +30,13 @@ function Planos() {
           <p>Escolha o plano ideal para a sua barraca.</p>
         </div>
       </header>
+
+      {primeiroAcesso && (
+        <p className={base.aviso} role="status">
+          Cadastro concluído! Escolha um plano para começar. Você pode trocar de plano quando
+          quiser.
+        </p>
+      )}
 
     
 
