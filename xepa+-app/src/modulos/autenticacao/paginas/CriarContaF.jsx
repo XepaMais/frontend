@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { cadastrarFeirante } from '@/compartilhado/servicos/autenticacao';
+import { cadastrarFeirante, entrar } from '@/compartilhado/servicos/autenticacao';
 import AceiteTermos from '@/modulos/autenticacao/paginas/AceiteTermos';
 import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
@@ -29,7 +29,9 @@ function CriarContaF() {
     try {
       if (!cadastro.email) throw new Error('Volte à etapa anterior e preencha os dados da conta.');
       await cadastrarFeirante(cadastro);
-      navigate('/Crumb', { state: { mensagem: 'Cadastro concluído. Entre com seu email e senha.' } });
+      // Já entra na conta nova e segue para a escolha do plano.
+      await entrar({ email: cadastro.email, senha: cadastro.senha });
+      navigate('/planos', { state: { primeiroAcesso: true } });
     } catch (erroApi) {
       setErro(erroApi.message);
     } finally {

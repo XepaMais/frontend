@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { entrar } from '@/compartilhado/servicos/autenticacao';
+import { carregarPlanoSelecionado } from '@/modulos/feirante/servicos/planoFeirante';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function Crumb() {
@@ -16,6 +17,10 @@ function Crumb() {
 
     try {
       const conta = await entrar({ email: formulario.get('email'), senha: formulario.get('senha') });
+      if (conta.tipo === 'FEIRANTE' && !carregarPlanoSelecionado()) {
+        navigate('/planos', { state: { primeiroAcesso: true } });
+        return;
+      }
       navigate(conta.tipo === 'FEIRANTE' ? '/homeF' : conta.tipo === 'CONSUMIDOR' ? '/homeU' : '/');
     } catch (erroApi) {
       setErro(erroApi.message);
