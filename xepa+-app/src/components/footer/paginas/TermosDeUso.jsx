@@ -65,7 +65,7 @@ const SECOES = [
     id: 'planos',
     titulo: 'Planos, pagamentos e comissões',
     paragrafos: [
-      'O feirante pode escolher entre os planos Grátis, Crescer e Pro. Cada plano tem recursos e comissões sobre as vendas diferentes, conforme informado na página de planos.',
+      'O feirante pode escolher entre os planos Semente, Broto e Colheita. Cada plano tem recursos e comissões sobre as vendas diferentes, conforme informado na página de planos.',
       'Os valores dos planos pagos são cobrados mensalmente. O feirante pode trocar ou cancelar o plano a qualquer momento; o cancelamento vale a partir do próximo período de cobrança.',
     ],
   },

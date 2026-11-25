@@ -14,12 +14,12 @@ const RESUMO = {
   },
   crescer: {
     preco: 'R$ 29,90',
-    topicos: ['Tudo do plano Grátis', 'Financeiro básico', 'Xep.AI'],
+    topicos: ['Tudo do plano Semente', 'Financeiro básico', 'Xep.AI'],
   },
   pro: {
     preco: 'R$ 59,90',
     topicos: [
-      'Tudo do plano Crescer',
+      'Tudo do plano Broto',
       'Financeiro completo',
       'Destaque de produtos e suporte prioritário',
     ],
