@@ -36,9 +36,7 @@ const PALAVRAS_DADOS = [
 ];
 
 function SobreNos() {
-  // Ao entrar na página, sempre começa do topo (o React Router mantém a rolagem anterior).
-  // Como html e body têm overflow-x: hidden (globais.css), quem rola é o <body>, não a janela,
-  // então zeramos os três.
+  // Sempre começa do topo.
   useEffect(() => {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;

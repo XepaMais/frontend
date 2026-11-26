@@ -7,7 +7,7 @@
   color: #111;
 }
 
-/* Computadores: todas as seções da Home têm --altura-secao (650px ou a tela inteira) */
+/* Computadores: seção com --altura-secao */
 @media (min-width: 1001px) {
   .secao-beneficios {
     height: var(--altura-secao);
@@ -73,12 +73,7 @@
   transform: translateY(-1px);
 }
 
-/*
- * Caixa no centro e as quatro categorias em volta, numa grade:
- *   c1 | caixa | c2
- *   c3 | caixa | c4
- * (no celular, a caixa fica em cima e as categorias numa grade 2 x 2 abaixo)
- */
+/* Caixa no centro e as quatro categorias em volta */
 .ilustracao-beneficios {
   display: grid;
   flex: 1;
@@ -239,15 +234,7 @@
   }
 }
 
-/*
- * Animação de entrada (roda uma vez, quando a seção aparece na tela).
- * --animada: o JS carregou, então os itens começam escondidos.
- * --visivel: a seção entrou na tela, então a sequência começa:
- *   1. título, texto e botão sobem   2. a caixa sobe e quica
- *   3. as etiquetas saem de trás da caixa, uma de cada vez
- * Usa as propriedades `translate` e `scale` (e não `transform`) para não brigar com o
- * efeito de hover das etiquetas. Quem pede menos movimento no sistema não recebe estas classes.
- */
+/* Animação de entrada: roda uma vez quando a seção aparece */
 .secao-beneficios--animada .cabecalho-beneficios > *,
 .secao-beneficios--animada .cesta-beneficios,
 .secao-beneficios--animada .categoria-beneficio {

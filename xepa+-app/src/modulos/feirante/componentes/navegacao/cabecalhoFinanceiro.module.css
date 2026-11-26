@@ -32,7 +32,6 @@
   transition: color 0.2s ease;
 }
 
-/* sublinhado que aparece embaixo da aba */
 .aba::after,
 .abaAtiva::after {
   content: '';

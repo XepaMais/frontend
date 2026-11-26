@@ -10,7 +10,7 @@ import {
 } from '@/compartilhado/servicos/pedidos';
 
 // Confirmação usada na Home do feirante e no Histórico de vendas.
-// O feirante digita o código que o cliente mostra; pedidos antigos sem código só pedem confirmação.
+// O feirante digita o código do cliente; pedidos antigos só pedem confirmação.
 function PopUpConfirmarEntrega({ pedido, onFechar, onConfirmado }) {
   const [codigo, setCodigo] = useState('');
   const [erro, setErro] = useState('');

@@ -1,5 +1,4 @@
-// Histórico das conversas com a Xepinha. Sem backend, fica neste navegador,
-// separado por conta de feirante: conta nova começa sem conversas.
+// Conversas com a Xepinha, por conta, neste navegador.
 import { idFeiranteAtual } from '@/compartilhado/servicos/autenticacao';
 
 const CHAVE = 'conversasXepinha';

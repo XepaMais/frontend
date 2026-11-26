@@ -5,7 +5,7 @@
   --altura-janela: 100vh;
   --altura-tela: calc(var(--altura-janela) - var(--altura-cabecalho));
 
-  /* Altura das seções da Home e do Sobre nós e da primeira dobra (sem a faixa) */
+  /* Altura das seções e da primeira dobra */
   --altura-secao: 650px;
   --altura-dobra: 650px;
 }
@@ -17,9 +17,7 @@
   }
 }
 
-/* Computadores: no mínimo 650px, mas em monitores maiores ocupam a tela inteira.
-   A primeira dobra desconta o cabeçalho; as outras seções aparecem quando ele já
-   saiu da tela ao rolar, então usam a altura inteira da janela. */
+/* Computadores: no mínimo 650px; em telas maiores, a tela inteira */
 @media (min-width: 1001px) {
   :root {
     --altura-secao: max(650px, var(--altura-janela));

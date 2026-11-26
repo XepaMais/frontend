@@ -1,5 +1,5 @@
 // Planos do Xepa+, usados na Home pública e na área do feirante.
-// taxa: comissão do Xepa+ descontada de cada venda de xepa feita pelo app.
+// taxa: comissão do Xepa+ por venda.
 
 export const PLANOS = [
   {

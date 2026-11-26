@@ -1,14 +1,7 @@
 import { useEffect, useRef } from 'react';
 import '@/modulos/publico/paginas/sobre-nos/estilos/Bloco.css';
 
-/*
- * Seção de largura total, igual à propaganda do feirante na Home:
- * metade com vídeo (até a borda) e metade com texto.
- * cor: 'verde' | 'laranja' | 'creme'   invertido: vídeo à direita
- * titulo: pode ter <Rabisco> na palavra de destaque
- * destaque: frase curta logo abaixo do título
- * Prefixo "sn-" para não herdar estilos de outras páginas (ex.: .painel do financeiro).
- */
+/* Seção com vídeo de um lado e texto do outro */
 export default function Painel({
   id,
   titulo,

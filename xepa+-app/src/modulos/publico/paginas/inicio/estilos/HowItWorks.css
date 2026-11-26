@@ -1,5 +1,5 @@
 .secao-funcionamento {
-  /* 1cqw = 1% da largura da seção → tudo escala igual à referência */
+  /* 1cqw = 1% da largura da seção */
   container-type: inline-size;
 
   /* ajuste fino dos textos (referência: 407px de largura) */
@@ -224,7 +224,7 @@
   }
 }
 
-/* Computadores: todas as seções da Home têm --altura-secao (650px ou a tela inteira) */
+/* Computadores: seção com --altura-secao */
 @media (min-width: 1001px) {
   .secao-funcionamento {
     display: flex;

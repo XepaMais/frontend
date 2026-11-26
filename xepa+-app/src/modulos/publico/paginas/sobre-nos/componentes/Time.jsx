@@ -3,7 +3,7 @@ import '@/modulos/publico/paginas/sobre-nos/estilos/Time.css';
 import fotoMatheus from '@/assets/imagens/sobre-nos/matheus.jpeg';
 import fotoFernanda from '@/assets/imagens/sobre-nos/fernanda.jpeg';
 import fotoHenrique from '@/assets/imagens/sobre-nos/henrique.jpeg';
-import fotoIgor from '@/assets/imagens/sobre-nos/igor.jpeg';
+import fotoIgor from '@/assets/imagens/sobre-nos/Igor.jpg';
 import fotoJamilly from '@/assets/imagens/sobre-nos/jamilly.jpeg';
 import fotoGabriel from '@/assets/imagens/sobre-nos/gabriel.jpeg';
 import fotoHadson from '@/assets/imagens/sobre-nos/hadson.jpeg';
@@ -11,8 +11,7 @@ import fotoMurilo from '@/assets/imagens/sobre-nos/murilo.jpg';
 import decoracaoCesta from '@/assets/imagens/sobre-nos/decoracao-cesta.png';
 
 const CORES = ['verde', 'laranja', 'amarelo'];
-// Começa a sequência de cores um card adiante: a Fernanda (3ª) fica verde e o resto segue
-// verde → laranja → amarelo a partir dela.
+// A sequência de cores começa um card adiante.
 const DESLOCAMENTO_COR = 1;
 
 const TIME = [
@@ -104,11 +103,7 @@ function partesDoNome(nome) {
   return [primeiro, resto.join(' ')];
 }
 
-/*
- * Carrossel "infinito": a lista é repetida 3 vezes e a pessoa fica sempre na cópia do meio.
- * Quando a rolagem para perto de uma das pontas, a posição pula (sem animação) para o mesmo
- * card na cópia do meio — por isso dá para ir para o lado sem nunca chegar ao fim.
- */
+/* Carrossel infinito: a lista repete 3 vezes e volta para a cópia do meio */
 const COPIAS = 3;
 const ITENS = Array.from({ length: COPIAS }, (_, copia) =>
   TIME.map((membro, indice) => ({ membro, indice, copia })),

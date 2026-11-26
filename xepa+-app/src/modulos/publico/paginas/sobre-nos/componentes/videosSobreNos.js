@@ -1,13 +1,4 @@
-/*
- * Vídeos de Missão, Visão e Valores.
- * Fonte: Mixkit (https://mixkit.co), licença gratuita para uso pessoal e comercial
- * (https://mixkit.co/license/#videoFree), sem necessidade de atribuição.
- *
- * Para usar os vídeos a partir do próprio projeto (sem depender da internet):
- * baixe os arquivos .mp4 abaixo, salve em src/assets/videos/sobre-nos/ e troque a URL
- * por um import, por exemplo:
- *   import missao from '@/assets/videos/sobre-nos/missao.mp4';
- */
+/* Vídeos de Missão, Visão e Valores (Mixkit, licença gratuita) */
 const BASE = 'https://assets.mixkit.co/videos';
 
 export const VIDEOS = {

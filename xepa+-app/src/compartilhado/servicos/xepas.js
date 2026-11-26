@@ -1,5 +1,5 @@
 // Xepas cadastradas pelo feirante e exibidas ao consumidor.
-// Sem backend, ficam neste navegador: feirante e consumidor precisam usar o mesmo.
+// Sem backend, ficam neste navegador.
 import { dataDeHoje } from '@/compartilhado/servicos/datas';
 
 const CHAVE_XEPAS = 'produtosFeirante';

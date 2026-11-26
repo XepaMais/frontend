@@ -1,6 +1,5 @@
-/* Primeira dobra: título central e uma fileira de frutas encostadas no pé */
+/* Primeira dobra: título e frutas */
 .sn-hero {
-  /* 1cqw = 1% da largura da seção → frutas e espaçamentos crescem juntos */
   container-type: inline-size;
   --escala: 1;
 
@@ -22,17 +21,13 @@
   gap: 16px;
   max-width: 760px;
   margin: 0 auto;
-
-  /* embaixo, espaço reservado para as frutas */
   padding: clamp(56px, 7vw, 72px) var(--margem-lateral, 24px) calc(20cqw * var(--escala) + 24px);
   text-align: center;
 }
 
-/* Computadores: a primeira dobra tem --altura-dobra (650px ou a tela inteira menos a faixa)
-   (mesmo padrão das páginas do rodapé, em PaginaFooter.module.css) */
+/* Computadores */
 @media (min-width: 1001px) {
   .sn-hero {
-    /* 290px numa dobra de 650px; cresce junto com a dobra em monitores maiores */
     --frutas-max: calc(var(--altura-dobra) * 0.446);
     height: var(--altura-dobra);
   }
@@ -42,20 +37,13 @@
     padding-bottom: calc(min(20cqw, var(--frutas-max)) + 24px);
   }
 
-  /* As frutas mantêm o tamanho (encostadas umas nas outras). Em telas largas,
-     onde a fileira passaria de --frutas-max, ela desce e o pé da fileira da frente
-     fica cortado, para caber na altura da dobra. */
+  /* Telas largas: frutas descem para caber */
   .sn-hero__frutas {
     translate: 0 max(0px, 20cqw - var(--frutas-max));
   }
 }
 
 .sn-hero__titulo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.06em;
-
   font-family: 'Cal Sans', 'Poppins', sans-serif;
   font-size: clamp(36px, 5.2vw, 72px);
   font-weight: 400;
@@ -64,32 +52,28 @@
   text-transform: uppercase;
 }
 
-/* faixa verde com letras amarelo-limão, igual ao título da Home */
+/* Faixa verde, como na Home */
 .sn-hero__linha {
+  display: inline-block;
   padding: 0.04em 0.18em 0.02em;
   background: #18552f;
   color: #e4f04a;
   animation: sn-sobe 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.sn-hero__linha:nth-child(2) {
-  animation-delay: 0.12s;
-}
-
 .sn-hero__texto {
-  max-width: 44ch;
-  margin-top: 10px;
+  max-width: 46ch;
+  margin-top: 24px;
 
   color: #18552f;
-  font-size: clamp(16px, 1.3vw, 18px);
+  font-size: clamp(18px, 1.6vw, 22px);
   font-weight: 500;
-  line-height: 1.6;
+  line-height: 1.55;
   text-wrap: balance;
   animation: sn-sobe 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
 }
 
-/* ---------- Frutas ---------- */
-
+/* Frutas */
 .sn-hero__frutas {
   position: absolute;
   inset: 0;
@@ -137,14 +121,14 @@
   }
 }
 
-/* Tablets: frutas um pouco maiores */
+/* Tablets */
 @media (max-width: 900px) {
   .sn-hero {
     --escala: 1.25;
   }
 }
 
-/* Celulares: frutas maiores para não sumirem na tela estreita */
+/* Celulares */
 @media (max-width: 560px) {
   .sn-hero {
     --escala: 1.6;

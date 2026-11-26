@@ -1,8 +1,4 @@
-/*
- * Janela do Demo no padrão das telas de login/cadastro e da Home:
- * fundo creme, cards brancos com ícone em círculo colorido e efeito ao passar o mouse.
- * O Modal é compartilhado com outros pop-ups, então os ajustes ficam só nestas classes.
- */
+/* Janela do Demo */
 
 .telaDesfocada {
   overflow: hidden;
@@ -16,7 +12,7 @@
   box-shadow: 0 24px 60px rgba(24, 85, 47, 0.3);
 }
 
-/* cabeçalho verde do Modal com título maior, como os títulos do site */
+/* Cabeçalho do Modal com título maior */
 .janelaDemo > header {
   padding: 16px 16px 16px 28px;
 }
@@ -76,7 +72,7 @@
   outline-offset: 2px;
 }
 
-/* ícone em círculo com a cor de cada perfil (como as categorias da Home) */
+/* Ícone em círculo com a cor de cada perfil */
 .icone {
   display: grid;
   width: 48px;

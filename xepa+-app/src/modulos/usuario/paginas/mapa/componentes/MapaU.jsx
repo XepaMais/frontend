@@ -44,10 +44,10 @@ function MapPage() {
     lng: -46.6917602,
   });
 
-  // ESTADO NOVO: Armazena a posição GPS real capturada do usuário
+  // Posição GPS do usuário.
   const [userPosition, setUserPosition] = useState(null);
 
-  // PEGAR A POSIÇÃO ATUAL AUTOMATICAMENTE AO ABRIR A TELA
+  // Pega a posição ao abrir a tela.
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -113,7 +113,7 @@ function MapPage() {
             center={mapCenter}
             zoom={14}
           >
-            {/* MARCADOR DO USUÁRIO (Aparece apenas se ele aceitar a geolocalização) */}
+            {/* Marcador do usuário (só se aceitar a localização) */}
             {userPosition && (
               <Marker
                 position={userPosition}
@@ -130,7 +130,7 @@ function MapPage() {
               />
             )}
 
-            {/* MARCADORES DAS FEIRAS (Logos da Xepa) */}
+            {/* Marcadores das feiras */}
             {FEIRAS_CADASTRADAS.map((feira) => (
               <Marker
                 key={feira.id}

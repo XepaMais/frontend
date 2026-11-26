@@ -13,8 +13,7 @@ function UserWay() {
     script.setAttribute('data-color', '#f76019');
     script.setAttribute('data-mobile', 'true');
     script.setAttribute('data-language', 'pt-BR');
-    // 3 = canto inferior direito. Fixado no código para não depender da configuração da conta
-    // (a conta está em "canto superior direito", em cima do menu do site).
+    // 3 = canto inferior direito (fixo no código).
     script.setAttribute('data-position', '3');
     script.setAttribute('data-xepa-userway', 'true');
     script.async = true;

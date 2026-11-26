@@ -168,7 +168,7 @@
   }
 }
 
-/* Computadores: mesma altura das outras seções da Home (650px ou a tela inteira) */
+/* Computadores: mesma altura das outras seções */
 @media (min-width: 1001px) {
   .propaganda {
     min-height: var(--altura-secao);

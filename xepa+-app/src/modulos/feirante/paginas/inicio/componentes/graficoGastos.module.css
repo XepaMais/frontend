@@ -1,4 +1,4 @@
-/* Legenda do gráfico "Gastos do mês" na Home do feirante: itens lado a lado, quebrando linha */
+/* Legenda do gráfico Gastos do mês */
 .legenda {
   display: flex;
   flex-wrap: wrap;

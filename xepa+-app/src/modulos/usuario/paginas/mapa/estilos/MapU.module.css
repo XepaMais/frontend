@@ -11,7 +11,7 @@
   background-color: #f5f5f5;
 }
 
-/* Barra de pesquisa elegante posicionada no topo */
+/* Barra de pesquisa no topo */
 .searchForm {
   align-items: center;
   box-sizing: border-box;
@@ -26,7 +26,7 @@
   max-width: 540px;
 }
 
-/* Componente do mapa que ocupa todo o espaço restante abaixo do formulário */
+/* Mapa ocupa o espaço restante */
 .map {
   flex: 1;
   width: 100%;
@@ -34,7 +34,7 @@
   z-index: 1;
 }
 
-/* Tela de carregamento centralizada caso o mapa demore a carregar */
+/* Carregamento centralizado */
 .loading {
   display: flex;
   align-items: center;

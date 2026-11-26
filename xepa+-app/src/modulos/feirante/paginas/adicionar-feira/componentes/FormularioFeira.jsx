@@ -28,12 +28,11 @@ function funcionariosIniciais(feira) {
   return [''];
 }
 
-// O formulário só existe enquanto o popup está aberto, então basta iniciar o estado com a feira.
-// Ao adicionar, não existe feira: por isso os valores iniciais vêm de um objeto vazio.
+// O formulário só existe com o popup aberto; ao adicionar, começa vazio.
 function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
   const dadosIniciais = feira || {};
   const [nome, setNome] = useState(dadosIniciais.nome || '');
-  // A rua vem do CEP; feiras antigas, salvas antes do campo número, só têm "endereco".
+  // Feiras antigas só têm o campo endereco.
   const [rua, setRua] = useState(dadosIniciais.rua || dadosIniciais.endereco || '');
   const [numero, setNumero] = useState(dadosIniciais.numero || '');
   const [cep, setCep] = useState(dadosIniciais.cep || '');
@@ -52,7 +51,7 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
   if (horarioInicio && horarioFim) {
     horario = `${horarioInicio} às ${horarioFim}`;
   }
-  // Formata o CEP e, quando ele fica completo, preenche o endereço sozinho pelo ViaCEP.
+  // Formata o CEP e preenche o endereço pelo ViaCEP.
   async function alterarCep(valor) {
     const cepFormatado = formatarCep(valor);
     setCep(cepFormatado);
@@ -73,7 +72,7 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
         return;
       }
 
-      // Alguns CEPs (cidades pequenas) não têm rua: aí usamos o bairro ou a cidade.
+      // CEP sem rua: usa o bairro ou a cidade.
       setRua(dados.logradouro || dados.bairro || dados.cidade);
       setCidade(`${dados.cidade} - ${dados.uf}`);
     } catch {
@@ -95,7 +94,7 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
     setSalvando(true);
 
     const endereco = `${rua}, ${numero.trim()}`;
-    // Junta rua, número, cidade e país num texto só, para o geocodificador achar o lugar certo.
+    // Endereço completo para o geocodificador.
     const enderecoCompleto = [endereco, cidade, 'Brasil'].filter(Boolean).join(', ');
 
     try {

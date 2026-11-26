@@ -1,8 +1,6 @@
-/* ---------- Visual da página Meus dados (padrão das telas de login/cadastro) ----------
-   A página usa as classes de conta.module.css, que valem para várias telas;
-   os ajustes abaixo ficam presos a .pagina e só mudam o Meus dados. */
+/* Ajustes da página Meus dados */
 
-/* mesmo fundo da tela Produtos, ocupando a largura toda da tela */
+/* Mesmo fundo da tela Produtos */
 .pagina {
   background: #fafbfa;
   box-shadow: 0 0 0 100vmax #fafbfa;
@@ -28,7 +26,7 @@
   box-shadow: 0 8px 24px rgba(24, 85, 47, 0.06);
 }
 
-/* botões principais (Editar perfil, Salvar alterações) em laranja, como na Home */
+/* Botões principais em laranja */
 .identificacao > button,
 .pagina form button[type='submit'] {
   border-color: #f76019;

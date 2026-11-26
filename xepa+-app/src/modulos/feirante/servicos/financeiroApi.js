@@ -1,4 +1,4 @@
-// Liga o financeiro ao backend (AWS). Com um feirante logado, tudo vai para o banco, sem login (modo demonstração), as páginas continuam usando este navegador.
+// Liga o financeiro ao backend. Sem login (demonstração), usa este navegador.
 import { carregarContaDaSessao } from '@/compartilhado/servicos/autenticacao';
 
 // Id da conta do feirante logado, ou null no modo demonstração.

@@ -381,8 +381,7 @@ function HomeFeirante() {
                       Total: {formatarMoeda(gastoMensal)}
                     </strong>
 
-                    {/* Legenda em etiquetas lado a lado: com mais categorias, elas
-                        se encaixam na mesma linha em vez de aumentar o card. */}
+                    {/* Legenda em etiquetas lado a lado */}
                     <ul className={Grafico.legenda}>
                       {fatiasGastos.map((fatia) => (
                         <li key={fatia.rotulo} className={Grafico.item}>
