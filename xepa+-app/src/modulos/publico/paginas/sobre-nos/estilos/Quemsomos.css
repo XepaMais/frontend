@@ -49,7 +49,7 @@
 }
 
 
-/* Computadores: coluna de texto mais larga e foto um pouco menor, para caber nos 650px */
+/* Computadores */
 @media (min-width: 1001px) {
   .sn-intro__linha {
     display: block;

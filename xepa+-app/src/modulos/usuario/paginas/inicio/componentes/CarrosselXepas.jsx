@@ -10,7 +10,6 @@ export function CarrosselXepas({ xepas, mensagemVazia, children, classeRolagem =
   const [podeAvancar, setPodeAvancar] = useState(false);
 
   // As setas só aparecem quando existe algo para aquele lado.
-  // O useCallback mantém a mesma função entre as renderizações, pois ela é usada no useEffect.
   const atualizarSetas = useCallback(() => {
     const elemento = trilho.current;
 

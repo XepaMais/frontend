@@ -14,11 +14,10 @@ const PALAVRAS_PADRAO = [
   'Mais comida na mesa',
 ];
 
-// Estrutura comum das páginas abertas pelo rodapé, no mesmo padrão do Sobre nós:
-// cabeçalho público + primeira dobra com título em faixas + faixa de palavras em carrossel.
+// Estrutura comum das páginas do rodapé (padrão do Sobre nós).
 // "titulo" pode ser um texto ou uma lista de linhas (cada linha vira uma faixa verde).
 function LayoutFooter({ titulo, descricao, palavras = PALAVRAS_PADRAO, children }) {
-  // Sempre começa do topo (html e body têm overflow-x: hidden, então zeramos os três).
+  // Sempre começa do topo.
   useEffect(() => {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;

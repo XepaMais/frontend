@@ -28,7 +28,7 @@ export function carregarConversas() {
   const salvas = JSON.parse(localStorage.getItem(CHAVE_CONVERSAS)) || [];
 
   return salvas
-    // Remove as conversas de exemplo (Carneiro, Murilo...) que versões antigas salvavam.
+    // Remove as conversas de exemplo antigas.
     .filter((conversa) => !conversa.demo)
     // Conversas salvas antes das notificações: considera tudo como já lido.
     .map((conversa) => (conversa.leituras
@@ -189,8 +189,7 @@ export function finalizarConversa(id) {
   return conversa;
 }
 
-// "Confirmar entrega" na Home e no Histórico de vendas: marca o pedido como retirado
-// e move a conversa dele para Finalizadas, igual ao botão "Pedido retirado" do chat.
+// Confirmar entrega: marca o pedido como retirado e finaliza a conversa.
 export function confirmarEntregaDoPedido(numero) {
   const id = `pedido-${numero}`;
   const conversa = carregarConversas().find((item) => item.id === id);

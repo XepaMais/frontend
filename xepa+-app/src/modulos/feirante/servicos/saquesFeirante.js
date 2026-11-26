@@ -1,5 +1,5 @@
 // Saques via Pix dos lucros do Xepa+. É só uma simulação: nenhum dinheiro é transferido.
-// Com login, o saldo é conferido e o saque gravado no banco (tb_saque); sem login, neste navegador.
+// Com login, o saque é gravado no banco; sem login, neste navegador.
 import { enviarJson, requisicaoApi } from '@/compartilhado/servicos/api';
 import { carregarLancamentosFinanceiros } from './lancamentosFinanceiros.js';
 import { caminhoFinanceiro, contaDoFeirante } from './financeiroApi.js';

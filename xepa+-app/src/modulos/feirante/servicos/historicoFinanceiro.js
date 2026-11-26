@@ -68,7 +68,7 @@ const NOME_PLANILHA = 'historico-financeiro.csv';
 const BOM = String.fromCharCode(0xfeff);
 const QUEBRA_LINHA = String.fromCharCode(13, 10);
 
-// Planilha no formato do Excel em português (";" e vírgula decimal). Com login, gerada pelo backend.
+// Planilha CSV no formato do Excel em português.
 export async function baixarPlanilha({ filtros, registros, totais, nomeFeirante }) {
   const conta = contaDoFeirante();
 

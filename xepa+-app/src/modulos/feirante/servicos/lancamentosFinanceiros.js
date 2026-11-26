@@ -26,7 +26,7 @@ export function salvarLancamentosFinanceiros(lancamentos) {
   localStorage.setItem(CHAVE_LANCAMENTOS, JSON.stringify(lancamentos));
 }
 
-// ---------- Funções usadas pelas páginas (API com login, navegador sem login) ----------
+// Funções usadas pelas páginas
 
 function rendaDaApi(renda) {
   return {
@@ -86,7 +86,7 @@ export async function removerRenda(id) {
   await excluirNaApi(caminhoFinanceiro(conta, `/rendas/${id}`));
 }
 
-// Chamada quando o consumidor confirma o pagamento (modo demonstração: pedidos ainda no navegador).
+// Chamada ao confirmar o pagamento (modo demonstração).
 // A comissão do plano vai para Despesas e só o valor líquido entra nos lucros.
 export function registrarVendaNoFinanceiro(pedido) {
   const lancamentos = carregarLancamentosFinanceiros();

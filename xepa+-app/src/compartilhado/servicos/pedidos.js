@@ -25,7 +25,7 @@ function gerarCodigoRetirada() {
 export const RETIRADA_FEIRA = 'retirada';
 export const ENTREGA_CASA = 'entrega';
 
-// Endereço em uma linha só: "Rua X, 10 - apto 2 - Bairro, Cidade/UF - CEP 00000-000".
+// Endereço em uma linha só.
 export function formatarEndereco(endereco) {
   if (!endereco) return '';
 

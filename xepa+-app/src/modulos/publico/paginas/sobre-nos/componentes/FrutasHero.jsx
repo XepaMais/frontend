@@ -48,9 +48,8 @@ function Fruta({ fruta, indice, frente }) {
   );
 }
 
-// Fileira de frutas encostada no pé da primeira dobra (Sobre nós e páginas do rodapé).
-// A seção que usa precisa ter `container-type: inline-size` e a variável --escala
-// (como a .sn-hero em Apresentacao.css), porque o tamanho das frutas é em cqw.
+// Fileira de frutas no pé da primeira dobra.
+// A seção precisa de container-type: inline-size e --escala.
 export default function FrutasHero() {
   return (
     <div className="sn-hero__frutas" aria-hidden="true">

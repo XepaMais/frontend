@@ -1,12 +1,4 @@
-/*
- * Computadores: em monitores maiores, o conteúdo das seções (menos a primeira dobra)
- * cresce junto com a tela, em vez de deixar espaço vazio em volta.
- * --escala-tela vem de useEscalaTela.js (1 no notebook de referência).
- *
- * O zoom também aumentaria a altura da própria seção, por isso ela é dividida
- * pela escala: no fim, a seção continua com --altura-secao na tela.
- * Usado pela Home e pelo Sobre nós (importar depois dos estilos das seções).
- */
+/* Computadores: o conteúdo cresce em monitores maiores (--escala-tela) */
 
 @media (min-width: 1001px) {
   main .secao-sobre,

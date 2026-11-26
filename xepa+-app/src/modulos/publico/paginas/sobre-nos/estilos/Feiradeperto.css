@@ -1,9 +1,8 @@
-/* ---------- Conheça a feira de perto ---------- */
-
+/* Conheça a feira de perto */
 .sn-feira {
   width: 100%;
   padding: clamp(64px, 8vw, 104px) var(--margem-lateral, 24px);
-  background: #fffffe;
+  background: #fff3ec;
 }
 
 .sn-feira .sn-p {
@@ -13,12 +12,9 @@
 .sn-feira__video {
   position: relative;
   overflow: hidden;
-
-  /* largo o bastante para assistir com conforto */
   width: min(100%, 1120px);
   margin: 0 auto;
   aspect-ratio: 16 / 9;
-
   border-radius: 12px;
   background: #18552f;
 }
@@ -30,7 +26,7 @@
   object-fit: cover;
 }
 
-/* botão de play laranja, no centro do vídeo */
+/* Botão de play */
 .sn-feira__play {
   position: absolute;
   inset: 0;
@@ -69,7 +65,7 @@
   outline-offset: 4px;
 }
 
-/* Computadores: frase em uma linha e vídeo do tamanho que cabe nos 650px da seção */
+/* Computadores */
 @media (min-width: 1001px) {
   .sn-feira .sn-topo {
     max-width: none;

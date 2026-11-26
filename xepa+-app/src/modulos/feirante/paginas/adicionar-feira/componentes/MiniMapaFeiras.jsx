@@ -10,7 +10,7 @@ function MiniMapaFeiras({ feiras }) {
   const navigate = useNavigate();
   const { isLoaded } = useJsApiLoader(GOOGLE_MAPS_LOADER);
 
-  // TODO 1: só as feiras que têm coordenada
+  // Só as feiras com coordenada
   const feirasNoMapa = feiras
     .filter((feira) => feira.latitude != null)
     .map((feira) => ({
@@ -18,7 +18,7 @@ function MiniMapaFeiras({ feiras }) {
       position: { lat: feira.latitude, lng: feira.longitude },
     }));
 
-  // Mapa completo dentro da área do feirante (mantém o menu do feirante no topo).
+  // Mapa completo na área do feirante.
   const abrirMapa = () => navigate('/mapa-feirante');
 
   if (!isLoaded) return <p>Carregando mapa...</p>;
