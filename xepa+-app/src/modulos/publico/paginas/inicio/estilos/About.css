@@ -161,7 +161,7 @@
   }
 }
 
-/* Computadores: seção com --altura-secao (650px ou a tela inteira), conteúdo centralizado */
+/* Computadores: seção com --altura-secao */
 @media (min-width: 901px) {
   .secao-sobre {
     box-sizing: border-box;

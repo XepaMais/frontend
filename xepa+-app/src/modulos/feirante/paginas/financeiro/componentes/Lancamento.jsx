@@ -5,8 +5,7 @@ import { dataDeHoje } from '@/compartilhado/servicos/datas';
 import { ORIGENS_RENDA } from '@/modulos/feirante/servicos/lancamentosFinanceiros';
 import CampoFeira from '@/modulos/feirante/componentes/CampoFeira.jsx';
 
-// O formulário só existe enquanto o popup está aberto, então basta iniciar o estado com a renda.
-// Ao adicionar, não existe renda: por isso cada campo começa com um valor padrão.
+// O formulário só existe com o popup aberto; ao adicionar, usa valores padrão.
 function Lancamento({ lancamento, aoFechar, aoSalvar }) {
   const [origem, setOrigem] = useState(
     lancamento && lancamento.categoria ? lancamento.categoria : '',

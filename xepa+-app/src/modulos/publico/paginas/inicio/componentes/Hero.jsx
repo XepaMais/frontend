@@ -3,7 +3,7 @@ import FaixaXepa from '@/modulos/publico/paginas/inicio/componentes/FaixaXepa.js
 // Vídeo de fundo da apresentação (Pexels 15645011)
 import videoFeira from '@/assets/videos/feira-hero.mp4';
 
-// Palavras que passam na faixa. Adicione ou remova quantas quiser.
+// Palavras da faixa.
 const palavras = [
   'Venha ver',
   'Xepa+',
@@ -19,7 +19,7 @@ export default function Hero() {
   return (
     <>
       <section className="secao-inicio" id="inicio">
-        {/* Vídeo de fundo: mudo e em loop, como pano de fundo da apresentação */}
+        {/* Vídeo de fundo */}
         <video
           className="video-inicio"
           src={videoFeira}

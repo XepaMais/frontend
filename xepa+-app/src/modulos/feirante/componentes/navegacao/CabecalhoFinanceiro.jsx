@@ -9,7 +9,7 @@ const ABAS = [
   { texto: 'Planilhas', destino: '/planilhas', recurso: 'planilhas' },
 ];
 
-// Segundo cabeçalho, exibido logo abaixo do cabeçalho do feirante na área financeira.
+// Cabeçalho da área financeira.
 function CabecalhoFinanceiro() {
   const { temAcesso } = usePlano();
 

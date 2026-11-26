@@ -1,10 +1,4 @@
-/*
- * Visual comum das páginas abertas pelo rodapé (Xep.AI, Suporte, Seja parceiro,
- * Termos de uso e Diretrizes de Privacidade). Segue o padrão da Home e do Sobre nós:
- * fundo creme, título em faixas verdes com letras limão, fileira de frutas no pé,
- * botões laranja e animações ao rolar.
- * Cada página soma a este arquivo só o que é exclusivo dela (estilos/<Pagina>.module.css).
- */
+/* Visual comum das páginas do rodapé */
 
 /* ---------- Página: cores e base ---------- */
 
@@ -21,7 +15,7 @@
   --cinza: #716d6d;
   --borda: #d6e1d9;
   --branco: #fff;
-  /* respiro em cima e embaixo de cada seção (antes ia até 96px e sobrava espaço entre elas) */
+  /* Espaço em cima e embaixo de cada seção */
   --espaco: clamp(40px, 4vw, 64px);
 
   overflow-x: hidden;
@@ -37,8 +31,7 @@
 
 /* ---------- Primeira dobra (igual ao Sobre nós) ---------- */
 
-/* Título no centro e a fileira de frutas encostada no pé (componente FrutasHero).
-   1cqw = 1% da largura da seção, então frutas e espaçamentos crescem juntos. */
+/* Título no centro e frutas no pé */
 .hero {
   container-type: inline-size;
   --escala: 1;
@@ -66,10 +59,9 @@
   text-align: center;
 }
 
-/* Computadores: a primeira dobra tem --altura-dobra (650px ou a tela inteira menos a faixa) */
+/* Computadores */
 @media (min-width: 1001px) {
   .hero {
-    /* 290px numa dobra de 650px; cresce junto com a dobra em monitores maiores */
     --frutas-max: calc(var(--altura-dobra) * 0.446);
     height: var(--altura-dobra);
   }
@@ -79,15 +71,13 @@
     padding-bottom: calc(min(20cqw, var(--frutas-max)) + 24px);
   }
 
-  /* As frutas mantêm o tamanho (e ficam encostadas umas nas outras). Em telas largas,
-     onde a fileira passaria de --frutas-max, ela desce e o pé da fileira da frente
-     fica cortado, para caber na altura da dobra sem abrir espaços entre as frutas. */
+  /* Telas largas: frutas descem para caber */
   .hero :global(.sn-hero__frutas) {
     translate: 0 max(0px, 20cqw - var(--frutas-max));
   }
 }
 
-/* Tablets e celulares: frutas maiores, como no Sobre nós */
+/* Tablets e celulares: frutas maiores */
 @media (max-width: 900px) {
   .hero {
     --escala: 1.25;

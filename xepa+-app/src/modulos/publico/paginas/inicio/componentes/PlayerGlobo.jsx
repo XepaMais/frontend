@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-// Player oficial da Globo para incorporar vídeos do Globoplay/g1 em outros sites.
-// (O Globoplay não deixa abrir a página do vídeo dentro de um iframe.)
+// Player oficial da Globo (o Globoplay não abre em iframe).
 const SCRIPT_PLAYER_GLOBO =
   'https://s3.glbimg.com/v1/AUTH_e1b09a2d222b4900a437a46914be81e5/api/stable/web/api.min.js';
 

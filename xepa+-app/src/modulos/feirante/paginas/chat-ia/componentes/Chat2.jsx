@@ -63,8 +63,7 @@ const TENTATIVAS_POR_MODELO = 3;
 
 const esperar = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Envia a mensagem tentando de novo em caso de sobrecarga (503) ou limite (429)
-// e, se o modelo principal continuar fora, passa para o reserva.
+// Tenta de novo em 503/429 e, se continuar, usa o modelo reserva.
 async function gerarResposta(history, textoUsuario) {
   let ultimoErro;
 
@@ -95,8 +94,8 @@ async function gerarResposta(history, textoUsuario) {
 
 const SAUDACAO = 'Olá! Eu sou a Xepinha, sua assistente no Xepa+. Como posso te ajudar hoje?';
 
-// Mesmo visual da página de Conversas: histórico à esquerda e a conversa à direita.
-// Sem conversa aberta, a direita é uma conversa nova (criada ao enviar a primeira pergunta).
+// Mesmo visual da página de Conversas.
+// Sem conversa aberta, a direita é uma conversa nova.
 function Chat2() {
   const [conversas, setConversas] = useState(carregarConversasXepinha);
   const [conversaAtiva, setConversaAtiva] = useState(() => carregarConversasXepinha()[0]?.id || null);

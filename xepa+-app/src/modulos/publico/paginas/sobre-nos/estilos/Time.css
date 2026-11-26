@@ -342,7 +342,7 @@
     width: 24px;
   }
 }
-/* Computadores: cards menores (4 por vez e foto mais baixa) para a seção caber nos 650px */
+/* Computadores: cards menores para caber nos 650px */
 @media (min-width: 1001px) {
   .time {
     --por-vista: 4;

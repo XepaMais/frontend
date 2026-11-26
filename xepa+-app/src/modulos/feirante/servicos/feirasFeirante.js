@@ -4,7 +4,7 @@ import { ehDoFeiranteAtual, idFeiranteAtual } from '@/compartilhado/servicos/aut
 
 const CHAVE_FEIRAS = 'feirasFeirante';
 
-// Feiras de exemplo que o projeto usava antes. São removidas de quem ainda as tem salvas.
+// Remove as feiras de exemplo antigas.
 const NOMES_EXEMPLO = { 1: 'Rocinha do tio', 2: 'BemBom', 3: 'Fazendinha' };
 
 function ehExemplo(feira) {

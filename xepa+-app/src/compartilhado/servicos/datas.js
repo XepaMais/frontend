@@ -1,6 +1,5 @@
-// Funções de data usadas em todo o projeto.
 
-// Transforma uma data no texto AAAA-MM-DD, formato usado para salvar e comparar datas.
+// Data -> AAAA-MM-DD.
 export function dataEmTexto(data) {
   const ano = data.getFullYear();
   const mes = String(data.getMonth() + 1).padStart(2, '0');

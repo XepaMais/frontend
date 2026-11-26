@@ -31,7 +31,7 @@
   font-size: clamp(16px, 1.3vw, 18px);
 }
 
-/* foto grande na coluna mais larga; o corte em 4:3 mantém os rostos (que ficam embaixo) */
+/* Foto em 4:3 para manter os rostos */
 .sn-agradecimento__foto {
   display: block;
   width: 100%;

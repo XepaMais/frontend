@@ -2,7 +2,7 @@ import '@/modulos/publico/paginas/inicio/estilos/PlanosFeirante.css';
 import { PLANOS } from '@/compartilhado/dados/planos';
 import Rabisco from '@/modulos/publico/paginas/inicio/componentes/Rabisco.jsx';
 
-// Resumo de cada plano só para a Home (os dados completos ficam em compartilhado/dados/planos)
+// Resumo de cada plano para a Home.
 const RESUMO = {
   gratis: {
     preco: 'R$ 0',

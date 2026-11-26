@@ -1,4 +1,4 @@
-/* A fonte Cal Sans é carregada no index.html e vale para toda a primeira área */
+/* Cal Sans é carregada no index.html */
 
 /* ---------- Apresentação com vídeo ---------- */
 
@@ -222,7 +222,7 @@
   }
 }
 
-/* Computadores: apresentação + faixa = 650px no mínimo; em monitores maiores, a tela inteira */
+/* Computadores: no mínimo 650px; em telas maiores, a tela inteira */
 @media (min-width: 1001px) {
   .secao-inicio {
     height: max(594px, calc(var(--altura-tela) - var(--altura-faixa)));

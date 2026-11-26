@@ -25,8 +25,7 @@ export function carregarContaDaSessao() {
   return JSON.parse(sessionStorage.getItem(CHAVE_SESSAO) || 'null');
 }
 
-// Dono dos dados do feirante guardados no navegador (feiras, xepas, conversas):
-// o id da conta logada, ou 'demo' sem login. Assim, cada conta nova começa vazia.
+// Dono dos dados do feirante no navegador: id da conta logada, ou 'demo'.
 export function idFeiranteAtual() {
   const conta = carregarContaDaSessao();
 

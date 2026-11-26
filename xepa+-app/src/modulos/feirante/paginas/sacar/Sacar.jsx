@@ -18,7 +18,7 @@ function rotuloDoTipo(tipo) {
   return encontrado ? encontrado.rotulo : 'Pix';
 }
 
-// Tela fictícia de saque: o feirante transfere para o Pix o que recebeu pelas vendas no Xepa+.
+// Tela fictícia de saque via Pix.
 function Sacar() {
   const [saques, setSaques] = useState([]);
   const [saldo, setSaldo] = useState({ recebido: 0, sacado: 0, disponivel: 0 });

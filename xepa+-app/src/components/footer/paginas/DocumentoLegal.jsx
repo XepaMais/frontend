@@ -6,8 +6,7 @@ const Styles = juntarEstilos(EstilosDocumento);
 
 const EMAIL_CONTATO = 'xepamais8@gmail.com';
 
-// Corpo comum dos Termos de uso e das Diretrizes de Privacidade:
-// índice com links para cada seção + texto numerado.
+// Corpo comum dos Termos de uso e das Diretrizes de Privacidade.
 // Cada seção: { id, titulo, paragrafos?: string[], itens?: string[] }
 function DocumentoLegal({ atualizadoEm, secoes }) {
   function irParaSecao(evento, id) {

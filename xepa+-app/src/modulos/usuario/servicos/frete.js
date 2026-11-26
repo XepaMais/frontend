@@ -1,6 +1,6 @@
 // Frete da entrega em casa, no estilo dos apps de delivery (valores fictícios).
 // Cada feira entrega separado: a taxa é calculada pela distância da feira até o endereço.
-// Futuramente a entrega será feita pela API do Uber: basta trocar o cálculo de calcularFrete pela cotação do Uber, mantendo o mesmo formato de retorno
+// Futuramente: trocar calcularFrete pela cotação da API do Uber, mantendo o retorno
 // ({ chave, entregas: [{ feira, distanciaKm, valor, tempo, foraDoRaio }], valor, foraDoRaio }).
 import { geocodificarEndereco } from '@/compartilhado/servicos/localizacao';
 import { carregarTodasFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
@@ -51,8 +51,7 @@ function distanciaKm(a, b) {
   return 2 * raioTerra * Math.asin(Math.sqrt(h));
 }
 
-// Quando o mapa não acha um dos endereços, usa uma distância aproximada
-// que é sempre a mesma para o mesmo CEP e a mesma feira (entre 1 e 10 km).
+// Se o mapa não acha o endereço, usa uma distância fixa por CEP e feira (1 a 10 km).
 function distanciaAproximada(cep, feira) {
   let soma = 0;
 

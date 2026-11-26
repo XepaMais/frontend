@@ -86,9 +86,7 @@ img {
   }
 }
 
-/* ===================== Visual novo da área financeira =====================
-   Lucros, Despesas, Planilhas, Feiras e Produtos usam a classe "pagina-financeiro".
-   Detalhes em laranja: botões principais, abas e títulos. */
+/* Visual da área financeira (classe pagina-financeiro) */
 
 .pagina-financeiro {
   --fin-borda: 1px solid #e3e9e5;

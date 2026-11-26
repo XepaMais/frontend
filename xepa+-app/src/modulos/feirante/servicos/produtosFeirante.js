@@ -1,5 +1,4 @@
-// Cadastro de produtos do feirante. A lista é compartilhada com a área do consumidor,
-// mas cada xepa guarda o dono (idFeirante): o feirante vê só as que ele cadastrou.
+// Produtos do feirante: cada xepa guarda o dono (idFeirante).
 import { carregarXepas, salvarXepas } from '@/compartilhado/servicos/xepas';
 import { ehDoFeiranteAtual, idFeiranteAtual } from '@/compartilhado/servicos/autenticacao';
 
