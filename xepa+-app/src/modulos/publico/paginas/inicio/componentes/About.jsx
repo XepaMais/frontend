@@ -1,11 +1,7 @@
 import '@/modulos/publico/paginas/inicio/estilos/About.css';
 import { useNavigate } from 'react-router-dom';
 import Rabisco from '@/modulos/publico/paginas/inicio/componentes/Rabisco.jsx';
-import PlayerGlobo from '@/modulos/publico/paginas/inicio/componentes/PlayerGlobo.jsx';
-
-// Reportagem do SP2 (TV Globo): "Xepa de feira é saída para encontrar promoções"
-const VIDEO_XEPA_ID = '13584285';
-const VIDEO_XEPA_LINK = 'https://globoplay.globo.com/v/13584285/';
+import videoFeira from '@/assets/videos/VideoFeira.mp4';
 
 export default function About() {
   const navigate = useNavigate();
@@ -40,14 +36,9 @@ export default function About() {
 
         <figure className="sobre-video" data-revelar="direita" style={{ '--atraso': '0.15s' }}>
           <div className="sobre-video__moldura">
-            <PlayerGlobo idVideo={VIDEO_XEPA_ID} linkOriginal={VIDEO_XEPA_LINK} />
+            <video src={`${videoFeira}#t=0.1`} controls preload="metadata" playsInline />
           </div>
-          <figcaption>
-            SP2, TV Globo: “Xepa de feira é saída para encontrar promoções”.{' '}
-            <a href={VIDEO_XEPA_LINK} target="_blank" rel="noreferrer">
-              Ver no Globoplay
-            </a>
-          </figcaption>
+          <figcaption>Vídeo gravado pela equipe Xepa+ na feira.</figcaption>
         </figure>
       </div>
     </section>

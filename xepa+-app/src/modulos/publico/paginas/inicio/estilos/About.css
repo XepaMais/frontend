@@ -100,26 +100,11 @@
   background: #18552f;
 }
 
-.player-globo,
-.player-globo__reserva {
-  position: absolute;
-  inset: 0;
-}
-
-/* o player da Globo cria o próprio conteúdo dentro do container */
-.player-globo > *,
-.player-globo iframe {
-  width: 100% !important;
-  height: 100% !important;
-  border: 0;
-}
-
-.player-globo__reserva {
-  display: grid;
-  place-items: center;
-  color: #fff;
-  font-weight: 600;
-  text-decoration: underline;
+.sobre-video__moldura video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .sobre-video figcaption {
@@ -127,11 +112,6 @@
   color: #5f7166;
   font-size: 13px;
   line-height: 1.5;
-}
-
-.sobre-video figcaption a {
-  color: #18552f;
-  font-weight: 600;
 }
 
 /* ---------- Tablets e celulares ---------- */
