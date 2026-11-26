@@ -68,7 +68,7 @@ function XepAI() {
               </li>
               <li>
                 <Check size={20} aria-hidden="true" />
-                Disponível nos planos Crescer e Pro
+                Disponível nos planos Broto e Colheita
               </li>
             </ul>
           </div>
@@ -102,7 +102,7 @@ function XepAI() {
         <h2>
           <Sparkles size={24} aria-hidden="true" /> Pronto para conversar com a Xepinha?
         </h2>
-        <p>Cadastre sua barraca, escolha o plano Crescer ou Pro e comece a usar a Xep.AI hoje.</p>
+        <p>Cadastre sua barraca, escolha o plano Broto ou Colheita e comece a usar a Xep.AI hoje.</p>
         <div className={Styles.botoes}>
           <Link to="/CriarUsuarioF" className={Styles.botao}>
             Cadastrar minha barraca

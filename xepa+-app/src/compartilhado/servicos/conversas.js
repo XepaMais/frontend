@@ -1,4 +1,5 @@
 import { carregarPerfil } from '@/compartilhado/servicos/perfil';
+import { ehDoFeiranteAtual } from '@/compartilhado/servicos/autenticacao';
 import {
   atualizarStatusPedido,
   descreverRecebimento,
@@ -14,81 +15,6 @@ export const STATUS_CONVERSA = {
   finalizada: 'finalizada',
 };
 
-function minutosAtras(minutos) {
-  return new Date(Date.now() - minutos * 60 * 1000).toISOString();
-}
-
-// Conversas de exemplo para a área do feirante não começar vazia.
-// Não aparecem para o consumidor (demo).
-function conversasDemonstracao() {
-  const nomeFeirante = carregarPerfil('feirante').nome;
-
-  const demo = (id, consumidor, pedido, mensagens, status = STATUS_CONVERSA.recente) => ({
-    id: `demo-${id}`,
-    demo: true,
-    consumidor,
-    feirante: nomeFeirante,
-    status,
-    criadaEm: pedido.data,
-    finalizadaEm: status === STATUS_CONVERSA.finalizada ? mensagens.at(-1)?.data : null,
-
-    // Murilo começa com mensagem não lida, para a notificação aparecer na Home.
-    leituras: {
-      feirante: id === 2 ? pedido.data : mensagens.at(-1)?.data,
-      consumidor: mensagens.at(-1)?.data,
-    },
-    pedido,
-    mensagens: mensagens.map((mensagem, indice) => ({ id: indice + 1, ...mensagem })),
-  });
-
-  return [
-    demo(
-      1,
-      'Carneiro',
-      {
-        numero: '1042',
-        data: minutosAtras(25),
-        total: 18,
-        retirada: 'Feira da Rua Augusta',
-        itens: [{ nome: 'Xepa de frutas', quantidade: 2, preco: 9 }],
-      },
-      [
-        { autor: 'consumidor', texto: 'Oi! Vi sua xepa de hoje e queria saber se ainda tem disponibilidade.', data: minutosAtras(20) },
-        { autor: 'feirante', texto: 'Olá! Temos sim. Posso reservar para você.', data: minutosAtras(14) },
-        { autor: 'consumidor', texto: 'Opa, tudo bem? Passo aí às 17h.', data: minutosAtras(12) },
-      ],
-    ),
-    demo(
-      2,
-      'Murilo',
-      {
-        numero: '1041',
-        data: minutosAtras(160),
-        total: 12.5,
-        retirada: 'Feira da Rua Augusta',
-        itens: [{ nome: 'Xepa de verduras e legumes', quantidade: 1, preco: 12.5 }],
-      },
-      [{ autor: 'consumidor', texto: 'Olá, boa tarde! Até que horas posso retirar?', data: minutosAtras(150) }],
-    ),
-    demo(
-      3,
-      'Fernanda',
-      {
-        numero: '1038',
-        data: minutosAtras(60 * 26),
-        total: 25,
-        retirada: 'Feira da Rua Augusta',
-        itens: [{ nome: 'Xepa completa', quantidade: 1, preco: 25 }],
-      },
-      [
-        { autor: 'feirante', texto: 'Oi! Separei aquelas frutas que você pediu.', data: minutosAtras(60 * 25) },
-        { autor: 'consumidor', texto: 'Perfeito, já estou chegando!', data: minutosAtras(60 * 24) },
-      ],
-      STATUS_CONVERSA.finalizada,
-    ),
-  ];
-}
-
 function ultimaAtividade(conversa) {
   return conversa.mensagens.at(-1)?.data || conversa.finalizadaEm || conversa.criadaEm;
 }
@@ -99,20 +25,21 @@ function salvarConversas(conversas) {
 }
 
 export function carregarConversas() {
-  const salvas = JSON.parse(localStorage.getItem(CHAVE_CONVERSAS));
-
-  if (!salvas) {
-    const iniciais = conversasDemonstracao();
-    localStorage.setItem(CHAVE_CONVERSAS, JSON.stringify(iniciais));
-    return iniciais;
-  }
+  const salvas = JSON.parse(localStorage.getItem(CHAVE_CONVERSAS)) || [];
 
   return salvas
+    // Remove as conversas de exemplo (Carneiro, Murilo...) que versões antigas salvavam.
+    .filter((conversa) => !conversa.demo)
     // Conversas salvas antes das notificações: considera tudo como já lido.
     .map((conversa) => (conversa.leituras
       ? conversa
       : { ...conversa, leituras: { feirante: ultimaAtividade(conversa), consumidor: ultimaAtividade(conversa) } }))
     .sort((a, b) => new Date(ultimaAtividade(b)) - new Date(ultimaAtividade(a)));
+}
+
+// Área do feirante: só as conversas sobre as xepas dele. Conta nova: lista vazia.
+export function carregarConversasDoFeirante() {
+  return carregarConversas().filter(ehDoFeiranteAtual);
 }
 
 // Mensagens que o perfil ('feirante' ou 'consumidor') ainda não viu.
@@ -159,6 +86,7 @@ export function abrirConversaDoPedido(pedido) {
   const novaConversa = {
     id,
     consumidor: carregarPerfil('usuario').nome,
+    idFeirante: pedido.itens[0]?.idFeirante,
     feirante: pedido.itens[0]?.barraca || carregarPerfil('feirante').nome,
     status: STATUS_CONVERSA.recente,
     criadaEm: agora,
@@ -206,6 +134,7 @@ export function abrirConversaDaXepa(xepa) {
   const novaConversa = {
     id,
     consumidor: carregarPerfil('usuario').nome,
+    idFeirante: xepa.idFeirante,
     feirante: xepa.feirante || carregarPerfil('feirante').nome,
     status: STATUS_CONVERSA.recente,
     criadaEm: agora,
@@ -253,7 +182,7 @@ export function finalizarConversa(id) {
     finalizadaEm: new Date().toISOString(),
   }));
 
-  if (conversa && !conversa.demo && conversa.pedido) {
+  if (conversa?.pedido) {
     atualizarStatusPedido(conversa.pedido.numero, 'Retirado');
   }
 

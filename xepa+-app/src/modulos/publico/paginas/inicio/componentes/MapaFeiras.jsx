@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { carregarFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
+import { carregarTodasFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
 import { buscarCep, geocodificarEndereco } from '@/compartilhado/servicos/localizacao';
 import '@/modulos/publico/paginas/inicio/estilos/MapaFeiras.css';
 import Rabisco from '@/modulos/publico/paginas/inicio/componentes/Rabisco.jsx';
@@ -33,7 +33,7 @@ function MapaFeiras() {
   const [mensagem, setMensagem] = useState(
     'Digite seu CEP para ver as feiras cadastradas perto de você.',
   );
-  const [feiras] = useState(() => carregarFeiras().filter((feira) => feira.latitude != null));
+  const [feiras] = useState(() => carregarTodasFeiras().filter((feira) => feira.latitude != null));
 
   async function pesquisarFeiras() {
     const termo = busca.trim();

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Receipt } from 'lucide-react';
 import {
-  carregarPedidos,
+  carregarVendasDoFeirante,
   descreverRecebimento,
   formatarDataHora,
   formatarMoeda,
@@ -24,14 +24,14 @@ function contarItens(venda) {
 }
 
 function HistoricoVendas() {
-  const [vendas, setVendas] = useState(carregarPedidos);
+  const [vendas, setVendas] = useState(carregarVendasDoFeirante);
 
   // O feirante confirma que o cliente retirou o pedido: o pop-up pede o código do cliente.
   const [pedidoParaConfirmar, setPedidoParaConfirmar] = useState(null);
 
   function aoConfirmarEntrega() {
     setPedidoParaConfirmar(null);
-    setVendas(carregarPedidos());
+    setVendas(carregarVendasDoFeirante());
   }
 
   let totalItens = 0;

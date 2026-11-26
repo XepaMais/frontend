@@ -51,6 +51,7 @@ export default function Pagamento() {
     const pedido = registrarPedido({
       itens: itens.map((item) => ({
         id: item.id,
+        idFeirante: item.idFeirante,
         nome: item.nome,
         categoria: item.categoria,
         descricao: item.itens || item.descricao,

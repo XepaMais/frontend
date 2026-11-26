@@ -1,15 +1,20 @@
-// Cadastro de produtos do feirante. A lista é compartilhada com a área do consumidor.
+// Cadastro de produtos do feirante. A lista é compartilhada com a área do consumidor,
+// mas cada xepa guarda o dono (idFeirante): o feirante vê só as que ele cadastrou.
 import { carregarXepas, salvarXepas } from '@/compartilhado/servicos/xepas';
+import { ehDoFeiranteAtual, idFeiranteAtual } from '@/compartilhado/servicos/autenticacao';
 
 const LARGURA_MAXIMA_IMAGEM = 480;
 
-export const carregarProdutos = carregarXepas;
+export function carregarProdutos() {
+  return carregarXepas().filter(ehDoFeiranteAtual);
+}
 
 // Retorna false quando o navegador não tem mais espaço para guardar o produto.
 export function adicionarProduto(produto) {
   const novoProduto = {
     ...produto,
     id: Date.now(),
+    idFeirante: idFeiranteAtual(),
     cadastradoEm: new Date().toISOString(),
   };
 

@@ -10,7 +10,7 @@
 - **Xepa:** produtos que ainda podem ser aproveitados, vendidos em condições especiais no fim da feira para reduzir o desperdício.
 - **Feirante:** cadastra feiras e xepas, conversa com clientes, confirma retiradas e controla as finanças.
 - **Consumidor:** encontra xepas e feiras no mapa, compra pelo app com Pix e retira na feira.
-- **Xep.AI (Xepinha):** assistente virtual para feirantes, disponível só nos planos Crescer e Pro.
+- **Xep.AI (Xepinha):** assistente virtual para feirantes, disponível só nos planos Broto e Colheita.
 
 ---
 
@@ -18,15 +18,15 @@
 
 | Plano | Preço | Comissão por venda pelo app | O que libera |
 |---|---|---|---|
-| Grátis | R$ 0,00 | 15% | Cadastro de barraca e feiras, xepas, chat com clientes, perfil básico |
-| Crescer | R$ 29,90/mês | 8% | Tudo do Grátis + gestão financeira básica (Lucros, Despesas, Sacar) + Xep.AI + suporte via chat |
-| Pro | R$ 59,90/mês | 5% | Tudo do Crescer + Planilhas com download em PDF + suporte prioritário via chat |
+| Semente | R$ 0,00 | 15% | Cadastro de barraca e feiras, xepas, chat com clientes, perfil básico |
+| Broto | R$ 29,90/mês | 8% | Tudo do Semente + gestão financeira básica (Lucros, Despesas, Sacar) + Xep.AI + suporte via chat |
+| Colheita | R$ 59,90/mês | 5% | Tudo do Broto + Planilhas com download em PDF + suporte prioritário via chat |
 
 - A comissão só vale para vendas de xepa feitas pelo app. Vendas feitas direto na banca não pagam comissão.
 - Exemplo: venda de R$ 20,00 pelo app.
-  - Plano Grátis: taxa de R$ 3,00, o feirante recebe R$ 17,00.
-  - Plano Crescer: taxa de R$ 1,60, o feirante recebe R$ 18,40.
-  - Plano Pro: taxa de R$ 1,00, o feirante recebe R$ 19,00.
+  - Plano Semente: taxa de R$ 3,00, o feirante recebe R$ 17,00.
+  - Plano Broto: taxa de R$ 1,60, o feirante recebe R$ 18,40.
+  - Plano Colheita: taxa de R$ 1,00, o feirante recebe R$ 19,00.
 
 ### Recurso bloqueado
 Quando o plano não inclui um recurso, ele aparece com um cadeado no menu. A página fica desfocada e mostra o botão "Ver planos".
@@ -34,7 +34,7 @@ Quando o plano não inclui um recurso, ele aparece com um cadeado no menu. A pá
 ### Trocar de plano
 1. Abra o menu da conta (sua foto ou nome no topo).
 2. Clique em "Planos".
-3. Clique em "Selecionar Crescer", "Selecionar Pro" ou "Selecionar Grátis".
+3. Clique em "Selecionar Broto", "Selecionar Colheita" ou "Selecionar Semente".
 4. O plano atual aparece como "Plano selecionado". A troca vale na hora.
 
 ---
@@ -45,15 +45,15 @@ Quando o plano não inclui um recurso, ele aparece com um cadeado no menu. A pá
 - **Home:** resumo do dia.
 - **Produtos:** cadastrar xepas.
 - **Feiras:** cadastrar as feiras onde você trabalha.
-- **Financeiro:** só nos planos Crescer e Pro.
+- **Financeiro:** só nos planos Broto e Colheita.
 - **Chat:** conversas com clientes.
-- **Xep.AI:** só nos planos Crescer e Pro.
+- **Xep.AI:** só nos planos Broto e Colheita.
 
 **Abas dentro de Financeiro:**
-- **Lucros:** planos Crescer e Pro.
-- **Despesas:** planos Crescer e Pro.
-- **Planilhas:** só no plano Pro.
-- **Sacar:** planos Crescer e Pro.
+- **Lucros:** planos Broto e Colheita.
+- **Despesas:** planos Broto e Colheita.
+- **Planilhas:** só no plano Colheita.
+- **Sacar:** planos Broto e Colheita.
 
 **Menu da conta (foto ou nome no topo):**
 - **Meus Dados:** dados pessoais e do negócio.
@@ -91,7 +91,7 @@ Quando o plano não inclui um recurso, ele aparece com um cadeado no menu. A pá
 ### 4.3 Entrar
 1. Na tela "Entrar na conta", digite email e senha.
 2. Clique em "Entrar".
-- Para conhecer o app sem conta, use "Visite nosso Demo (Acesso rápido)". Lá dá para escolher Consumidor ou Feirante nos planos Grátis, Crescer ou Pro.
+- Para conhecer o app sem conta, use "Visite nosso Demo (Acesso rápido)". Lá dá para escolher Consumidor ou Feirante nos planos Semente, Broto ou Colheita.
 
 ### 4.4 Esqueci a senha
 Ainda não existe a opção de recuperar senha na tela de login. Oriente o feirante a falar com o Suporte (seção 11).
@@ -246,7 +246,7 @@ As vendas feitas pelo app entram sozinhas em Lucros. Vendas feitas na banca, em 
 - Lista de despesas com filtro (categoria, quantidade e preço). O lápis edita e a lixeira exclui.
 - Gráfico "Despesas do mês por categoria".
 
-### 9.3 Planilhas e PDF (só plano Pro)
+### 9.3 Planilhas e PDF (só plano Colheita)
 **Ver o histórico completo:**
 1. Abra Financeiro e clique na aba "Planilhas".
 2. A tabela junta todas as rendas e despesas: data, descrição, categoria, tipo (Lucro ou Despesa), feira e valor.
@@ -266,7 +266,7 @@ As vendas feitas pelo app entram sozinhas em Lucros. Vendas feitas na banca, em 
 **Problemas comuns:**
 - Botão "Baixar PDF" apagado: não há registros com os filtros atuais. Altere ou limpe os filtros.
 - "Nenhum registro encontrado": registre rendas e despesas ou limpe os filtros.
-- Plano Crescer: a aba Planilhas aparece com cadeado. Para usar, é preciso mudar para o plano Pro.
+- Plano Broto: a aba Planilhas aparece com cadeado. Para usar, é preciso mudar para o plano Colheita.
 
 ### 9.4 Sacar (tela "Sacar lucros")
 - **Saldo disponível:** o que você recebeu pelas vendas de xepa no app, já sem a taxa do plano, menos o que já foi sacado. Rendas registradas manualmente não entram no saldo para saque.
@@ -303,7 +303,7 @@ O saque aparece no "Histórico de saques". Nesta versão o saque é uma simulaç
 4. Para vendas pelo app, considere a comissão do plano.
 
 - **Fórmula:** preço = custo total ÷ (1 − margem − comissão).
-- **Exemplo:** custo de R$ 5,00, margem de 30% e plano Crescer (8%) dá 5,00 ÷ 0,62 = R$ 8,06.
+- **Exemplo:** custo de R$ 5,00, margem de 30% e plano Broto (8%) dá 5,00 ÷ 0,62 = R$ 8,06.
 
 ### Quando fazer xepa
 - Para produtos perecíveis que não aguentam até a próxima feira.

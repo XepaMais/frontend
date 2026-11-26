@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Crown, ShoppingBasket, Sprout, Store } from 'lucide-react';
 import Modal from '@/compartilhado/componentes/modal/Modal';
 import Crumb from '@/modulos/autenticacao/paginas/Crumb';
+import { encerrarSessao } from '@/compartilhado/servicos/autenticacao';
 import { salvarPlanoSelecionado } from '@/modulos/feirante/servicos/planoFeirante';
 import Styles from '@/modulos/autenticacao/paginas/demo/demo.module.css';
 
@@ -14,7 +15,7 @@ const PERFIS = [
     destino: '/demo/consumidor',
   },
   {
-    nome: 'Feirante - Plano Grátis',
+    nome: 'Feirante - Plano Semente',
     descricao: 'Cadastre suas feiras e xepas e converse com os clientes.',
     Icone: Store,
     cor: Styles.limao,
@@ -22,15 +23,15 @@ const PERFIS = [
     plano: 'gratis',
   },
   {
-    nome: 'Feirante - Plano Crescer',
-    descricao: 'Tudo do Grátis, com gestão financeira básica e Xepinha.',
+    nome: 'Feirante - Plano Broto',
+    descricao: 'Tudo do Semente, com gestão financeira básica e Xepinha.',
     Icone: Sprout,
     cor: Styles.amarelo,
     destino: '/demo/feirante',
     plano: 'crescer',
   },
   {
-    nome: 'Feirante - Plano Pro',
+    nome: 'Feirante - Plano Colheita',
     descricao: 'Acesso a tudo: gestão financeira completa, planilhas e Xepinha.',
     Icone: Crown,
     cor: Styles.laranja,
@@ -43,6 +44,8 @@ function Demo() {
   const navigate = useNavigate();
 
   function entrar(perfil) {
+    encerrarSessao();
+
     if (perfil.plano) {
       salvarPlanoSelecionado(perfil.plano);
     }

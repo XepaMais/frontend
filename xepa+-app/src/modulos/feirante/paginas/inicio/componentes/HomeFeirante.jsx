@@ -13,7 +13,7 @@ import ItemConversa from '@/modulos/feirante/paginas/historico-chat/componentes/
 import { dataDeHoje } from '@/compartilhado/servicos/datas';
 import {
   descreverRecebimento,
-  carregarPedidos,
+  carregarVendasDoFeirante,
   formatarDataHora,
   formatarMoeda,
   PENDENTE_RETIRADA,
@@ -78,7 +78,7 @@ function HomeFeirante() {
   const { plano, temAcesso } = usePlano();
   const dadosDoPlano = PLANOS.find((item) => item.id === plano);
   const ultimaXepa = carregarProdutos()[0];
-  const [pedidos, setPedidos] = useState(carregarPedidos);
+  const [pedidos, setPedidos] = useState(carregarVendasDoFeirante);
   const pedidosPendentes = pedidos.filter((pedido) => pedido.status === PENDENTE_RETIRADA);
   const pedidosRetirados = pedidos.length - pedidosPendentes.length;
 
@@ -87,12 +87,12 @@ function HomeFeirante() {
 
   function aoConfirmarEntrega() {
     setPedidoParaConfirmar(null);
-    setPedidos(carregarPedidos());
+    setPedidos(carregarVendasDoFeirante());
   }
   const { lancamentos, gastos: todosOsGastos, doMes, total } = useFinanceiro();
   // Só conversas recentes (pedidos ainda não retirados), as mais novas primeiro.
   // As que têm pedido novo ou mensagem não lida aparecem no topo.
-  const conversasRecentes = useConversas()
+  const conversasRecentes = useConversas('feirante')
     .filter((conversa) => conversa.status === STATUS_CONVERSA.recente)
     .sort((a, b) => (
       Number(mensagensNaoLidas(b, 'feirante').length > 0)

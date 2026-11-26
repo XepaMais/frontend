@@ -81,7 +81,7 @@ function SejaParceiro() {
             <ul className={Styles.lista}>
               <li>
                 <Check size={20} aria-hidden="true" />
-                Comece sem pagar nada com o plano Grátis
+                Comece sem pagar nada com o plano Semente
               </li>
               <li>
                 <Check size={20} aria-hidden="true" />
