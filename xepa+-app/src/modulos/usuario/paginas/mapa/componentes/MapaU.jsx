@@ -6,6 +6,7 @@ import logoXepa from '@/assets/imagens/gerais/logo-colorida.png'
 import { GOOGLE_MAPS_LOADER } from '@/compartilhado/servicos/googleMaps'
 import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa'
 import { buscarFeirasProximas, listarFeiras } from '@/modulos/usuario/servicos/feiras'
+import { buscarCep, geocodificarEndereco } from '@/compartilhado/servicos/localizacao'
 
 const NOMES_DIAS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
 
@@ -101,28 +102,31 @@ function MapPage() {
   };
 
   // Busca por CEP caso o usuário queira pesquisar outra região
-  const buscarRegiaoPorCep = (valor) => {
-    if (!window.google?.maps) return;
-
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode(
-      {
-        address: valor,
-        componentRestrictions: { country: 'BR' }
-      },
-      (results, status) => {
-        if (status === 'OK' && results?.[0]) {
-          const coords = results[0].geometry.location;
-          setFeiraSelecionada(null);
-          setMapCenter({
-            lat: coords.lat(),
-            lng: coords.lng(),
-          });
-        } else {
-          setAviso('Não encontramos este CEP. Tente novamente.');
-        }
+  // ViaCEP dá o endereço e o OpenStreetMap dá a posição (não depende da chave do Google).
+  const buscarRegiaoPorCep = async (valor) => {
+    try {
+      const dados = await buscarCep(valor);
+      if (!dados) {
+        setAviso('Não encontramos este CEP. Confira os números.');
+        return;
       }
-    );
+
+      const endereco = [dados.logradouro, dados.bairro, dados.cidade, dados.uf].filter(Boolean).join(', ');
+      const local =
+        (await geocodificarEndereco(endereco)) ||
+        // Se a rua não for encontrada, tenta pelo bairro e cidade.
+        (await geocodificarEndereco([dados.bairro, dados.cidade, dados.uf].filter(Boolean).join(', ')));
+
+      if (!local) {
+        setAviso('Não conseguimos achar este CEP no mapa. Tente outro.');
+        return;
+      }
+
+      setFeiraSelecionada(null);
+      setMapCenter({ lat: local.latitude, lng: local.longitude });
+    } catch {
+      setAviso('Não foi possível buscar o CEP agora. Tente novamente.');
+    }
   };
 
   // Procura a feira pelo nome (primeiro nas que já estão no mapa, depois em todas),
