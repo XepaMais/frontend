@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { carregarFeiras, salvarFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
+import {
+  atualizarFeira,
+  buscarMinhasFeiras,
+  carregarFeiras,
+  criarFeira,
+  excluirFeira,
+} from '@/modulos/feirante/servicos/feirasFeirante';
+import Modal from '@/compartilhado/componentes/modal/Modal';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import '@/modulos/feirante/paginas/financeiro/financeiro.css';
 import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa';
@@ -28,32 +35,55 @@ function textoDaBusca(feira) {
 function AddFeira() {
   const [busca, setBusca] = useState('');
   const [modal, setModal] = useState(null);
+  // Começa com a cópia local e troca pela lista da API assim que ela chega.
   const [feiras, setFeiras] = useState(carregarFeiras);
+  const [aviso, setAviso] = useState('');
 
   useEffect(() => {
-    salvarFeiras(feiras);
-  }, [feiras]);
+    let ativo = true;
 
-  function adicionarFeira(dados) {
-    setFeiras([...feiras, { id: Date.now(), ...dados }]);
-    setModal(null);
+    buscarMinhasFeiras()
+      .then((lista) => {
+        if (ativo) setFeiras(lista);
+      })
+      .catch((erro) => {
+        if (ativo) setAviso(erro.message);
+      });
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
+
+  async function adicionarFeira(dados) {
+    try {
+      const nova = await criarFeira(dados);
+      setFeiras((atuais) => [...atuais, nova]);
+      setModal(null);
+    } catch (erro) {
+      setAviso(erro.message);
+    }
   }
 
-  function editarFeira(dados) {
-    const novasFeiras = feiras.map((feira) => {
-      if (feira.id === modal.feira.id) {
-        return { ...feira, ...dados };
-      }
-
-      return feira;
-    });
-
-    setFeiras(novasFeiras);
-    setModal(null);
+  async function editarFeira(dados) {
+    const id = modal.feira.id;
+    try {
+      const atualizada = await atualizarFeira(id, dados);
+      setFeiras((atuais) => atuais.map((feira) => (feira.id === id ? atualizada : feira)));
+      setModal(null);
+    } catch (erro) {
+      setAviso(erro.message);
+    }
   }
 
-  function excluirFeira() {
-    setFeiras(feiras.filter((feira) => feira.id !== modal.feira.id));
+  async function confirmarExclusao() {
+    const id = modal.feira.id;
+    try {
+      await excluirFeira(id);
+      setFeiras((atuais) => atuais.filter((feira) => feira.id !== id));
+    } catch (erro) {
+      setAviso(erro.message);
+    }
     setModal(null);
   }
 
@@ -160,9 +190,10 @@ function AddFeira() {
           nome={modal.feira.nome}
           aviso="será excluída. Xepas, rendas e despesas já registrados continuam com o nome dela."
           onFechar={() => setModal(null)}
-          onConfirmar={excluirFeira}
+          onConfirmar={confirmarExclusao}
         />
       )}
+      {aviso && <Modal titulo="Aviso" descricao={aviso} aoFechar={() => setAviso('')} />}
     </div>
   );
 }

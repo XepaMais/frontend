@@ -105,7 +105,8 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
         return;
       }
 
-      onSalvar({
+      // Espera a API salvar, para o botão continuar bloqueado enquanto isso.
+      await onSalvar({
         nome: nome.trim(),
         endereco,
         rua,
