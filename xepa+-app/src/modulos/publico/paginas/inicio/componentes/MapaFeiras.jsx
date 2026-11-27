@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { carregarTodasFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
+import { useEffect, useState } from 'react';
+import { listarFeiras } from '@/modulos/usuario/servicos/feiras';
 import { buscarCep, geocodificarEndereco } from '@/compartilhado/servicos/localizacao';
 import '@/modulos/publico/paginas/inicio/estilos/MapaFeiras.css';
 import Rabisco from '@/modulos/publico/paginas/inicio/componentes/Rabisco.jsx';
@@ -33,7 +33,28 @@ function MapaFeiras() {
   const [mensagem, setMensagem] = useState(
     'Digite seu CEP para ver as feiras cadastradas perto de você.',
   );
-  const [feiras] = useState(() => carregarTodasFeiras().filter((feira) => feira.latitude != null));
+  // Feiras cadastradas pelos feirantes (API).
+  const [feiras, setFeiras] = useState([]);
+
+  useEffect(() => {
+    let ativo = true;
+
+    listarFeiras()
+      .then((lista) => {
+        if (!ativo) return;
+        setFeiras(
+          lista
+            .filter((feira) => feira.latitude != null && feira.longitude != null)
+            .map((feira) => ({ ...feira, latitude: Number(feira.latitude), longitude: Number(feira.longitude) })),
+        );
+      })
+      // Sem API, a busca ainda centraliza o mapa; só não indica a feira mais próxima.
+      .catch(() => {});
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
 
   async function pesquisarFeiras() {
     const termo = busca.trim();

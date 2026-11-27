@@ -9,8 +9,7 @@ import CampoFeira from '@/modulos/feirante/componentes/CampoFeira.jsx';
 function FormularioGasto({ modo, gasto, onFechar, onSalvar }) {
   const estaEditando = modo === 'editar';
 
-  // O formulário só existe enquanto o popup está aberto, então basta iniciar o estado com o gasto.
-  // Ao adicionar, não existe gasto: por isso cada campo começa com um valor padrão.
+  // O formulário só existe com o popup aberto; ao adicionar, usa valores padrão.
   const [descricao, setDescricao] = useState(gasto ? gasto.descricao : '');
   const [quantidade, setQuantidade] = useState(gasto ? String(gasto.quantidade) : '');
   const [valorUnitario, setValorUnitario] = useState(gasto ? String(gasto.valorUnitario) : '');

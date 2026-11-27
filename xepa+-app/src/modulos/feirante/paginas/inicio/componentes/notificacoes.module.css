@@ -1,4 +1,4 @@
-/* Card "Notificações" da Home do feirante (complementa HomeFeirante.module.css) */
+/* Card Notificações da Home do feirante */
 .titulo {
   display: flex;
   align-items: center;
@@ -75,7 +75,7 @@
   gap: 8px;
 }
 
-/* Fundo branco como a lista do chat (section.quadro vence o fundo do card da Home) */
+/* Fundo branco como a lista do chat */
 section.quadro {
   background: var(--branco);
 }

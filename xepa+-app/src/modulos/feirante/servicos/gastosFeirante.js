@@ -27,7 +27,7 @@ export function salvarGastos(gastos) {
   localStorage.setItem(CHAVE_GASTOS, JSON.stringify(gastos));
 }
 
-// ---------- Funções usadas pelas páginas (API com login, navegador sem login) ----------
+// Funções usadas pelas páginas
 
 function rotuloDaCategoria(valor) {
   const categoria = CATEGORIAS_GASTO.find((item) => item.valor === valor);
@@ -41,7 +41,7 @@ function valorDaCategoria(rotulo) {
   return categoria ? categoria.valor : 'outros';
 }
 
-// Despesa da API -> formato usado nas telas. O horário evita que a data mude de dia por causa do fuso.
+// Despesa da API -> formato das telas.
 function despesaDaApi(despesa) {
   return {
     id: despesa.id,

@@ -5,8 +5,7 @@ import { fileURLToPath, URL } from 'node:url';
 export default defineConfig({
   plugins: [react()],
   server: {
-    // Em desenvolvimento, /api é repassado para o backend na AWS (o mesmo que a
-    // Vercel usa no vercel.json), evitando CORS.
+    // Em desenvolvimento, /api vai para o backend na AWS (evita CORS).
     proxy: {
       '/api': {
         target: 'http://13.184.82.8:8080',

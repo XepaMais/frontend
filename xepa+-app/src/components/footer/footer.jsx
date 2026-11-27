@@ -34,7 +34,7 @@ const COLUNAS_PUBLICAS = [
   },
 ];
 
-// Colunas do rodapé da área do feirante: pedidos e histórico ficam logo na primeira coluna.
+// Colunas do rodapé da área do feirante.
 const COLUNAS_FEIRANTE = [
   {
     titulo: 'Pedidos',
@@ -74,7 +74,7 @@ const COLUNAS_FEIRANTE = [
   },
 ];
 
-// html e body têm overflow-x: hidden (globais.css), então quem rola pode ser o <body>.
+// Quem rola pode ser o <body> (overflow-x: hidden).
 function rolarParaOTopo() {
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
@@ -86,7 +86,7 @@ function rolarParaSecao(id, tentativas = 30) {
   const secao = document.getElementById(id);
 
   if (secao) {
-    // Rolagem direta: com o <body> como área de rolagem, o modo "smooth" pode não sair do lugar.
+    // Rolagem direta: o modo smooth pode travar no <body>.
     secao.scrollIntoView({ block: 'start' });
     return;
   }
@@ -96,8 +96,7 @@ function rolarParaSecao(id, tentativas = 30) {
   }
 }
 
-// O Link do React Router não rola a página: sem isso, a nova página abre na
-// mesma altura em que o rodapé estava, e os links com # não chegam à seção.
+// O Link não rola a página: sem isso, a nova página abre no meio.
 function LinkRodape({ to, children, ...props }) {
   const navigate = useNavigate();
 

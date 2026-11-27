@@ -160,7 +160,7 @@ function carregarConversasLocais() {
   const salvas = JSON.parse(localStorage.getItem(CHAVE_CONVERSAS)) || [];
 
   return salvas
-    // Remove as conversas de exemplo (Carneiro, Murilo...) que versões antigas salvavam.
+    // Remove as conversas de exemplo antigas.
     .filter((conversa) => !conversa.demo)
     // Conversas salvas antes das notificações: considera tudo como já lido.
     .map((conversa) => (conversa.leituras

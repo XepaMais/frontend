@@ -11,7 +11,7 @@
   cursor: pointer;
 }
 
-/* Botão secundário: contorno verde, no padrão dos botões da área do feirante */
+/* Botão secundário: contorno verde */
 .botaoMapa {
   display: inline-flex;
   align-items: center;

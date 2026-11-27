@@ -53,7 +53,6 @@ function bateComIngredientes(receita, ingredientesEscolhidos) {
     receita.ingredientes.some((ingrediente) => normalizar(ingrediente).includes(escolhido) || escolhido.includes(normalizar(ingrediente)))
   );
 }
-// Cada componente abaixo é um bloco da página.
 
 function Hero() {
   const heroImageRef = useRef(null);

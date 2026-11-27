@@ -1,6 +1,4 @@
-// Organiza o texto da Xepinha em blocos para exibir: parágrafos, passos numerados e tópicos.
-// Mesmo que a IA mande tudo numa linha só, cada passo/tópico vai para uma linha própria
-// e respostas longas são divididas em parágrafos curtos.
+// Organiza a resposta da Xepinha em parágrafos, passos e tópicos.
 
 const NUMERADO = /^(\d{1,2})[.)]\s+(.*)$/;
 const TOPICO = /^[-•*]\s+(.*)$/;
@@ -28,8 +26,7 @@ function separarItensNaMesmaLinha(linha) {
   if (numeros.length >= 2) resultado = resultado.replace(/\s+(?=\d{1,2}[.)]\s+\S)/g, '\n');
   if (topicos.length >= 2) resultado = resultado.replace(/\s+(?=•\s+\S)/g, '\n');
 
-  // O texto que vem depois do último item ("3. Salve. Depois disso...") não faz parte da
-  // lista: o último item fica só com a primeira frase e o resto vira parágrafo.
+  // O texto depois do último item vira parágrafo.
   const partes = resultado.split('\n');
   const ultimo = partes.pop();
   // Procura o fim da frase depois do marcador ("3. "), que também tem ponto.

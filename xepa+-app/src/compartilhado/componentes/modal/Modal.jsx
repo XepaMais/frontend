@@ -2,8 +2,8 @@ import { useEffect, useId } from 'react';
 import { X } from 'lucide-react';
 import styles from './Modal.module.css';
 
-// Janela usada por todos os pop-ups do projeto: fecha no X, no Esc e ao clicar fora.
-// classeFundo e classeJanela são opcionais: permitem ajustar o fundo e a janela em uma tela específica.
+// Janela base dos pop-ups: fecha no X, no Esc ou clicando fora.
+// classeFundo e classeJanela são opcionais.
 function Modal({ titulo, descricao, aoFechar, classeFundo = '', classeJanela = '', children }) {
   const idTitulo = useId();
 

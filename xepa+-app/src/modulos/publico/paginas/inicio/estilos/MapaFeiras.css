@@ -103,7 +103,7 @@
   line-height: 1.5;
 }
 
-/* ---------- Computadores: seção com --altura-secao (650px ou a tela inteira) ---------- */
+/* Computadores */
 /* o mapa estica para ocupar o espaço que sobra */
 
 @media (min-width: 761px) {

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
-// Botão "Voltar" no topo das telas de login e cadastro, para a pessoa não ficar presa nelas.
+// Botão Voltar das telas de login e cadastro.
 function BotaoVoltar({ destino, texto = 'Voltar' }) {
   const navigate = useNavigate();
 

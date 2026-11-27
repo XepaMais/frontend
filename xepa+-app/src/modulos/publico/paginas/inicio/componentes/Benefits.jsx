@@ -8,8 +8,7 @@ import '@google/model-viewer';
 
 import Rabisco from '@/modulos/publico/paginas/inicio/componentes/Rabisco.jsx';
 
-// A ordem define a posição: no computador, 1 e 3 ficam à esquerda da caixa e 2 e 4 à direita;
-// no celular, as quatro formam uma grade 2 x 2 abaixo dela.
+// Computador: 1 e 3 à esquerda, 2 e 4 à direita; celular: grade 2 x 2.
 const categorias = [
   { nome: 'Legumes', Icone: Carrot, cor: 'laranja' },
   { nome: 'Verduras', Icone: LeafyGreen, cor: 'verde' },
@@ -19,8 +18,7 @@ const categorias = [
 
 export default function Benefits() {
   const secaoRef = useRef(null);
-  // 'parado': sem animação (movimento reduzido) | 'aguardando': escondido até a seção aparecer
-  // | 'visivel': anima
+  // 'parado' | 'aguardando' | 'visivel'
   const [etapa, setEtapa] = useState(() => {
     const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     return reduzir || !('IntersectionObserver' in window) ? 'parado' : 'aguardando';
@@ -70,7 +68,7 @@ export default function Benefits() {
       </header>
 
       <div className="ilustracao-beneficios" data-revelar="zoom" style={{ '--atraso': '0.15s' }}>
-        {/* Modelo 3D da cesta (fica em public/modelos). A imagem antiga aparece enquanto carrega. */}
+        {/* Modelo 3D da cesta; a imagem aparece enquanto carrega */}
         <model-viewer
           class="cesta-beneficios"
           src="/modelos/cesta-xepa.glb"

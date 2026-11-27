@@ -1,11 +1,4 @@
-/*
- * Página Sobre nós
- * Escala de texto única para a página inteira (usar sempre estas classes/variáveis):
- *   .sn-eyebrow   rótulo pequeno acima do título      14px, maiúsculas
- *   .sn-titulo    título de seção (h2)                 28px → 40px
- *   .sn-texto     texto corrido                        16px → 18px
- *   .sn-nota      fontes e legendas                    14px
- */
+/* Página Sobre nós */
 .sobre {
   --sn-eyebrow: var(--fonte-pequena, 14px);
   /* mesmos tamanhos dos títulos e textos da Home */
@@ -142,10 +135,7 @@
   }
 }
 
-/* =========================================================
- * Novo visual (igual à Home). Usado em todas as seções,
- * menos na área do Time, que continua com as classes acima.
- * ========================================================= */
+/* Visual novo (igual à Home), menos na área do Time */
 
 .sn-h2 {
   margin: 0;
@@ -216,11 +206,7 @@
   outline-offset: 3px;
 }
 
-/* =========================================================
- * Computadores: todas as seções têm --altura-secao, como na Home
- * (650px, ou a tela inteira em monitores maiores).
- * O conteúdo fica centralizado na altura da seção.
- * ========================================================= */
+/* Computadores: seções com --altura-secao */
 
 @media (min-width: 1001px) {
   .sobre > section {
@@ -245,7 +231,7 @@
     padding-bottom: 48px;
   }
 
-  /* em coluna flex, a margem automática encolheria os blocos: ocupam a largura toda */
+  /* Blocos ocupam a largura toda */
   .sn-intro > *,
   .sn-dados > *,
   .secao-time > *,

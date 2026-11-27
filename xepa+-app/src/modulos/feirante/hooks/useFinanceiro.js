@@ -54,7 +54,7 @@ export default function useFinanceiro() {
   const daSemana = lancamentos.filter((item) => estaNaSemanaAtual(lerData(item)));
   const doMes = lancamentos.filter((item) => estaNoMesAtual(lerData(item)));
 
-  // Custos da semana: gastos cadastrados na página de Gastos + compras antigas já registradas.
+  // Custos da semana: gastos + compras antigas.
   const custosDaSemana = somarGastosDaSemana(gastos) + total(daSemana, 'compra');
 
   // Adiciona a renda nova ou substitui a que está sendo editada.
