@@ -8,7 +8,7 @@ import TextoXepinha from '@/modulos/feirante/paginas/chat-ia/componentes/TextoXe
 import {
   horarioCurto,
   horarioMensagem,
-} from '@/modulos/feirante/paginas/historico-chat/componentes/ItemConversa';
+} from '@/modulos/feirante/paginas/historico-chat/componentes/horariosConversa';
 import {
   adicionarMensagemXepinha,
   carregarConversasXepinha,

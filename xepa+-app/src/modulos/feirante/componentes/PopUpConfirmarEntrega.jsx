@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import Modal from '@/compartilhado/componentes/modal/Modal';
 import styles from '@/compartilhado/componentes/modal/Modal.module.css';
-import { confirmarEntregaDoPedido } from '@/compartilhado/servicos/conversas';
+import { confirmarEntregaDoPedido, sincronizarConversas } from '@/compartilhado/servicos/conversas';
 import {
+  confirmarRetiradaNaApi,
   descreverRecebimento,
   ENTREGA_CASA,
   formaRecebimento,
@@ -11,16 +12,36 @@ import {
 
 // Confirmação usada na Home do feirante e no Histórico de vendas.
 // O feirante digita o código que o cliente mostra; pedidos antigos sem código só pedem confirmação.
+// Pedidos da API: quem confere o código é a API (o feirante não recebe o código).
 function PopUpConfirmarEntrega({ pedido, onFechar, onConfirmado }) {
   const [codigo, setCodigo] = useState('');
   const [erro, setErro] = useState('');
+  const [enviando, setEnviando] = useState(false);
 
   const entrega = formaRecebimento(pedido) === ENTREGA_CASA;
   const recebimento = descreverRecebimento(pedido);
-  const precisaCodigo = Boolean(pedido.codigo);
+  const daApi = pedido.origem === 'api';
+  const precisaCodigo = daApi || Boolean(pedido.codigo);
 
-  function confirmar(evento) {
+  async function confirmar(evento) {
     evento.preventDefault();
+
+    if (daApi) {
+      setEnviando(true);
+      try {
+        await confirmarRetiradaNaApi(pedido, codigo.trim());
+      } catch (falha) {
+        setErro(falha.message === 'Código de retirada incorreto.'
+          ? 'Código incorreto. Confira o código que aparece no pedido do cliente.'
+          : falha.message);
+        setEnviando(false);
+        return;
+      }
+      // A conversa do pedido também foi finalizada pela API.
+      sincronizarConversas();
+      onConfirmado();
+      return;
+    }
 
     if (precisaCodigo && codigo.trim() !== String(pedido.codigo)) {
       setErro('Código incorreto. Confira o código que aparece no pedido do cliente.');
@@ -86,7 +107,7 @@ function PopUpConfirmarEntrega({ pedido, onFechar, onConfirmado }) {
           <button
             type="submit"
             className={styles.principal}
-            disabled={precisaCodigo && codigo.length < 4}
+            disabled={enviando || (precisaCodigo && codigo.length < 4)}
           >
             {entrega ? 'Confirmar entrega' : 'Confirmar retirada'}
           </button>

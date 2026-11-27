@@ -1,15 +1,157 @@
-// Pedidos registrados ao confirmar o pagamento. 
+// Pedidos registrados ao confirmar o pagamento.
+// - Consumidor logado comprando xepas da API: o pedido fica na API (/api/consumidor/{idConta}/pedidos)
+//   e uma cópia vai para 'pedidosApi' (impacto, chat e listas leem na hora).
+// - Modo demonstração: o pedido fica só neste navegador ('pedidosXepa').
 const CHAVE_PEDIDOS = 'pedidosXepa';
+const CHAVE_PEDIDOS_API = 'pedidosApi';
 
-import { ehDoFeiranteAtual } from '@/compartilhado/servicos/autenticacao';
+export const EVENTO_PEDIDOS = 'pedidos-atualizados';
 
-export function carregarPedidos() {
+import { carregarContaDaSessao, ehDoFeiranteAtual } from '@/compartilhado/servicos/autenticacao';
+import { enviarJson, requisicaoApi, urlDaApi } from '@/compartilhado/servicos/api';
+import imagemPadrao from '@/assets/imagens/gerais/xepaCompleta.jpg';
+
+function carregarPedidosLocais() {
   return JSON.parse(localStorage.getItem(CHAVE_PEDIDOS)) || [];
+}
+
+// Cópia dos pedidos da API do consumidor logado (cada conta tem a sua).
+function chavePedidosApi() {
+  const conta = carregarContaDaSessao();
+
+  return conta?.tipo === 'CONSUMIDOR' ? `${CHAVE_PEDIDOS_API}:${conta.id}` : null;
+}
+
+function carregarPedidosDaApiEmCache() {
+  const chave = chavePedidosApi();
+
+  return chave ? JSON.parse(localStorage.getItem(chave)) || [] : [];
+}
+
+// Mais recentes primeiro, juntando API e modo demonstração.
+export function carregarPedidos() {
+  return [...carregarPedidosDaApiEmCache(), ...carregarPedidosLocais()]
+    .sort((a, b) => new Date(b.data) - new Date(a.data));
+}
+
+// Chave única do pedido nas listas (números da API e locais podem coincidir).
+export function chavePedido(pedido) {
+  return pedido.origem === 'api' ? `api-${pedido.id}` : pedido.numero;
+}
+
+// Resposta da API -> mesmo formato dos pedidos locais.
+export function pedidoDaApi(pedido) {
+  const entrega = pedido.recebimento?.tipo === ENTREGA_CASA;
+
+  return {
+    id: pedido.id,
+    origem: 'api',
+    numero: pedido.numero,
+    data: pedido.data,
+    status: pedido.status,
+    codigo: pedido.codigo,
+    // Conversa do pedido no chat (aberta pela API no checkout).
+    idConversa: pedido.idConversa,
+    consumidor: pedido.consumidor,
+    total: Number(pedido.total),
+    itens: pedido.itens.map((item) => ({
+      id: item.id,
+      idFeirante: String(item.idFeirante),
+      nome: item.nome,
+      categoria: item.categoria,
+      descricao: (item.descricao || '').replace('\n---\n', ' — ').replace(/^ — | — $/g, ''),
+      barraca: item.barraca || item.feira,
+      retirada: item.retirada ? `${item.feira} - ${item.retirada}` : item.feira,
+      quantidade: Number(item.quantidade),
+      preco: Number(item.preco),
+      imagem: urlDaApi(item.imagem) || imagemPadrao,
+    })),
+    recebimento: entrega
+      ? {
+        tipo: ENTREGA_CASA,
+        endereco: pedido.recebimento.endereco,
+        frete: { valor: Number(pedido.recebimento.frete?.valor || 0), entregas: [] },
+      }
+      : { tipo: RETIRADA_FEIRA },
+  };
+}
+
+export function guardarPedidosDaApi(pedidos) {
+  const chave = chavePedidosApi();
+  if (!chave) return;
+
+  const novos = pedidos.map(pedidoDaApi);
+  const outros = carregarPedidosDaApiEmCache().filter((pedido) => !novos.some((novo) => novo.id === pedido.id));
+  localStorage.setItem(chave, JSON.stringify([...novos, ...outros]));
+  window.dispatchEvent(new Event(EVENTO_PEDIDOS));
+}
+
+// Busca o histórico na API (consumidor logado). Sem conexão, mantém a última cópia.
+export async function sincronizarPedidos() {
+  const conta = carregarContaDaSessao();
+  if (conta?.tipo !== 'CONSUMIDOR') return false;
+
+  try {
+    const pedidos = await requisicaoApi(`/consumidor/${conta.id}/pedidos`);
+    localStorage.setItem(chavePedidosApi(), JSON.stringify(pedidos.map(pedidoDaApi)));
+    window.dispatchEvent(new Event(EVENTO_PEDIDOS));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// ---------- Vendas do feirante ----------
+// Feirante logado: as vendas vêm da API (GET /api/feirante/{idConta}/pedidos), sem o código de
+// retirada (só o consumidor tem; a API confere o código digitado).
+
+function chaveVendasApi() {
+  const conta = carregarContaDaSessao();
+
+  return conta?.tipo === 'FEIRANTE' ? `vendasApi:${conta.id}` : null;
+}
+
+function carregarVendasDaApiEmCache() {
+  const chave = chaveVendasApi();
+
+  return chave ? JSON.parse(localStorage.getItem(chave)) || [] : [];
 }
 
 // Área do feirante: só os pedidos com alguma xepa dele. Conta nova: lista vazia.
 export function carregarVendasDoFeirante() {
-  return carregarPedidos().filter((pedido) => pedido.itens.some(ehDoFeiranteAtual));
+  const locais = carregarPedidosLocais().filter((pedido) => pedido.itens.some(ehDoFeiranteAtual));
+
+  return [...carregarVendasDaApiEmCache(), ...locais].sort((a, b) => new Date(b.data) - new Date(a.data));
+}
+
+export async function sincronizarVendas() {
+  const conta = carregarContaDaSessao();
+  if (conta?.tipo !== 'FEIRANTE') return false;
+
+  try {
+    const vendas = await requisicaoApi(`/feirante/${conta.id}/pedidos`);
+    localStorage.setItem(chaveVendasApi(), JSON.stringify(vendas.map(pedidoDaApi)));
+    window.dispatchEvent(new Event(EVENTO_PEDIDOS));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// O feirante digita o código que o cliente mostra; a API confere e marca como retirado.
+export async function confirmarRetiradaNaApi(pedido, codigo) {
+  const conta = carregarContaDaSessao();
+  const atualizado = pedidoDaApi(await enviarJson(
+    `/feirante/${conta.id}/pedidos/${pedido.id}/retirada`,
+    { codigo },
+  ));
+  const chave = chaveVendasApi();
+  if (chave) {
+    const vendas = carregarVendasDaApiEmCache().map((venda) => (venda.id === atualizado.id ? atualizado : venda));
+    localStorage.setItem(chave, JSON.stringify(vendas));
+  }
+  window.dispatchEvent(new Event(EVENTO_PEDIDOS));
+  return atualizado;
 }
 
 // Status usados na retirada do pedido.
@@ -28,6 +170,8 @@ export const ENTREGA_CASA = 'entrega';
 // Endereço em uma linha só: "Rua X, 10 - apto 2 - Bairro, Cidade/UF - CEP 00000-000".
 export function formatarEndereco(endereco) {
   if (!endereco) return '';
+  // Pedidos da API já trazem o endereço numa linha.
+  if (typeof endereco === 'string') return endereco;
 
   const rua = [endereco.logradouro, endereco.numero].filter(Boolean).join(', ');
   const cidade = [endereco.cidade, endereco.uf].filter(Boolean).join('/');
@@ -86,7 +230,7 @@ export function textoStatus(pedido) {
 }
 
 export function registrarPedido({ itens, total, recebimento }) {
-  const pedidos = carregarPedidos();
+  const pedidos = carregarPedidosLocais();
 
   const novoPedido = {
     numero: String(pedidos.length + 1).padStart(4, '0'),
@@ -105,7 +249,7 @@ export function registrarPedido({ itens, total, recebimento }) {
 
 // Usado quando o feirante marca o pedido como retirado no chat.
 export function atualizarStatusPedido(numero, status) {
-  const pedidos = carregarPedidos().map((pedido) => (
+  const pedidos = carregarPedidosLocais().map((pedido) => (
     pedido.numero === numero ? { ...pedido, status } : pedido
   ));
 

@@ -10,9 +10,13 @@ import {
   descreverRecebimento,
   ENTREGA_CASA,
   formatarMoeda,
+  guardarPedidosDaApi,
+  pedidoDaApi,
   registrarPedido,
+  RETIRADA_FEIRA,
 } from '@/compartilhado/servicos/pedidos';
-import { baixarEstoque } from '@/compartilhado/servicos/xepas';
+import { baixarEstoque, ehXepaDaApi, sincronizarXepas } from '@/compartilhado/servicos/xepas';
+import { finalizarCompra, idConsumidorLogado } from '@/modulos/usuario/servicos/consumidorApi';
 import { abrirConversaDoPedido } from '@/compartilhado/servicos/conversas';
 import { registrarVendaNoFinanceiro } from '@/modulos/feirante/servicos/lancamentosFinanceiros';
 import useCarrinho from '@/modulos/usuario/hooks/useCarrinho';
@@ -28,6 +32,8 @@ import { chaveFrete } from '@/modulos/usuario/servicos/frete';
 export default function Pagamento() {
   const navegar = useNavigate();
   const [copiado, setCopiado] = useState(false);
+  const [enviando, setEnviando] = useState(false);
+  const [erro, setErro] = useState('');
   const { itens } = useCarrinho();
   // Forma de recebimento escolhida no carrinho.
   const [recebimento] = useState(() => recebimentoParaPedido(carregarRecebimento()));
@@ -47,9 +53,61 @@ export default function Pagamento() {
 
   const codigoPix = '00020101021226850014BR.GOV.BCB.PIX';
 
-  function confirmarPagamento() {
+  async function confirmarPagamento() {
+    if (enviando) return;
+    setErro('');
+
+    // Consumidor logado: as xepas da API são compradas pela API (um pedido por feirante,
+    // estoque, financeiro do feirante). As do modo demonstração seguem só neste navegador.
+    const itensApi = idConsumidorLogado() ? itens.filter(ehXepaDaApi) : [];
+    const itensLocais = itens.filter((item) => !itensApi.includes(item));
+
+    if (itensApi.length) {
+      setEnviando(true);
+      try {
+        const pedidos = await finalizarCompra({
+          itens: itensApi.map((item) => ({ idXepa: item.id, quantidade: item.quantidade })),
+          recebimento: entrega
+            ? {
+              tipo: ENTREGA_CASA,
+              endereco: recebimento.endereco,
+              fretes: (recebimento.frete?.entregas || []).map(({ feira, valor }) => ({ feira, valor })),
+            }
+            : { tipo: RETIRADA_FEIRA },
+        });
+        guardarPedidosDaApi(pedidos);
+        // O feirante recebe o pedido no chat (o financeiro dele já foi lançado pela API).
+        pedidos.forEach((pedido) => abrirConversaDoPedido(pedidoDaApi(pedido)));
+        sincronizarXepas();
+      } catch (falha) {
+        setErro(falha.message);
+        setEnviando(false);
+        return;
+      }
+    }
+
+    if (itensLocais.length) {
+      registrarPedidoLocal(itensLocais, itensApi.length ? taxaDasFeiras(itensLocais) : taxaEntrega);
+    }
+
+    limparCarrinho({ enviarParaApi: !itensApi.length });
+    navegar('/historico-pedidos');
+  }
+
+  // Frete só das feiras destes itens (cada feira é uma entrega).
+  function taxaDasFeiras(lista) {
+    if (!entrega) return 0;
+    const feiras = new Set(lista.map((item) => item.feira || item.barraca || 'Feira'));
+
+    return (recebimento.frete?.entregas || [])
+      .filter((entregaFeira) => feiras.has(entregaFeira.feira))
+      .reduce((soma, entregaFeira) => soma + entregaFeira.valor, 0);
+  }
+
+  // Modo demonstração: pedido, chat, financeiro e estoque ficam neste navegador.
+  function registrarPedidoLocal(itensLocais, taxa) {
     const pedido = registrarPedido({
-      itens: itens.map((item) => ({
+      itens: itensLocais.map((item) => ({
         id: item.id,
         idFeirante: item.idFeirante,
         nome: item.nome,
@@ -61,15 +119,13 @@ export default function Pagamento() {
         preco: item.preco,
         imagem: item.imagem || imagemPadrao,
       })),
-      total: totalPedido,
+      total: calcularTotal(itensLocais) + taxa,
       recebimento,
     });
     // O feirante fica sabendo do pedido na hora: chat (Recentes + notificação) e financeiro.
     abrirConversaDoPedido(pedido);
     registrarVendaNoFinanceiro(pedido);
-    baixarEstoque(itens);
-    limparCarrinho();
-    navegar('/historico-pedidos');
+    baixarEstoque(itensLocais);
   }
 
   async function copiarPix() {
@@ -186,12 +242,19 @@ export default function Pagamento() {
                 <span>{formatarMoeda(totalPedido)}</span>
               </div>
 
+              {erro && (
+                <p role="alert" style={{ color: '#c0392b', margin: '0 0 12px' }}>
+                  {erro}
+                </p>
+              )}
+
               <button
                 type="button"
                 className={Styles.btnConfirmPayment}
                 onClick={confirmarPagamento}
+                disabled={enviando}
               >
-                Já fiz o pagamento
+                {enviando ? 'Confirmando...' : 'Já fiz o pagamento'}
               </button>
 
               <div className={Styles.secureBadge}>

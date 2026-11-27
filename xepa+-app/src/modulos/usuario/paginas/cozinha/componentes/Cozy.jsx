@@ -12,7 +12,6 @@ import imagemTomates from '@/assets/imagens/gerais/imagem-tomates.jpg';
 import imagemSopaV from '@/assets/imagens/gerais/imagem-sopaV.jpg';
 import imagemSopaC from '@/assets/imagens/gerais/imagem-sopaC.jpg';
 import imagemSaladaC from '@/assets/imagens/gerais/imagem-saladaC.jpg';
-import imagemMorangos from '@/assets/imagens/gerais/morangos.png';
 
 const categorias = ['Todas', 'Saladas', 'Sopas', 'Doces', 'Sucos', 'Aproveitamento integral', 'Rápidas'];
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight, BellOff, Lock, PackageCheck } from 'lucide-react';
 import Styles from '@/modulos/feirante/paginas/inicio/componentes/estilos/HomeFeirante.module.css';
@@ -14,6 +14,8 @@ import { dataDeHoje } from '@/compartilhado/servicos/datas';
 import {
   descreverRecebimento,
   carregarVendasDoFeirante,
+  EVENTO_PEDIDOS,
+  sincronizarVendas,
   formatarDataHora,
   formatarMoeda,
   PENDENTE_RETIRADA,
@@ -23,7 +25,8 @@ import useFinanceiro from '@/modulos/feirante/hooks/useFinanceiro';
 import usePlano from '@/modulos/feirante/hooks/usePlano';
 import RecursoPlano from '@/modulos/feirante/componentes/RecursoPlano';
 import { PLANOS } from '@/compartilhado/dados/planos';
-import { carregarProdutos } from '@/modulos/feirante/servicos/produtosFeirante';
+import { carregarProdutos, sincronizarProdutos } from '@/modulos/feirante/servicos/produtosFeirante';
+import { EVENTO_XEPAS } from '@/compartilhado/servicos/xepas';
 import {
   calcularTotaisDeGastos,
   gastosDoMesPorCategoria,
@@ -77,8 +80,22 @@ function HomeFeirante() {
   const { primeiroNome } = usePerfil('feirante');
   const { plano, temAcesso } = usePlano();
   const dadosDoPlano = PLANOS.find((item) => item.id === plano);
-  const ultimaXepa = carregarProdutos()[0];
+  const [ultimaXepa, setUltimaXepa] = useState(() => carregarProdutos()[0]);
   const [pedidos, setPedidos] = useState(carregarVendasDoFeirante);
+
+  // Feirante logado: vendas e xepas vêm da API (valem em qualquer aparelho).
+  useEffect(() => {
+    const atualizarVendas = () => setPedidos(carregarVendasDoFeirante());
+    const atualizarXepas = () => setUltimaXepa(carregarProdutos()[0]);
+    window.addEventListener(EVENTO_PEDIDOS, atualizarVendas);
+    window.addEventListener(EVENTO_XEPAS, atualizarXepas);
+    sincronizarVendas();
+    sincronizarProdutos();
+    return () => {
+      window.removeEventListener(EVENTO_PEDIDOS, atualizarVendas);
+      window.removeEventListener(EVENTO_XEPAS, atualizarXepas);
+    };
+  }, []);
   const pedidosPendentes = pedidos.filter((pedido) => pedido.status === PENDENTE_RETIRADA);
   const pedidosRetirados = pedidos.length - pedidosPendentes.length;
 
@@ -238,7 +255,7 @@ function HomeFeirante() {
                     </div>
                     <div className={Styles.pedido_valores}>
                       <strong>{formatarMoeda(pedido.total)}</strong>
-                      <span>Código: {pedido.codigo || '-'}</span>
+                      <span>Código: {pedido.codigo || (pedido.origem === 'api' ? 'com o cliente' : '-')}</span>
                     </div>
                     <button
                       type="button"

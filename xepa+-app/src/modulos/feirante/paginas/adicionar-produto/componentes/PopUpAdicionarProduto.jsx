@@ -44,7 +44,7 @@ function PopUpAdicionarProduto({ feira, onFechar, onSalvo }) {
       }
     }
 
-    const salvou = adicionarProduto({
+    const { salvou, erro: motivo } = await adicionarProduto({
       nome: dados.get('nome').trim(),
       categoria: dados.get('categoria'),
       itens: dados.get('itens').trim(),
@@ -60,10 +60,10 @@ function PopUpAdicionarProduto({ feira, onFechar, onSalvo }) {
       cep: feira.cep || '',
       feirante: perfil.nome,
       barraca: perfil.barraca,
-    });
+    }, feira.id);
 
     if (!salvou) {
-      setErro('Não há mais espaço no navegador para salvar este produto.');
+      setErro(motivo);
       return;
     }
 

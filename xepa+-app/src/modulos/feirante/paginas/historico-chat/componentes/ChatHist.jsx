@@ -15,8 +15,8 @@ import {
 import { formatarDataHora, formatarMoeda } from '@/compartilhado/servicos/pedidos';
 import ItemConversa, {
   AvatarConversa,
-  horarioMensagem,
 } from '@/modulos/feirante/paginas/historico-chat/componentes/ItemConversa';
+import { horarioMensagem } from '@/modulos/feirante/paginas/historico-chat/componentes/horariosConversa';
 
 const ABAS = [
   { id: STATUS_CONVERSA.recente, titulo: 'Recentes' },

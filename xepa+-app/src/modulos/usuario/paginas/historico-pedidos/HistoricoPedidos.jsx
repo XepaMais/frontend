@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ClipboardList, Home, QrCode, Store } from 'lucide-react';
 import {
   carregarPedidos,
+  chavePedido,
+  EVENTO_PEDIDOS,
+  sincronizarPedidos,
   descreverRecebimento,
   ENTREGA_CASA,
   formaRecebimento,
@@ -17,9 +20,18 @@ import base from '@/compartilhado/estilos/conta.module.css';
 import styles from './estilos/HistoricoPedidos.module.css';
 
 function HistoricoPedidos() {
-  const [pedidos] = useState(carregarPedidos);
+  const [pedidos, setPedidos] = useState(carregarPedidos);
   const [pedidoAberto, setPedidoAberto] = useState(null);
   const navegar = useNavigate();
+
+  // Consumidor logado: traz o histórico da API (status atualizado pelo feirante).
+  useEffect(() => {
+    const atualizar = () => setPedidos(carregarPedidos());
+
+    window.addEventListener(EVENTO_PEDIDOS, atualizar);
+    sincronizarPedidos();
+    return () => window.removeEventListener(EVENTO_PEDIDOS, atualizar);
+  }, []);
 
   function falarComVendedor(pedido) {
     const conversa = abrirConversaDoPedido(pedido);
@@ -49,12 +61,13 @@ function HistoricoPedidos() {
 
           <div className={base.lista}>
             {pedidos.map((pedido) => {
-              const aberto = pedidoAberto === pedido.numero;
+              const chave = chavePedido(pedido);
+              const aberto = pedidoAberto === chave;
               const entrega = formaRecebimento(pedido) === ENTREGA_CASA;
               const recebimento = descreverRecebimento(pedido);
 
               return (
-                <article className={base.card} key={pedido.numero}>
+                <article className={base.card} key={chave}>
                   <header className={base.faixa}>
                     <strong>Pedido nº {pedido.numero}</strong>
                     <span>Comprado em {formatarDataHora(pedido.data)}</span>
@@ -124,7 +137,7 @@ function HistoricoPedidos() {
                           type="button"
                           className={base.botaoSecundario}
                           aria-expanded={aberto}
-                          onClick={() => setPedidoAberto(aberto ? null : pedido.numero)}
+                          onClick={() => setPedidoAberto(aberto ? null : chave)}
                         >
                           {aberto ? 'Ocultar detalhes' : 'Ver detalhes'}
                         </button>

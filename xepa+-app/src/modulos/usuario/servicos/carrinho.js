@@ -1,7 +1,14 @@
 // Carrinho do consumidor. Guarda só o id e a quantidade; o resto vem da xepa.
-import { carregarXepasDisponiveis } from '@/compartilhado/servicos/xepas';
+// Consumidor logado: as xepas da API também ficam no carrinho salvo na API
+// (/api/consumidor/{idConta}/carrinho), para valer em qualquer aparelho.
+import { buscarXepa, carregarXepasDisponiveis, ehXepaDaApi, xepaDaApi } from '@/compartilhado/servicos/xepas';
 import { ENTREGA_CASA, RETIRADA_FEIRA } from '@/compartilhado/servicos/pedidos';
 import { carregarContaDaSessao } from '@/compartilhado/servicos/autenticacao';
+import {
+  buscarCarrinho,
+  idConsumidorLogado,
+  substituirCarrinho,
+} from '@/modulos/usuario/servicos/consumidorApi';
 
 const CHAVE_CARRINHO = 'carrinhoXepa';
 const CHAVE_RECEBIMENTO = 'recebimentoXepa';
@@ -20,9 +27,52 @@ export function carregarCarrinho() {
   return JSON.parse(localStorage.getItem(chaveDaConta(CHAVE_CARRINHO))) || [];
 }
 
-function salvarCarrinho(itens) {
+function salvarCarrinho(itens, { enviarParaApi = true } = {}) {
   localStorage.setItem(chaveDaConta(CHAVE_CARRINHO), JSON.stringify(itens));
   window.dispatchEvent(new Event(EVENTO_CARRINHO));
+  if (enviarParaApi) enviarCarrinhoParaApi(itens);
+}
+
+// Só as xepas da API vão para o carrinho do servidor (as do modo demonstração não existem lá).
+function itensDaApi(itens) {
+  return itens
+    .filter((item) => ehXepaDaApi(buscarXepa(item.id)))
+    .map((item) => ({ idXepa: item.id, quantidade: item.quantidade }));
+}
+
+function enviarCarrinhoParaApi(itens) {
+  if (!idConsumidorLogado()) return;
+  // Em segundo plano: se falhar, o carrinho local continua valendo e é reenviado na próxima mudança.
+  substituirCarrinho(itensDaApi(itens)).catch(() => {});
+}
+
+// Ao abrir o app logado: junta o carrinho salvo na API com o deste navegador.
+export async function sincronizarCarrinho() {
+  if (!idConsumidorLogado()) return;
+  try {
+    const remoto = await buscarCarrinho();
+    const locais = carregarCarrinho();
+    const juntos = [...locais];
+
+    for (const item of remoto.itens) {
+      if (!juntos.some((atual) => atual.id === item.id)) {
+        juntos.push({ id: item.id, quantidade: Number(item.quantidade) });
+      }
+    }
+
+    // Garante que as xepas do carrinho remoto estejam na cópia local da vitrine.
+    guardarXepasDoCarrinho(remoto.itens.map((item) => item.xepa));
+    salvarCarrinho(juntos, { enviarParaApi: juntos.length !== remoto.itens.length });
+  } catch {
+    // Sem conexão: fica com o carrinho local.
+  }
+}
+
+function guardarXepasDoCarrinho(xepas) {
+  const cache = JSON.parse(localStorage.getItem('xepasApi')) || [];
+  const novas = xepas.filter((xepa) => !cache.some((atual) => atual.id === xepa.id)).map(xepaDaApi);
+
+  if (novas.length) localStorage.setItem('xepasApi', JSON.stringify([...cache, ...novas]));
 }
 
 export function adicionarAoCarrinho(id) {
@@ -50,8 +100,9 @@ export function alterarQuantidade(id, quantidade) {
   salvarCarrinho(itens);
 }
 
-export function limparCarrinho() {
-  salvarCarrinho([]);
+// Depois da compra pela API o servidor já tirou os itens: não precisa reenviar.
+export function limparCarrinho({ enviarParaApi = true } = {}) {
+  salvarCarrinho([], { enviarParaApi });
 }
 
 // Junta o carrinho com os dados da xepa. Ignora o que esgotou, venceu ou saiu do ar.
