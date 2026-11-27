@@ -1,14 +1,46 @@
-import { useState, useEffect } from 'react'
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api'
+import { useState, useEffect, useRef } from 'react'
+import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF } from '@react-google-maps/api'
 import Styles from '../estilos/MapU.module.css'
 import Modal from '@/compartilhado/componentes/modal/Modal'
 import logoXepa from '@/assets/imagens/gerais/logo-colorida.png'
 import { GOOGLE_MAPS_LOADER } from '@/compartilhado/servicos/googleMaps'
 import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa'
-import { buscarFeirasProximas, listarFeiras } from '@/modulos/usuario/servicos/feiras'
+import { buscarFeirasPorNome, listarFeiras } from '@/modulos/usuario/servicos/feiras'
 import { buscarCep, geocodificarEndereco } from '@/compartilhado/servicos/localizacao'
+import { carregarTodasFeiras } from '@/modulos/feirante/servicos/feirasFeirante'
 
 const NOMES_DIAS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+
+// De quanto em quanto tempo o mapa busca feiras novas enquanto está aberto.
+const ATUALIZAR_A_CADA_MS = 60000;
+
+function temPosicao(feira) {
+  return Number.isFinite(feira.position.lat) && Number.isFinite(feira.position.lng);
+}
+
+// Feiras do modo demonstração (só neste navegador): já vêm com dias em texto e horário pronto.
+function feiraLocalParaMapa(feira) {
+  return {
+    id: `local-${feira.id}`,
+    nome: feira.nome,
+    descricao: [feira.endereco || feira.rua, feira.cidade].filter(Boolean).join(' - '),
+    dias: (feira.dias || []).length === 7 ? 'Todos os dias' : (feira.dias || []).join(', '),
+    horario: feira.horario || '',
+    position: { lat: Number(feira.latitude), lng: Number(feira.longitude) },
+  };
+}
+
+// Mapa geral: todas as feiras da API + as do modo demonstração que ainda não estão na API.
+async function carregarFeirasDoMapa() {
+  const daApi = (await listarFeiras()).map(feiraParaMapa).filter(temPosicao);
+  const idsApi = new Set(daApi.map((feira) => feira.id));
+  const locais = carregarTodasFeiras()
+    .filter((feira) => !idsApi.has(feira.id) && feira.latitude != null)
+    .map(feiraLocalParaMapa)
+    .filter(temPosicao);
+
+  return [...daApi, ...locais];
+}
 
 // A API manda latitude/longitude, horários "07:00:00" e dias 1=segunda ... 7=domingo;
 // o mapa usa position, "07:00" e o texto dos dias.
@@ -25,6 +57,17 @@ function feiraParaMapa(feira) {
     horario: inicio && fim ? `${inicio} às ${fim}` : '',
     position: { lat: Number(feira.latitude), lng: Number(feira.longitude) },
   };
+}
+
+// Link do Google Maps com a rota até a feira. Sem a posição do usuário, o próprio Google usa a localização atual.
+// No celular abre o app do Google Maps (carro, a pé ou transporte público).
+function linkDaRota(feira, origem) {
+  const parametros = new URLSearchParams({
+    api: '1',
+    destination: `${feira.position.lat},${feira.position.lng}`,
+  });
+  if (origem) parametros.set('origin', `${origem.lat},${origem.lng}`);
+  return `https://www.google.com/maps/dir/?${parametros}`;
 }
 
 // Compara nomes sem acento e sem diferença de maiúsculas.
@@ -48,25 +91,58 @@ function MapPage() {
   // Posição GPS do usuário.
   const [userPosition, setUserPosition] = useState(null);
 
-  // Feiras vindas da API, perto do centro do mapa (GPS do usuário, CEP ou feira buscada).
+  // Todas as feiras cadastradas: quando um feirante adiciona uma feira, ela aparece aqui
+  // (ao abrir o mapa, ao voltar para a aba e a cada minuto com a tela aberta).
   const [feiras, setFeiras] = useState([]);
+
+  // Mapa do Google (para enquadrar as feiras) e se a pessoa já mexeu nele (busca ou arrastar).
+  const [mapa, setMapa] = useState(null);
+  const pessoaMexeu = useRef(false);
+
+  // Ao abrir, enquadra todas as feiras (e a posição do usuário) para os marcadores ficarem à vista.
+  // Depois que a pessoa busca ou arrasta o mapa, não mexe mais.
+  useEffect(() => {
+    if (!mapa || pessoaMexeu.current || feiras.length === 0) return;
+
+    const limites = new window.google.maps.LatLngBounds();
+    feiras.forEach((feira) => limites.extend(feira.position));
+    if (userPosition) limites.extend(userPosition);
+    mapa.fitBounds(limites, 60);
+    // Só uma feira: não deixa o zoom chegar perto demais.
+    if (feiras.length === 1 && !userPosition) mapa.setZoom(15);
+  }, [mapa, feiras.length, userPosition]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     let ativo = true;
+    let jaAvisou = false;
 
-    buscarFeirasProximas(mapCenter.lat, mapCenter.lng)
-      .then((lista) => {
-        if (ativo) setFeiras(lista.map(feiraParaMapa));
-      })
-      .catch((erro) => {
-        if (ativo) setAviso(erro.message);
-      });
+    const atualizar = () => {
+      carregarFeirasDoMapa()
+        .then((lista) => {
+          if (ativo) setFeiras(lista);
+        })
+        .catch((erro) => {
+          // Avisa só uma vez; nas próximas tentativas mantém as feiras que já estão no mapa.
+          if (ativo && !jaAvisou) {
+            jaAvisou = true;
+            setAviso(erro.message);
+          }
+        });
+    };
+    const aoVoltarParaAba = () => {
+      if (document.visibilityState === 'visible') atualizar();
+    };
 
-    // Se o centro mudar antes da resposta chegar, ignora a resposta antiga.
+    atualizar();
+    const relogio = setInterval(aoVoltarParaAba, ATUALIZAR_A_CADA_MS);
+    document.addEventListener('visibilitychange', aoVoltarParaAba);
+
     return () => {
       ativo = false;
+      clearInterval(relogio);
+      document.removeEventListener('visibilitychange', aoVoltarParaAba);
     };
-  }, [mapCenter]);
+  }, []);
 
   // Pega a posição ao abrir a tela.
   useEffect(() => {
@@ -122,6 +198,7 @@ function MapPage() {
         return;
       }
 
+      pessoaMexeu.current = true;
       setFeiraSelecionada(null);
       setMapCenter({ lat: local.latitude, lng: local.longitude });
     } catch {
@@ -129,29 +206,29 @@ function MapPage() {
     }
   };
 
-  // Procura a feira pelo nome (primeiro nas que já estão no mapa, depois em todas),
-  // centraliza o mapa nela e abre o balão com os dados.
+  // Procura a feira pelo nome na API (acha também as que acabaram de ser cadastradas),
+  // centraliza o mapa nela e abre o balão com os dados. Sem conexão, procura nas que já estão no mapa.
   const buscarFeiraPorNome = async (texto) => {
     const termo = normalizar(texto);
     const combina = (feira) => normalizar(feira.nome).includes(termo);
 
-    let encontrada = feiras.find(combina);
+    let encontrada;
+    try {
+      encontrada = (await buscarFeirasPorNome(texto)).map(feiraParaMapa).find(temPosicao);
+    } catch {
+      encontrada = undefined;
+    }
+    // Feiras do modo demonstração (ou API fora do ar): procura na lista do mapa.
+    encontrada = encontrada || feiras.find(combina);
 
     if (!encontrada) {
-      try {
-        const todas = (await listarFeiras()).map(feiraParaMapa);
-        encontrada = todas.find(combina);
-      } catch (erro) {
-        setAviso(erro.message);
-        return;
-      }
-    }
-
-    if (!encontrada || Number.isNaN(encontrada.position.lat) || Number.isNaN(encontrada.position.lng)) {
       setAviso('Não encontramos nenhuma feira com esse nome.');
       return;
     }
 
+    // Feira nova que ainda não estava no mapa: entra agora.
+    pessoaMexeu.current = true;
+    setFeiras((atuais) => (atuais.some((feira) => feira.id === encontrada.id) ? atuais : [...atuais, encontrada]));
     setMapCenter(encontrada.position);
     setFeiraSelecionada(encontrada);
   };
@@ -177,10 +254,13 @@ function MapPage() {
             mapContainerStyle={{ width: '100%', height: '100%' }}
             center={mapCenter}
             zoom={14}
+            onLoad={setMapa}
+            onUnmount={() => setMapa(null)}
+            onDragStart={() => { pessoaMexeu.current = true; }}
           >
             {/* Marcador do usuário (só se aceitar a localização) */}
             {userPosition && (
-              <Marker
+              <MarkerF
                 position={userPosition}
                 title="Você está aqui"
                 icon={{
@@ -197,7 +277,7 @@ function MapPage() {
 
             {/* Marcadores das feiras */}
             {feiras.map((feira) => (
-              <Marker
+              <MarkerF
                 key={feira.id}
                 position={feira.position}
                 title={feira.nome}
@@ -211,7 +291,7 @@ function MapPage() {
             ))}
 
             {feiraSelecionada && (
-              <InfoWindow
+              <InfoWindowF
                 position={feiraSelecionada.position}
                 onCloseClick={() => setFeiraSelecionada(null)}
               >
@@ -222,8 +302,27 @@ function MapPage() {
                     <p style={{ margin: '0 0 5px 0', fontSize: '12px', color: '#666' }}>{feiraSelecionada.dias}</p>
                   )}
                   <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#4caf50' }}>{feiraSelecionada.horario}</span>
+                  <a
+                    href={linkDaRota(feiraSelecionada, userPosition)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'block',
+                      marginTop: '8px',
+                      padding: '6px 10px',
+                      borderRadius: '6px',
+                      background: '#FF5200',
+                      color: '#fff',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    Como chegar
+                  </a>
                 </div>
-              </InfoWindow>
+              </InfoWindowF>
             )}
           </GoogleMap>
         ) : (
