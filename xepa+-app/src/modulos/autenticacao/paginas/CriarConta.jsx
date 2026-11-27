@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { cadastrarConsumidor } from '@/compartilhado/servicos/autenticacao';
+import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import AceiteTermos, { consentimentoDoFormulario } from '@/modulos/autenticacao/paginas/AceiteTermos';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
@@ -34,6 +35,8 @@ function CriarConta() {
 
       <section className={Styles.ladoForm}>
         <form className={Styles.form} onSubmit={cadastrar}>
+          <BotaoVoltar destino="/cadastro" />
+
           <h1>Crie sua conta</h1>
 
           <div className={Styles.campo}>
