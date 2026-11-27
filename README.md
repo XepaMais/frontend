@@ -144,48 +144,7 @@ Cada plano de feirante libera recursos diferentes, como a Xepinha e a gestão fi
   - rótulos em todos os campos e `role="alert"` nas mensagens de erro.
 - Os vídeos respeitam a preferência por menos movimento.
 
-## Responsividade e compatibilidade
-
-O layout usa CSS Modules com `@media` em 58 arquivos de estilo, além de `clamp()` e `flex-wrap`, para se ajustar a celular, tablet e computador sem rolagem lateral.
-
-| Navegador / dispositivo | Tela | Páginas testadas | Resultado | Data | Quem testou |
-| --- | --- | --- | --- | --- | --- |
-| Chromium (Claude Code, emulação de celular) | 375×812 | 15 páginas públicas, cadastro, 404 | ✅ sem rolagem lateral | 27/11/2026 | Claude |
-| Chromium (Claude Code) | 1280×800 | Redirecionamentos, títulos, 404, cadastro | ✅ | 27/11/2026 | Claude |
-| Chrome (Windows) | 1920×1080 | | | | |
-| Edge (Windows) | 1366×768 | | | | |
-| Firefox (Windows) | 1366×768 | | | | |
-| Safari (iPhone) | 390×844 | | | | |
-| Chrome (Android) | 360×800 | | | | |
-| Tablet (iPad ou Android) | 768×1024 | | | | |
-
-Em cada linha, testar os fluxos principais:
-- cadastro e login;
-- comprar uma xepa (carrinho → pagamento → código de retirada);
-- publicar uma xepa;
-- financeiro;
-- chat;
-- excluir a conta de teste.
-
-Guarde as capturas em `.github/readme/testes/`.
-
-## Rodar localmente
-
-```powershell
-cd xepa+-app
-npm install
-npm run dev
-```
-
-O site abre em http://localhost:5173 usando a API publicada. Para usar uma API local, crie `.env.local` com `VITE_API_URL=http://localhost:8080/api`.
-
-| Comando | O que faz |
-| --- | --- |
-| `npm run dev` | Servidor de desenvolvimento |
-| `npm run build` | Gera a versão de produção em `dist/` |
-| `npm run lint` | Confere o código com o ESLint |
-
-### Publicação
+## Publicação
 
 O site é publicado na **Vercel** a cada merge na `main`. O arquivo [`vercel.json`](xepa+-app/vercel.json):
 - repassa `/api` para a API por HTTPS;
