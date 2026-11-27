@@ -7,15 +7,57 @@
 // Entrar de novo na demonstração recomeça tudo do zero.
 import { PLANOS } from '@/compartilhado/dados/planos';
 import { dataEmTexto } from '@/compartilhado/servicos/datas';
-import imgCompleta from '@/assets/imagens/gerais/xepaCompleta.jpg';
-import imgMorangos from '@/assets/imagens/gerais/morangos.png';
-import imgTomates from '@/assets/imagens/gerais/imagem-tomates.jpg';
-import imgSaladaFrutas from '@/assets/imagens/gerais/imagem-saladaF.jpg';
-import imgRefogados from '@/assets/imagens/gerais/imagem-refogados.jpg';
-import imgTalos from '@/assets/imagens/gerais/imagem-talos.jpg';
-import imgSalada from '@/assets/imagens/gerais/imagem-saladaC.jpg';
-import imgSopa from '@/assets/imagens/gerais/imagem-sopaV.jpg';
-import imgVitamina from '@/assets/imagens/gerais/imagem-vitamina.jpg';
+import legumesFeira from '@/assets/imagens/xepas-demo/legumesFeira.jpg';
+import tomateCebola from '@/assets/imagens/xepas-demo/tomateCebola.jpg';
+import bananas from '@/assets/imagens/xepas-demo/bananas.jpg';
+import coentro from '@/assets/imagens/xepas-demo/coentro.jpg';
+import legumesSortidos from '@/assets/imagens/xepas-demo/legumesSortidos.jpg';
+import alface from '@/assets/imagens/xepas-demo/alface.jpg';
+import abobora from '@/assets/imagens/xepas-demo/abobora.jpg';
+import morangos from '@/assets/imagens/xepas-demo/morangos.jpg';
+import manjericao from '@/assets/imagens/xepas-demo/manjericao.jpg';
+import brocolisCouveFlor from '@/assets/imagens/xepas-demo/brocolisCouveFlor.jpg';
+import frutasTropicais from '@/assets/imagens/xepas-demo/frutasTropicais.jpg';
+import cestaLegumes from '@/assets/imagens/xepas-demo/cestaLegumes.jpg';
+import tomates from '@/assets/imagens/xepas-demo/tomates.jpg';
+import alfaceCrespa from '@/assets/imagens/xepas-demo/alfaceCrespa.jpg';
+import gengibre from '@/assets/imagens/xepas-demo/gengibre.jpg';
+
+// ---------- Fotos das xepas ----------
+// Fotos reais do Wikimedia Commons (licenças livres), salvas em src/assets/imagens/xepas-demo.
+// Créditos:
+// - legumesFeira.jpg: Legumes e verduras da Feira Livre de Jacobina (CC BY-SA 4.0)
+// - tomateCebola.jpg: Tomatoes and Onions at a Farmers Market (CC0)
+// - bananas.jpg: Fresh Banana and Coconut Fruit Stall (CC BY-SA 4.0)
+// - coentro.jpg: Bunches of coriander leaves (CC BY-SA 4.0)
+// - legumesSortidos.jpg: Burnie Farmers Market Veges (CC0)
+// - alface.jpg: Lettuce at Fruit Garden Market, Port Harcourt (CC BY 4.0)
+// - abobora.jpg: Squashes on Gomel Market (CC BY-SA 4.0)
+// - morangos.jpg: Strawberries at Ljubljana Central Market (CC BY 4.0)
+// - manjericao.jpg: Fresh green basil leaves (CC BY 4.0)
+// - brocolisCouveFlor.jpg: Colorful winter Vegetables (CC0)
+// - frutasTropicais.jpg: Mango, papaya arequipena, banana (CC BY 2.0)
+// - cestaLegumes.jpg: Eagle hill garden (CC BY-SA 2.0)
+// - tomates.jpg: Tomate Carmem (CC0)
+// - alfaceCrespa.jpg: Lettuce (fancy), Harbourside Market, Wellington (CC0)
+// - gengibre.jpg: Spring onions, garlic, and ginger (CC BY 2.0)
+const FOTOS = {
+  legumesFeira,
+  tomateCebola,
+  bananas,
+  coentro,
+  legumesSortidos,
+  alface,
+  abobora,
+  morangos,
+  manjericao,
+  brocolisCouveFlor,
+  frutasTropicais,
+  cestaLegumes,
+  tomates,
+  alfaceCrespa,
+  gengibre,
+};
 
 // ---------- Datas ----------
 
@@ -221,25 +263,25 @@ const FEIRANTES = {
 // Xepas de cada feirante. "vendidas" = quantidade já vendida (esgotada quando quantidade = 0).
 const XEPAS = {
   gratis: [
-    { nome: 'Xepa de legumes do Tião', categoria: 'Verduras e legumes', itens: 'Abobrinha, chuchu, cenoura, beterraba e vagem', preco: 12, quantidade: 6, imagem: imgRefogados, descricao: 'Cerca de 3 kg. Legumes do fim da feira, ótimos para refogado e sopa.', feira: 0 },
-    { nome: 'Kit tomate e cebola', categoria: 'Verduras e legumes', itens: 'Tomate italiano, cebola e pimentão', preco: 9, quantidade: 4, imagem: imgTomates, descricao: 'Uns 2 kg de tomate bem maduro, perfeito para molho.', feira: 0 },
-    { nome: 'Xepa de frutas da estação', categoria: 'Frutas', itens: 'Banana prata, mamão e laranja pera', preco: 14, quantidade: 3, imagem: imgSaladaFrutas, descricao: 'Frutas maduras para comer na semana ou fazer suco.', feira: 0 },
-    { nome: 'Cheiro-verde e temperos', categoria: 'Tempero', itens: 'Salsinha, cebolinha, coentro e hortelã', preco: 5, quantidade: 0, imagem: imgTalos, descricao: 'Maços do dia. Esgotou rápido!', feira: 0 },
+    { nome: 'Xepa de legumes do Tião', categoria: 'Verduras e legumes', itens: 'Abobrinha, chuchu, cenoura, beterraba e vagem', preco: 12, quantidade: 6, imagem: FOTOS.legumesFeira, descricao: 'Cerca de 3 kg. Legumes do fim da feira, ótimos para refogado e sopa.', feira: 0 },
+    { nome: 'Kit tomate e cebola', categoria: 'Verduras e legumes', itens: 'Tomate italiano, cebola e pimentão', preco: 9, quantidade: 4, imagem: FOTOS.tomateCebola, descricao: 'Uns 2 kg de tomate bem maduro, perfeito para molho.', feira: 0 },
+    { nome: 'Xepa de frutas da estação', categoria: 'Frutas', itens: 'Banana prata, mamão e laranja pera', preco: 14, quantidade: 3, imagem: FOTOS.bananas, descricao: 'Frutas maduras para comer na semana ou fazer suco.', feira: 0 },
+    { nome: 'Cheiro-verde e temperos', categoria: 'Tempero', itens: 'Salsinha, cebolinha, coentro e hortelã', preco: 5, quantidade: 0, imagem: FOTOS.coentro, descricao: 'Maços do dia. Esgotou rápido!', feira: 0 },
   ],
   crescer: [
-    { nome: 'Cesta Verde da Rô', categoria: 'Completa', itens: 'Alface, couve, rúcula, tomate, cenoura, banana e cheiro-verde', preco: 22, quantidade: 8, imagem: imgCompleta, descricao: 'A cesta mais pedida: verduras, legumes e um pouco de fruta. Uns 4 kg.', feira: 0 },
-    { nome: 'Folhas para salada', categoria: 'Verduras e legumes', itens: 'Alface crespa, alface roxa, rúcula e agrião', preco: 10, quantidade: 5, imagem: imgSalada, descricao: 'Folhas colhidas na véspera, lavar e consumir em até 3 dias.', feira: 0 },
-    { nome: 'Kit sopa', categoria: 'Verduras e legumes', itens: 'Mandioquinha, batata, cenoura, abóbora e salsão', preco: 13, quantidade: 6, imagem: imgSopa, descricao: 'Tudo para uma sopa de família. Cerca de 3 kg.', feira: 1 },
-    { nome: 'Morangos do fim da feira', categoria: 'Frutas', itens: '3 bandejas de morango', preco: 15, quantidade: 4, imagem: imgMorangos, descricao: 'Bem docinhos e maduros: bons para geleia e vitamina.', feira: 1 },
-    { nome: 'Temperos da horta', categoria: 'Tempero', itens: 'Manjericão, alecrim, salsinha e cebolinha', preco: 6, quantidade: 0, imagem: imgTalos, descricao: 'Esgotado nesta semana.', feira: 1 },
+    { nome: 'Cesta Verde da Rô', categoria: 'Completa', itens: 'Alface, couve, rúcula, tomate, cenoura, banana e cheiro-verde', preco: 22, quantidade: 8, imagem: FOTOS.legumesSortidos, descricao: 'A cesta mais pedida: verduras, legumes e um pouco de fruta. Uns 4 kg.', feira: 0 },
+    { nome: 'Folhas para salada', categoria: 'Verduras e legumes', itens: 'Alface crespa, alface roxa, rúcula e agrião', preco: 10, quantidade: 5, imagem: FOTOS.alface, descricao: 'Folhas colhidas na véspera, lavar e consumir em até 3 dias.', feira: 0 },
+    { nome: 'Kit sopa', categoria: 'Verduras e legumes', itens: 'Mandioquinha, batata, cenoura, abóbora e salsão', preco: 13, quantidade: 6, imagem: FOTOS.abobora, descricao: 'Tudo para uma sopa de família. Cerca de 3 kg.', feira: 1 },
+    { nome: 'Morangos do fim da feira', categoria: 'Frutas', itens: '3 bandejas de morango', preco: 15, quantidade: 4, imagem: FOTOS.morangos, descricao: 'Bem docinhos e maduros: bons para geleia e vitamina.', feira: 1 },
+    { nome: 'Temperos da horta', categoria: 'Tempero', itens: 'Manjericão, alecrim, salsinha e cebolinha', preco: 6, quantidade: 0, imagem: FOTOS.manjericao, descricao: 'Esgotado nesta semana.', feira: 1 },
   ],
   pro: [
-    { nome: 'Cesta Sítio Nakamura', categoria: 'Completa', itens: 'Alface, brócolis, couve-flor, cenoura, tomate, pepino, banana e mexerica', preco: 28, quantidade: 10, imagem: imgCompleta, descricao: 'Cesta grande, colhida no sítio em Mairiporã. Uns 5 kg.', feira: 0 },
-    { nome: 'Xepa de frutas para vitamina', categoria: 'Frutas', itens: 'Banana, mamão, manga e morango', preco: 16, quantidade: 7, imagem: imgVitamina, descricao: 'Frutas bem maduras, perfeitas para vitamina e doces.', feira: 1 },
-    { nome: 'Legumes para refogar', categoria: 'Verduras e legumes', itens: 'Brócolis, vagem, abobrinha e berinjela', preco: 14, quantidade: 6, imagem: imgRefogados, descricao: 'Mais ou menos 3 kg de legumes do dia.', feira: 1 },
-    { nome: 'Tomates para molho', categoria: 'Verduras e legumes', itens: 'Tomate débora e italiano, 3 kg', preco: 11, quantidade: 5, imagem: imgTomates, descricao: 'Tomates maduros que não aguentam até a próxima feira.', feira: 0 },
-    { nome: 'Salada pronta da semana', categoria: 'Verduras e legumes', itens: 'Alface americana, rúcula, tomate-cereja e pepino', preco: 12, quantidade: 4, imagem: imgSalada, descricao: 'Folhas e legumes para saladas de 4 dias.', feira: 2 },
-    { nome: 'Kit temperos orientais', categoria: 'Tempero', itens: 'Cebolinha, gengibre, alho e shissô', preco: 7, quantidade: 0, imagem: imgTalos, descricao: 'Esgotado: volta no próximo sábado.', feira: 2 },
+    { nome: 'Cesta Sítio Nakamura', categoria: 'Completa', itens: 'Alface, brócolis, couve-flor, cenoura, tomate, pepino, banana e mexerica', preco: 28, quantidade: 10, imagem: FOTOS.brocolisCouveFlor, descricao: 'Cesta grande, colhida no sítio em Mairiporã. Uns 5 kg.', feira: 0 },
+    { nome: 'Xepa de frutas para vitamina', categoria: 'Frutas', itens: 'Banana, mamão, manga e morango', preco: 16, quantidade: 7, imagem: FOTOS.frutasTropicais, descricao: 'Frutas bem maduras, perfeitas para vitamina e doces.', feira: 1 },
+    { nome: 'Legumes para refogar', categoria: 'Verduras e legumes', itens: 'Brócolis, vagem, abobrinha e berinjela', preco: 14, quantidade: 6, imagem: FOTOS.cestaLegumes, descricao: 'Mais ou menos 3 kg de legumes do dia.', feira: 1 },
+    { nome: 'Tomates para molho', categoria: 'Verduras e legumes', itens: 'Tomate débora e italiano, 3 kg', preco: 11, quantidade: 5, imagem: FOTOS.tomates, descricao: 'Tomates maduros que não aguentam até a próxima feira.', feira: 0 },
+    { nome: 'Salada pronta da semana', categoria: 'Verduras e legumes', itens: 'Alface americana, rúcula, tomate-cereja e pepino', preco: 12, quantidade: 4, imagem: FOTOS.alfaceCrespa, descricao: 'Folhas e legumes para saladas de 4 dias.', feira: 2 },
+    { nome: 'Kit temperos orientais', categoria: 'Tempero', itens: 'Cebolinha, gengibre, alho e shissô', preco: 7, quantidade: 0, imagem: FOTOS.gengibre, descricao: 'Esgotado: volta no próximo sábado.', feira: 2 },
   ],
 };
 
