@@ -20,7 +20,7 @@ import Mapa from '@/modulos/usuario/paginas/mapa/componentes/MapaU';
 
 export const rotasFeirante = [
   <Route key="demo-feirante" path="/demo/feirante" element={<HomeFeirante />} />,
-  <Route key="inicio-feirante" path="/homeF" element={<HomeFeirante />} />,
+  <Route key="inicio-feirante" path="/feirante" element={<HomeFeirante />} />,
   <Route
     key="financeiro"
     path="/financeiro"
@@ -53,8 +53,8 @@ export const rotasFeirante = [
     }
   />,
 
-  <Route key="historico-chat" path="/HistoricoChat" element={<HistoricoChat />} />,
-  <Route key="historico-chat-usuario" path="/HistoricoChatUsuario" element={<HistoricoChat perfil="consumidor" />} />,
+  <Route key="historico-chat" path="/feirante/conversas" element={<HistoricoChat />} />,
+  <Route key="historico-chat-usuario" path="/consumidor/conversas" element={<HistoricoChat perfil="consumidor" />} />,
 
   <Route key="perfil-feirante" path="/perfil-feirante" element={<PerfilFeirante />} />,
   <Route key="historico-vendas" path="/historico-vendas" element={<HistoricoVendas />} />,

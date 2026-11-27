@@ -430,7 +430,7 @@ function HomeFeirante() {
               <button
                 type="button"
                 className={Notif.verTodas}
-                onClick={() => navigate('/HistoricoChat')}
+                onClick={() => navigate('/feirante/conversas')}
               >
                 Ver conversas
               </button>
@@ -443,7 +443,7 @@ function HomeFeirante() {
                   conversa={conversa}
                   perfil="feirante"
                   nome={conversa.consumidor}
-                  onClick={() => navigate('/HistoricoChat', { state: { conversa: conversa.id } })}
+                  onClick={() => navigate('/feirante/conversas', { state: { conversa: conversa.id } })}
                 />
               ))}
 

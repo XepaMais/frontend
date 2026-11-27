@@ -39,7 +39,7 @@ function HistoricoPedidos() {
 
   function falarComVendedor(pedido) {
     const conversa = abrirConversaDoPedido(pedido);
-    navegar('/HistoricoChatUsuario', { state: { conversa } });
+    navegar('/consumidor/conversas', { state: { conversa } });
   }
 
   return (

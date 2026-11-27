@@ -14,7 +14,7 @@ import Dispositivos from '@/modulos/usuario/paginas/dispositivos/Dispositivos';
 
 export const rotasUsuario = [
   <Route key="demo-usuario" path="/demo/consumidor" element={<HomeUsuario />} />,
-  <Route key="inicio-usuario" path="/homeU" element={<HomeUsuario />} />,
+  <Route key="inicio-usuario" path="/consumidor" element={<HomeUsuario />} />,
 
   <Route key="mapa-usuario" path="/mapa" element={<Mapa />} />,
   <Route key="mapa-home" path="/mapa-home" element={<Mapa />} />,
@@ -22,15 +22,15 @@ export const rotasUsuario = [
   <Route key="receitas-usuario" path="/cozinha" element={<Cozinha />} />,
   <Route key="receitas-home" path="/cozinha-home" element={<Cozinha />} />,
 
-  <Route key="detalhe-produto" path="/Verduras" element={<DetalheProduto />} />,
+  <Route key="detalhe-produto" path="/xepa" element={<DetalheProduto />} />,
 
   // Endereços da tela antiga de chat: levam para as conversas de verdade.
   <Route
     key="chat-consumidor"
     path="/chat-consumidor"
-    element={<Navigate to="/HistoricoChatUsuario" replace />}
+    element={<Navigate to="/consumidor/conversas" replace />}
   />,
-  <Route key="chat-feirante" path="/chat-feirante" element={<Navigate to="/HistoricoChat" replace />} />,
+  <Route key="chat-feirante" path="/chat-feirante" element={<Navigate to="/feirante/conversas" replace />} />,
 
   <Route key="impacto" path="/impacto" element={<Impacto />} />,
   <Route key="pagamento" path="/pagamento" element={<Pagamento />} />,

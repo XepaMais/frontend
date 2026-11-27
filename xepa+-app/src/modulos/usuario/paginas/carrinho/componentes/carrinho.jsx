@@ -105,7 +105,7 @@ export function Carrinho() {
             <ShoppingCart size={44} aria-hidden="true" />
             <h2>Seu carrinho está vazio</h2>
             <p>Adicione xepas para retirar na feira ou receber em casa.</p>
-            <Link to="/homeU" className={base.botaoPrincipal}>
+            <Link to="/consumidor" className={base.botaoPrincipal}>
               Ver xepas
             </Link>
           </section>
@@ -125,7 +125,7 @@ export function Carrinho() {
                     <img src={item.imagem || imagemPadrao} alt="" />
                     <div>
                       <h4>
-                        <Link to={`/Verduras?xepa=${item.id}`}>{item.nome}</Link>
+                        <Link to={`/xepa?xepa=${item.id}`}>{item.nome}</Link>
                       </h4>
                       <div className={Styles.quantidade}>
                         <button

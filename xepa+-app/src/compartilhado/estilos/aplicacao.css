@@ -80,3 +80,29 @@ b {
 #root {
   min-height: 100vh;
 }
+
+/* Link "Pular para o conteúdo": invisível até receber o foco do teclado */
+.pular-conteudo {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 10000;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--verde);
+  color: var(--branco);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform 0.15s ease;
+}
+
+.pular-conteudo:focus {
+  transform: translateY(0);
+  outline: 3px solid var(--amarelo);
+  outline-offset: 2px;
+}
+
+main:focus {
+  outline: none;
+}

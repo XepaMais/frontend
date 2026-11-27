@@ -145,7 +145,7 @@ export default function Pagamento() {
           <ShoppingCart size={44} aria-hidden="true" />
           <h2>Seu carrinho está vazio</h2>
           <p>Adicione xepas ao carrinho para realizar o pagamento.</p>
-          <Link to="/homeU" className={base.botaoPrincipal}>
+          <Link to="/consumidor" className={base.botaoPrincipal}>
             Ver xepas
           </Link>
         </section>

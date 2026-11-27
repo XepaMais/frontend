@@ -28,7 +28,7 @@ function Planos() {
       return;
     }
 
-    if (primeiroAcesso) navigate('/homeF', { replace: true });
+    if (primeiroAcesso) navigate('/feirante', { replace: true });
   }
 
   return (

@@ -18,7 +18,7 @@ function Crumb() {
     try {
       const conta = await entrar({ email: formulario.get('email'), senha: formulario.get('senha') });
       // O plano é escolhido só no cadastro; o login vai direto para a área da conta.
-      navigate(conta.tipo === 'FEIRANTE' ? '/homeF' : conta.tipo === 'CONSUMIDOR' ? '/homeU' : '/');
+      navigate(conta.tipo === 'FEIRANTE' ? '/feirante' : conta.tipo === 'CONSUMIDOR' ? '/consumidor' : '/');
     } catch (erroApi) {
       setErro(erroApi.message);
     } finally {
@@ -64,7 +64,7 @@ function Crumb() {
           </button>
 
           <p className={Styles.cadastro}>
-            Ainda não tem conta? <Link to="/OpcaoLogin">Cadastre-se</Link>
+            Ainda não tem conta? <Link to="/cadastro">Cadastre-se</Link>
           </p>
         </form>
       </section>
