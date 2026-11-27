@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from '@/compartilhado/componentes/modal/Modal';
 import usePerfil from '@/compartilhado/hooks/usePerfil';
 import { CATEGORIAS_XEPA } from '@/compartilhado/servicos/xepas';
@@ -10,7 +10,13 @@ const TAMANHO_MAXIMO_IMAGEM = 30 * 1024 * 1024;
 
 function PopUpAdicionarProduto({ feira, onFechar, onSalvo }) {
   const [imagem, setImagem] = useState(null);
+  const [previa, setPrevia] = useState('');
+  const [faltaImagem, setFaltaImagem] = useState(false);
   const [erro, setErro] = useState('');
+
+  useEffect(() => () => {
+    if (previa) URL.revokeObjectURL(previa);
+  }, [previa]);
   const { perfil } = usePerfil('feirante');
 
   function selecionarImagem(evento) {
@@ -26,6 +32,7 @@ function PopUpAdicionarProduto({ feira, onFechar, onSalvo }) {
 
     setErro('');
     setImagem(arquivo);
+    setPrevia(URL.createObjectURL(arquivo));
   }
 
   async function salvar(evento) {
@@ -33,15 +40,19 @@ function PopUpAdicionarProduto({ feira, onFechar, onSalvo }) {
 
     const formulario = evento.currentTarget;
     const dados = new FormData(formulario);
-    let imagemSalva = '';
+    let imagemSalva;
 
-    if (imagem) {
-      try {
-        imagemSalva = await reduzirImagem(imagem);
-      } catch {
-        setErro('Não foi possível ler essa imagem. Escolha outro arquivo.');
-        return;
-      }
+    if (!imagem) {
+      setFaltaImagem(true);
+      setErro('Adicione uma foto da xepa para cadastrar o produto.');
+      return;
+    }
+
+    try {
+      imagemSalva = await reduzirImagem(imagem);
+    } catch {
+      setErro('Não foi possível ler essa imagem. Escolha outro arquivo.');
+      return;
     }
 
     const { salvou, erro: motivo } = await adicionarProduto({
@@ -125,10 +136,11 @@ function PopUpAdicionarProduto({ feira, onFechar, onSalvo }) {
 
         <div className={base.campo}>
           <span className={base.subtitulo}>Imagem do Produto</span>
-          <div className={styles.upload}>
+          <div className={`${styles.upload} ${faltaImagem && !imagem ? styles.uploadErro : ''}`}>
+            {previa && <img src={previa} alt="Prévia da xepa" className={styles.previaImagem} />}
             <p>Envie uma foto clara. PNG, JPG e outros formatos, com no máximo 30 MB.</p>
             <label className={styles.botaoImagem}>
-              Adicionar Imagem
+              {imagem ? 'Trocar Imagem' : 'Adicionar Imagem'}
               <input
                 type="file"
                 name="imagem"
