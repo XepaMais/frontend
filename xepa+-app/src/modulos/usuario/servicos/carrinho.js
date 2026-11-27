@@ -4,6 +4,7 @@
 import { buscarXepa, carregarXepasDisponiveis, ehXepaDaApi, xepaDaApi } from '@/compartilhado/servicos/xepas';
 import { ENTREGA_CASA, RETIRADA_FEIRA } from '@/compartilhado/servicos/pedidos';
 import { carregarContaDaSessao } from '@/compartilhado/servicos/autenticacao';
+import { enviarJson, requisicaoApi } from '@/compartilhado/servicos/api';
 import {
   buscarCarrinho,
   idConsumidorLogado,
@@ -168,8 +169,53 @@ export function carregarRecebimento() {
   };
 }
 
+export const EVENTO_RECEBIMENTO = 'recebimento-atualizado';
+
+// Consumidor logado: a forma de receber e o endereço também vão para a API
+// (/api/consumidor/{idConta}/endereco) e valem em qualquer aparelho. O frete fica só aqui.
+let envioPendente = null;
+
 export function salvarRecebimento(recebimento) {
   localStorage.setItem(chaveDaConta(CHAVE_RECEBIMENTO), JSON.stringify(recebimento));
+
+  const idConta = idConsumidorLogado();
+  if (!idConta) return;
+
+  // Espera a pessoa parar de digitar antes de enviar.
+  clearTimeout(envioPendente);
+  envioPendente = setTimeout(() => {
+    enviarJson(`/consumidor/${idConta}/endereco`, {
+      tipo: recebimento.tipo,
+      endereco: recebimento.endereco,
+    }, 'PUT').catch(() => {
+      // Sem conexão: fica salvo neste navegador e vai na próxima alteração (ou no pedido).
+    });
+  }, 800);
+}
+
+function enderecoVazio(endereco) {
+  return !Object.values(endereco || {}).some((valor) => String(valor || '').trim());
+}
+
+// Ao abrir o app logado: traz o endereço salvo na conta (se neste navegador ainda não há um).
+export async function sincronizarRecebimento() {
+  const idConta = idConsumidorLogado();
+  if (!idConta) return;
+
+  try {
+    const salvo = await requisicaoApi(`/consumidor/${idConta}/endereco`);
+    const local = carregarRecebimento();
+    if (!enderecoVazio(local.endereco) || enderecoVazio(salvo.endereco)) return;
+
+    localStorage.setItem(chaveDaConta(CHAVE_RECEBIMENTO), JSON.stringify({
+      tipo: salvo.tipo === ENTREGA_CASA ? ENTREGA_CASA : RETIRADA_FEIRA,
+      endereco: { ...ENDERECO_VAZIO, ...salvo.endereco },
+      frete: null,
+    }));
+    window.dispatchEvent(new Event(EVENTO_RECEBIMENTO));
+  } catch {
+    // Sem conexão: fica com o endereço deste navegador.
+  }
 }
 
 // Campos obrigatórios para entregar em casa.

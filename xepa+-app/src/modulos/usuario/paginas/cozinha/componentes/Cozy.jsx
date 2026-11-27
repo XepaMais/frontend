@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { CakeSlice, Clock3, GlassWater, Grid2X2, Leaf, Salad, Soup } from 'lucide-react';
 import ScrollReveal from 'scrollreveal';
+import { requisicaoApi, urlDaApi } from '@/compartilhado/servicos/api';
 import videoCozinha from '@/assets/videos/cozinha-hero.mp4';
 import Style from '@/modulos/usuario/paginas/cozinha/estilos/Cozy.module.css';
 import imagemTalos from '@/assets/imagens/gerais/imagem-talos.jpg';
@@ -25,17 +26,45 @@ const iconesCategoria = {
   Rápidas: Clock3,
 };
 
-const receitas = [
-  { nome: 'Salada ceaser', categoria: 'Saladas', tempo: '15 min', dificuldade: 'Fácil', ingredientes: ['tomate', 'cenoura', 'alface'], imagem: imagemSaladaC },
-  { nome: 'Caldo verde', categoria: 'Sopas', tempo: '35 min', dificuldade: 'Fácil', ingredientes: ['couve', 'batata', 'cebola'], imagem: imagemSopaV },
-  { nome: 'Bolo de banana ', categoria: 'Doces', tempo: '45 min', dificuldade: 'Média', ingredientes: ['banana', 'aveia', 'canela'], imagem: imagemBolo},
-  { nome: 'Talos salteados com alho', categoria: 'Aproveitamento integral', tempo: '20 min', dificuldade: 'Fácil', ingredientes: ['couve', 'alho', 'cenoura'], imagem: imagemTalos,},
-  { nome: 'Tomates recheados', categoria: 'Rápidas', tempo: '25 min', dificuldade: 'Média', ingredientes: ['tomate', 'arroz', 'queijo'], imagem: imagemTomates },
-  { nome: 'Creme de cenoura', categoria: 'Sopas', tempo: '30 min', dificuldade: 'Fácil', ingredientes: ['cenoura', 'batata', 'gengibre'],imagem: imagemSopaC },
-  { nome: 'Salada de frutas da estação', categoria: 'Doces', tempo: '12 min', dificuldade: 'Fácil', ingredientes: ['banana', 'mamão', 'laranja'], imagem: imagemSaladaF},
-  { nome: 'Refogado colorido', categoria: 'Aproveitamento integral', tempo: '18 min', dificuldade: 'Fácil', ingredientes: ['cenoura', 'couve', 'cebola'], imagem: imagemRefogados},
-  { nome: 'Vitamina de banana e mamão', categoria: 'Sucos', tempo: '5 min', dificuldade: 'Fácil', ingredientes: ['banana', 'mamão', 'leite'], imagem: imagemVitamina },
-];
+// Foto que vem junto com o site para cada receita (pelo código da receita na API).
+const FOTOS_RECEITAS = {
+  'salada-caesar': imagemSaladaC,
+  'caldo-verde': imagemSopaV,
+  'bolo-banana': imagemBolo,
+  'talos-salteados': imagemTalos,
+  'tomates-recheados': imagemTomates,
+  'creme-cenoura': imagemSopaC,
+  'salada-frutas': imagemSaladaF,
+  'refogado-colorido': imagemRefogados,
+  'vitamina-banana-mamao': imagemVitamina,
+};
+
+// Lista usada enquanto a API responde (ou se ela estiver fora do ar). As receitas ficam em GET /api/receitas.
+const RECEITAS_PADRAO = [
+  { codigo: 'salada-caesar', nome: 'Salada caesar', categoria: 'Saladas', tempo: '15 min', dificuldade: 'Fácil', ingredientes: ['tomate', 'cenoura', 'alface'] },
+  { codigo: 'caldo-verde', nome: 'Caldo verde', categoria: 'Sopas', tempo: '35 min', dificuldade: 'Fácil', ingredientes: ['couve', 'batata', 'cebola'] },
+  { codigo: 'bolo-banana', nome: 'Bolo de banana', categoria: 'Doces', tempo: '45 min', dificuldade: 'Média', ingredientes: ['banana', 'aveia', 'canela'] },
+  { codigo: 'talos-salteados', nome: 'Talos salteados com alho', categoria: 'Aproveitamento integral', tempo: '20 min', dificuldade: 'Fácil', ingredientes: ['couve', 'alho', 'cenoura'] },
+  { codigo: 'tomates-recheados', nome: 'Tomates recheados', categoria: 'Rápidas', tempo: '25 min', dificuldade: 'Média', ingredientes: ['tomate', 'arroz', 'queijo'] },
+  { codigo: 'creme-cenoura', nome: 'Creme de cenoura', categoria: 'Sopas', tempo: '30 min', dificuldade: 'Fácil', ingredientes: ['cenoura', 'batata', 'gengibre'] },
+  { codigo: 'salada-frutas', nome: 'Salada de frutas da estação', categoria: 'Doces', tempo: '12 min', dificuldade: 'Fácil', ingredientes: ['banana', 'mamão', 'laranja'] },
+  { codigo: 'refogado-colorido', nome: 'Refogado colorido', categoria: 'Aproveitamento integral', tempo: '18 min', dificuldade: 'Fácil', ingredientes: ['cenoura', 'couve', 'cebola'] },
+  { codigo: 'vitamina-banana-mamao', nome: 'Vitamina de banana e mamão', categoria: 'Sucos', tempo: '5 min', dificuldade: 'Fácil', ingredientes: ['banana', 'mamão', 'leite'] },
+].map((receita) => ({ ...receita, imagem: FOTOS_RECEITAS[receita.codigo] }));
+
+// Receita da API -> formato dos cards. Foto enviada para a API tem prioridade; senão, a do site.
+function receitaDaApi(receita) {
+  return {
+    codigo: receita.codigo,
+    nome: receita.nome,
+    categoria: receita.categoria,
+    tempo: receita.tempoMinutos ? `${receita.tempoMinutos} min` : '',
+    dificuldade: receita.dificuldade || '',
+    ingredientes: receita.ingredientes || [],
+    imagem: urlDaApi(receita.imagem) || FOTOS_RECEITAS[receita.codigo],
+  };
+}
+
 
 // Deixa o texto minúsculo para comparar sem se preocupar com maiúsculas
 const normalizar = (texto) => texto.trim().toLocaleLowerCase('pt-BR');
@@ -224,7 +253,7 @@ function RecipeGrid({ lista }) {
   return (
     <div className={Style.grid}>
       {lista.map((receita) => (
-        <RecipeCard key={receita.nome} receita={receita} />
+        <RecipeCard key={receita.codigo || receita.nome} receita={receita} />
       ))}
     </div>
   );
@@ -235,6 +264,22 @@ function RecipeGrid({ lista }) {
 export default function Cozy() {
   const [categoria, setCategoria] = useState('Todas');
   const [ingredientes, setIngredientes] = useState(['tomate', 'banana', 'cenoura', 'couve']);
+  const [receitas, setReceitas] = useState(RECEITAS_PADRAO);
+
+  // Receitas cadastradas no banco (novas receitas aparecem sem mudar o site).
+  useEffect(() => {
+    let ativo = true;
+    requisicaoApi('/receitas')
+      .then((lista) => {
+        if (ativo && lista.length) setReceitas(lista.map(receitaDaApi));
+      })
+      .catch(() => {
+        // API fora do ar: fica com a lista padrão.
+      });
+    return () => {
+      ativo = false;
+    };
+  }, []);
 
   // Só ficam as receitas que passam nos filtros de categoria e ingredientes
   const receitasFiltradas = receitas.filter(

@@ -9,7 +9,7 @@ import {
   xepaDaApi,
 } from '@/compartilhado/servicos/xepas';
 import { ehDoFeiranteAtual, idFeiranteAtual } from '@/compartilhado/servicos/autenticacao';
-import { enviarImagem, enviarJson, requisicaoApi } from '@/compartilhado/servicos/api';
+import { enviarImagem, enviarJson, excluirNaApi, requisicaoApi } from '@/compartilhado/servicos/api';
 
 const LARGURA_MAXIMA_IMAGEM = 480;
 
@@ -85,6 +85,31 @@ export async function adicionarProduto(produto, idFeira) {
   } catch {
     return { salvou: false, erro: 'Não há mais espaço no navegador para salvar este produto.' };
   }
+}
+
+// Corrige a xepa (nome, preço, quantidade, validade, o que vem, descrição).
+// Xepa da API: PUT /api/feirante/{idConta}/xepas/{id}. Quantidade 0 tira a xepa da vitrine.
+export async function editarProduto(produto, dados) {
+  if (produto.origem === 'api') {
+    await enviarJson(`/feirante/${idFeiranteAtual()}/xepas/${produto.id}`, dados, 'PUT');
+    await Promise.all([sincronizarXepas(), sincronizarProdutos()]);
+    return;
+  }
+
+  salvarXepas(carregarXepasLocais().map((xepa) => (xepa.id === produto.id ? { ...xepa, ...dados } : xepa)));
+  window.dispatchEvent(new Event(EVENTO_XEPAS));
+}
+
+// Exclui a xepa: sai da vitrine (pedidos antigos continuam mostrando o que foi comprado).
+export async function excluirProduto(produto) {
+  if (produto.origem === 'api') {
+    await excluirNaApi(`/feirante/${idFeiranteAtual()}/xepas/${produto.id}`);
+    await Promise.all([sincronizarXepas(), sincronizarProdutos()]);
+    return;
+  }
+
+  salvarXepas(carregarXepasLocais().filter((xepa) => xepa.id !== produto.id));
+  window.dispatchEvent(new Event(EVENTO_XEPAS));
 }
 
 // Reduz a foto antes de salvar, porque o localStorage tem pouco espaço.
