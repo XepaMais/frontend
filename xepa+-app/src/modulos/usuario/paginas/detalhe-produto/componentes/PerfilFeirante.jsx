@@ -59,9 +59,13 @@ function PerfilFeirante({ xepa }) {
   ].filter((item) => item.valor);
 
   // Abre (ou reaproveita) a conversa sobre esta xepa e leva direto para ela.
-  function falarComFeirante() {
-    const id = abrirConversaDaXepa(xepa);
-    navegar('/HistoricoChatUsuario', { state: { conversa: id } });
+  async function falarComFeirante() {
+    try {
+      const id = await abrirConversaDaXepa(xepa);
+      navegar('/HistoricoChatUsuario', { state: { conversa: id } });
+    } catch (falha) {
+      window.alert(falha.message);
+    }
   }
 
   return (

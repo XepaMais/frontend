@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Package } from 'lucide-react';
-import { carregarProdutos } from '@/modulos/feirante/servicos/produtosFeirante';
+import { carregarProdutos, sincronizarProdutos } from '@/modulos/feirante/servicos/produtosFeirante';
+import { EVENTO_XEPAS } from '@/compartilhado/servicos/xepas';
 import { formatarMoeda } from '@/compartilhado/servicos/pedidos';
 import imagemPadrao from '@/assets/imagens/gerais/xepaCompleta.jpg';
 import base from '@/compartilhado/estilos/conta.module.css';
@@ -13,7 +14,15 @@ function formatarData(data) {
 
 function HistoricoProdutos() {
   const localizacao = useLocation();
-  const [produtos] = useState(carregarProdutos);
+  const [produtos, setProdutos] = useState(carregarProdutos);
+
+  // Feirante logado: as xepas vêm da API (valem em qualquer aparelho).
+  useEffect(() => {
+    const atualizar = () => setProdutos(carregarProdutos());
+    window.addEventListener(EVENTO_XEPAS, atualizar);
+    sincronizarProdutos();
+    return () => window.removeEventListener(EVENTO_XEPAS, atualizar);
+  }, []);
   // A Home pode abrir esta página já com os detalhes de um produto visíveis.
   const [produtoAberto, setProdutoAberto] = useState(
     localizacao.state ? localizacao.state.produtoId : null,
@@ -64,7 +73,7 @@ function HistoricoProdutos() {
 
                     {aberto && (
                       <div className={styles.detalhes}>
-                        <p>Validade estimada: {formatarData(produto.validade)}</p>
+                        {produto.validade && <p>Validade estimada: {formatarData(produto.validade)}</p>}
                         {produto.itens && <p>O que vem: {produto.itens}</p>}
                         {produto.feira && <p>Feira: {produto.feira}</p>}
                         <p>Local de retirada: {produto.local}</p>

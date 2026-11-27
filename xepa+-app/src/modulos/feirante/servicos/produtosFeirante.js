@@ -1,15 +1,77 @@
-// Produtos do feirante: cada xepa guarda o dono (idFeirante).
-import { carregarXepas, salvarXepas } from '@/compartilhado/servicos/xepas';
+// Cadastro de produtos do feirante. Cada xepa guarda o dono (idFeirante): o feirante vê só as dele.
+// Feirante logado com feira salva na API: a xepa é publicada na API (/api/feirante/{idConta}/xepas)
+// e aparece para os consumidores de qualquer aparelho. Modo demonstração: fica neste navegador.
+import {
+  carregarXepasLocais,
+  EVENTO_XEPAS,
+  salvarXepas,
+  sincronizarXepas,
+  xepaDaApi,
+} from '@/compartilhado/servicos/xepas';
 import { ehDoFeiranteAtual, idFeiranteAtual } from '@/compartilhado/servicos/autenticacao';
+import { enviarImagem, enviarJson, requisicaoApi } from '@/compartilhado/servicos/api';
 
 const LARGURA_MAXIMA_IMAGEM = 480;
 
-export function carregarProdutos() {
-  return carregarXepas().filter(ehDoFeiranteAtual);
+// Cópia das xepas que o feirante logado publicou na API (inclui as esgotadas).
+function chaveProdutosApi() {
+  const id = idFeiranteAtual();
+  return id === 'demo' ? null : `xepasFeiranteApi:${id}`;
 }
 
-// Retorna false quando o navegador não tem mais espaço para guardar o produto.
-export function adicionarProduto(produto) {
+export function carregarProdutos() {
+  const chave = chaveProdutosApi();
+  const daApi = chave ? JSON.parse(localStorage.getItem(chave)) || [] : [];
+
+  return [...daApi, ...carregarXepasLocais().filter(ehDoFeiranteAtual)];
+}
+
+// Busca na API as xepas do feirante logado (GET /api/feirante/{idConta}/xepas).
+export async function sincronizarProdutos() {
+  const chave = chaveProdutosApi();
+  if (!chave) return false;
+
+  try {
+    const xepas = await requisicaoApi(`/feirante/${idFeiranteAtual()}/xepas`);
+    localStorage.setItem(chave, JSON.stringify(xepas.map(xepaDaApi)));
+    window.dispatchEvent(new Event(EVENTO_XEPAS));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Feiras vindas da API têm id numérico pequeno; as do modo demonstração usam Date.now().
+function feiraDaApi(idFeira) {
+  return Number.isInteger(Number(idFeira)) && Number(idFeira) > 0 && Number(idFeira) < 1e9;
+}
+
+// Devolve { salvou: true } ou { salvou: false, erro }.
+export async function adicionarProduto(produto, idFeira) {
+  const idConta = idFeiranteAtual();
+
+  if (idConta !== 'demo' && feiraDaApi(idFeira)) {
+    try {
+      // A foto vai primeiro para a API; a xepa guarda só o endereço dela.
+      const imagem = produto.imagem ? await enviarImagem(produto.imagem) : null;
+      await enviarJson(`/feirante/${idConta}/xepas`, {
+        nome: produto.nome,
+        categoria: produto.categoria,
+        itens: produto.itens,
+        descricao: produto.descricao,
+        preco: produto.preco,
+        quantidade: produto.quantidade,
+        validade: produto.validade || null,
+        idFeira: Number(idFeira),
+        imagem,
+      });
+      await Promise.all([sincronizarXepas(), sincronizarProdutos()]);
+      return { salvou: true };
+    } catch (falha) {
+      return { salvou: false, erro: falha.message };
+    }
+  }
+
   const novoProduto = {
     ...produto,
     id: Date.now(),
@@ -18,10 +80,10 @@ export function adicionarProduto(produto) {
   };
 
   try {
-    salvarXepas([novoProduto, ...carregarXepas()]);
-    return true;
+    salvarXepas([novoProduto, ...carregarXepasLocais()]);
+    return { salvou: true };
   } catch {
-    return false;
+    return { salvou: false, erro: 'Não há mais espaço no navegador para salvar este produto.' };
   }
 }
 

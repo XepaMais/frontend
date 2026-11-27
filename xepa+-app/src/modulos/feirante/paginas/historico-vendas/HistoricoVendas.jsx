@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Receipt } from 'lucide-react';
 import {
   carregarVendasDoFeirante,
+  EVENTO_PEDIDOS,
+  sincronizarVendas,
   descreverRecebimento,
   formatarDataHora,
   formatarMoeda,
@@ -25,6 +27,14 @@ function contarItens(venda) {
 
 function HistoricoVendas() {
   const [vendas, setVendas] = useState(carregarVendasDoFeirante);
+
+  // Feirante logado: as vendas vêm da API (valem em qualquer aparelho).
+  useEffect(() => {
+    const atualizar = () => setVendas(carregarVendasDoFeirante());
+    window.addEventListener(EVENTO_PEDIDOS, atualizar);
+    sincronizarVendas();
+    return () => window.removeEventListener(EVENTO_PEDIDOS, atualizar);
+  }, []);
 
   // O feirante confirma que o cliente retirou o pedido: o pop-up pede o código do cliente.
   const [pedidoParaConfirmar, setPedidoParaConfirmar] = useState(null);
@@ -125,7 +135,7 @@ function HistoricoVendas() {
                       )}
                     </td>
                     <td data-rotulo="Código">
-                      <strong>{venda.codigo || '-'}</strong>
+                      <strong>{venda.codigo || (venda.origem === 'api' ? 'com o cliente' : '-')}</strong>
                     </td>
                     <td data-rotulo="Entrega">
                       {venda.status === PENDENTE_RETIRADA ? (

@@ -4,7 +4,7 @@ import logoImpacto from '@/assets/imagens/marca/logo.png';
 import styles from '@/modulos/usuario/paginas/impacto/estilos/Impacto.module.css';
 import chartStyles from '@/modulos/usuario/paginas/impacto/estilos/GraficoImpacto.module.css';
 import { calcularImpacto, formatarKg } from '@/compartilhado/servicos/impacto';
-import { formatarMoeda } from '@/compartilhado/servicos/pedidos';
+import { EVENTO_PEDIDOS, formatarMoeda, sincronizarPedidos } from '@/compartilhado/servicos/pedidos';
 
 const linhasGrade = [0, 1, 2, 3, 4, 5];
 
@@ -21,7 +21,13 @@ function useImpacto() {
     // Atualiza se um pedido for feito em outra aba.
     const atualizar = () => setImpacto(calcularImpacto());
     window.addEventListener('storage', atualizar);
-    return () => window.removeEventListener('storage', atualizar);
+    // Consumidor logado: os pedidos feitos pela API (em qualquer aparelho) também contam.
+    window.addEventListener(EVENTO_PEDIDOS, atualizar);
+    sincronizarPedidos();
+    return () => {
+      window.removeEventListener('storage', atualizar);
+      window.removeEventListener(EVENTO_PEDIDOS, atualizar);
+    };
   }, []);
 
   return impacto;
