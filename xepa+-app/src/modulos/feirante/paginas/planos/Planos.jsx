@@ -15,9 +15,18 @@ function Planos() {
   const primeiroAcesso = Boolean(useLocation().state?.primeiroAcesso);
   const [selecionado, setSelecionado] = useState(carregarPlanoSelecionado);
 
-  function selecionar(idPlano) {
-    salvarPlanoSelecionado(idPlano);
+  // Feirante logado: o plano fica salvo na API (vale em qualquer aparelho).
+  async function selecionar(idPlano) {
+    const anterior = selecionado;
     setSelecionado(idPlano);
+
+    try {
+      await salvarPlanoSelecionado(idPlano);
+    } catch (falha) {
+      setSelecionado(anterior);
+      window.alert(falha.message);
+      return;
+    }
 
     if (primeiroAcesso) navigate('/homeF', { replace: true });
   }

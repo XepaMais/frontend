@@ -11,6 +11,7 @@ import {
   formaRecebimento,
   formatarDataHora,
   formatarMoeda,
+  PENDENTE_RETIRADA,
   RETIRADO,
   textoStatus,
   textoTaxaEntrega,
@@ -18,10 +19,13 @@ import {
 import { abrirConversaDoPedido } from '@/compartilhado/servicos/conversas';
 import base from '@/compartilhado/estilos/conta.module.css';
 import styles from './estilos/HistoricoPedidos.module.css';
+import AvaliarPedido from './AvaliarPedido';
+import PopUpCancelarPedido from '@/compartilhado/componentes/conta/PopUpCancelarPedido';
 
 function HistoricoPedidos() {
   const [pedidos, setPedidos] = useState(carregarPedidos);
   const [pedidoAberto, setPedidoAberto] = useState(null);
+  const [pedidoParaCancelar, setPedidoParaCancelar] = useState(null);
   const navegar = useNavigate();
 
   // Consumidor logado: traz o histórico da API (status atualizado pelo feirante).
@@ -126,6 +130,9 @@ function HistoricoPedidos() {
                       </div>
                     )}
 
+                    {/* Pedido da API já recebido: o consumidor avalia (vai para a média do feirante). */}
+                    {pedido.origem === 'api' && pedido.status === RETIRADO && <AvaliarPedido pedido={pedido} />}
+
                     <div className={styles.rodape}>
                       <div className={styles.resumo}>
                         <span className={base.status}>{textoStatus(pedido)}</span>
@@ -148,6 +155,16 @@ function HistoricoPedidos() {
                         >
                           Falar com vendedor
                         </button>
+                        {/* Pedido da API ainda não retirado: dá para cancelar (a xepa volta para a vitrine). */}
+                        {pedido.origem === 'api' && pedido.status === PENDENTE_RETIRADA && (
+                          <button
+                            type="button"
+                            className={base.botaoPerigoContorno}
+                            onClick={() => setPedidoParaCancelar(pedido)}
+                          >
+                            Cancelar pedido
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -156,6 +173,17 @@ function HistoricoPedidos() {
             })}
           </div>
         </>
+      )}
+
+      {pedidoParaCancelar && (
+        <PopUpCancelarPedido
+          pedido={pedidoParaCancelar}
+          onFechar={() => setPedidoParaCancelar(null)}
+          onCancelado={() => {
+            setPedidoParaCancelar(null);
+            setPedidos(carregarPedidos());
+          }}
+        />
       )}
     </main>
   );

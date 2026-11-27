@@ -62,11 +62,14 @@ function paraApi(dados) {
     horarioFim: dados.horarioFim || null,
     latitude: dados.latitude,
     longitude: dados.longitude,
+    // Quem atende na barraca nessa feira (fica na API e aparece no perfil do feirante).
+    funcionarios: (dados.funcionarios || []).filter((nome) => nome && nome.trim()),
   };
 }
 
-// API → formato usado nas telas. Funcionários ainda não vão para a API: ficam na cópia local.
-function daApi(feira, funcionarios = []) {
+// API → formato usado nas telas. Funcionários vêm da API (feiras antigas: da cópia local).
+function daApi(feira, funcionariosAntigos = []) {
+  const funcionarios = feira.funcionarios?.length ? feira.funcionarios : funcionariosAntigos;
   const inicio = feira.horarioInicio?.slice(0, 5) || '';
   const fim = feira.horarioFim?.slice(0, 5) || '';
   const cep = feira.cep ? `${feira.cep.slice(0, 5)}-${feira.cep.slice(5)}` : '';
@@ -99,6 +102,14 @@ export async function buscarMinhasFeiras() {
 
   const lista = await requisicaoApi(caminho());
   const feiras = lista.map((feira) => daApi(feira, funcionariosLocais(feira.id)));
+
+  // Funcionários cadastrados antes (só neste navegador): envia para a API uma vez.
+  lista.forEach((feiraApi, indice) => {
+    if (!feiraApi.funcionarios?.length && feiras[indice].funcionarios.length) {
+      enviarJson(caminho(`/${feiraApi.id}`), paraApi(feiras[indice]), 'PUT').catch(() => {});
+    }
+  });
+
   salvarFeiras(feiras);
   return feiras;
 }

@@ -52,6 +52,8 @@ export function pedidoDaApi(pedido) {
     codigo: pedido.codigo,
     // Conversa do pedido no chat (aberta pela API no checkout).
     idConversa: pedido.idConversa,
+    // Nota dada pelo consumidor depois da retirada: { nota, comentario, data } ou null.
+    avaliacao: pedido.avaliacao || null,
     consumidor: pedido.consumidor,
     total: Number(pedido.total),
     itens: pedido.itens.map((item) => ({
@@ -84,6 +86,18 @@ export function guardarPedidosDaApi(pedidos) {
   const outros = carregarPedidosDaApiEmCache().filter((pedido) => !novos.some((novo) => novo.id === pedido.id));
   localStorage.setItem(chave, JSON.stringify([...novos, ...outros]));
   window.dispatchEvent(new Event(EVENTO_PEDIDOS));
+}
+
+// Consumidor avalia o pedido já retirado (nota de 1 a 5). Avaliar de novo troca a nota.
+export async function avaliarPedido(pedido, nota, comentario) {
+  const conta = carregarContaDaSessao();
+  const atualizado = await enviarJson(
+    `/consumidor/${conta.id}/pedidos/${pedido.id}/avaliacao`,
+    { nota, comentario },
+    'PUT',
+  );
+  guardarPedidosDaApi([atualizado]);
+  return pedidoDaApi(atualizado);
 }
 
 // Busca o histórico na API (consumidor logado). Sem conexão, mantém a última cópia.
@@ -154,9 +168,31 @@ export async function confirmarRetiradaNaApi(pedido, codigo) {
   return atualizado;
 }
 
+// Cancelamento antes da retirada (pedidos da API): o estoque volta para a vitrine e o Pix é
+// marcado como estornado. Consumidor cancela o próprio pedido; feirante cancela a venda.
+export async function cancelarPedidoNaApi(pedido) {
+  const conta = carregarContaDaSessao();
+
+  if (conta?.tipo === 'FEIRANTE') {
+    const atualizado = pedidoDaApi(await enviarJson(`/feirante/${conta.id}/pedidos/${pedido.id}/cancelar`, {}));
+    const chave = chaveVendasApi();
+    if (chave) {
+      const vendas = carregarVendasDaApiEmCache().map((venda) => (venda.id === atualizado.id ? atualizado : venda));
+      localStorage.setItem(chave, JSON.stringify(vendas));
+    }
+    window.dispatchEvent(new Event(EVENTO_PEDIDOS));
+    return atualizado;
+  }
+
+  const resposta = await enviarJson(`/consumidor/${conta.id}/pedidos/${pedido.id}/cancelar`, {});
+  guardarPedidosDaApi([resposta]);
+  return pedidoDaApi(resposta);
+}
+
 // Status usados na retirada do pedido.
 export const PENDENTE_RETIRADA = 'Pendente de retirada';
 export const RETIRADO = 'Retirado';
+export const CANCELADO = 'Cancelado';
 
 // Gera um número aleatório de 4 dígitos (de 1000 a 9999).
 function gerarCodigoRetirada() {
@@ -224,7 +260,7 @@ export function textoTaxaEntrega(recebimento) {
 
 // O status salvo continua o mesmo; só o texto muda quando o pedido é entregue em casa.
 export function textoStatus(pedido) {
-  if (formaRecebimento(pedido) !== ENTREGA_CASA) return pedido.status;
+  if (pedido.status === CANCELADO || formaRecebimento(pedido) !== ENTREGA_CASA) return pedido.status;
 
   return pedido.status === RETIRADO ? 'Entregue' : 'Aguardando entrega';
 }
