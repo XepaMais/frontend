@@ -7,44 +7,57 @@
 }
 
 .selecaoDias legend {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   padding: 0;
+  color: var(--verde);
   font-size: var(--fonte-pequena);
-  font-weight: 600;
+  font-weight: 700;
 }
 
+/* Mesmo visual do seletor Diário / Semanal / Mensal do financeiro */
 .dias {
   display: flex;
   justify-content: space-between;
-  gap: 6px;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 12px;
+  background: #edf3ee;
 }
 
 .dia,
 .diaSelecionado {
-  width: 44px;
-  height: 44px;
-  flex: 0 1 44px;
+  min-width: 0;
+  height: 40px;
+  flex: 1;
   padding: 0;
-  border: 1.5px solid var(--verde);
-  border-radius: 50%;
-  font-size: var(--fonte-legenda);
-  font-weight: 600;
+  border: 0;
+  border-radius: var(--raio-botao);
+  font-size: var(--fonte-pequena);
+  font-weight: 700;
   cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .dia {
-  background: var(--branco);
+  background: transparent;
   color: var(--verde);
 }
 
+.dia:hover {
+  background: rgba(24, 85, 47, 0.08);
+}
+
 .diaSelecionado {
-  background: var(--verde);
+  background: var(--laranja);
   color: var(--branco);
+  box-shadow: 0 4px 10px rgba(247, 96, 25, 0.3);
 }
 
 .dia:focus-visible,
 .diaSelecionado:focus-visible {
-  outline: 2px solid var(--limao);
+  outline: 2px solid var(--verde);
   outline-offset: 2px;
 }
 
@@ -102,7 +115,9 @@
 
 /* Endereço preenchido pelo CEP: fica com cara de campo travado. */
 input.campoAutomatico[readonly] {
-  background: #f2f2f2;
+  border-style: dashed;
+  background: #edf3ee;
+  color: var(--verde);
   cursor: default;
 }
 
