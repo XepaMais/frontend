@@ -19,9 +19,10 @@
   max-height: calc(100vh - 32px);
   flex-direction: column;
   overflow: hidden;
+  border: var(--borda-card);
   border-radius: var(--raio-card);
   background: var(--branco);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 16px 40px rgba(24, 85, 47, 0.18);
   color: var(--verde);
 }
 
@@ -31,15 +32,16 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 12px 12px 24px;
-  background: var(--verde);
-  color: var(--branco);
+  padding: 20px 16px 12px 24px;
+  border-bottom: 1px solid var(--cinza-claro);
+  background: var(--branco);
+  color: var(--verde);
 }
 
 .topo h2 {
   margin: 0;
-  font-size: var(--fonte-titulo-card);
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   line-height: 1.3;
 }
 
@@ -54,16 +56,16 @@
   border: 0;
   border-radius: var(--raio-botao);
   background: transparent;
-  color: var(--branco);
+  color: var(--verde);
   cursor: pointer;
 }
 
 .fechar:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(24, 85, 47, 0.08);
 }
 
 .fechar:focus-visible {
-  outline: 2px solid var(--branco);
+  outline: 2px solid var(--limao);
   outline-offset: -2px;
 }
 
@@ -108,13 +110,14 @@
 .campo select,
 .campo textarea {
   width: 100%;
-  min-height: 44px;
-  padding: 8px 12px;
-  border: 1.5px solid var(--verde);
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--cinza-claro);
   border-radius: var(--raio-botao);
   background: var(--branco);
   color: var(--preto);
   font-size: var(--fonte-texto);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .campo textarea {
@@ -131,8 +134,9 @@
 .campo input:focus,
 .campo select:focus,
 .campo textarea:focus {
-  outline: 2px solid var(--limao);
-  outline-offset: 1px;
+  border-color: var(--verde);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(24, 85, 47, 0.12);
 }
 
 /* Remove as setinhas dos campos numéricos */
@@ -219,8 +223,8 @@
 .principal,
 .secundario,
 .perigo {
-  min-height: 44px;
-  padding: 8px 20px;
+  min-height: 46px;
+  padding: 10px 22px;
   border-radius: var(--raio-botao);
   font-size: var(--fonte-pequena);
   font-weight: 600;
@@ -229,8 +233,8 @@
 }
 
 .principal {
-  border: 1.5px solid var(--verde);
-  background: var(--verde);
+  border: 1.5px solid var(--laranja);
+  background: var(--laranja);
   color: var(--branco);
 }
 
@@ -240,8 +244,8 @@
 }
 
 .principal:not(:disabled):hover {
-  border-color: #287447;
-  background: #287447;
+  border-color: #d94b19;
+  background: #d94b19;
 }
 
 .secundario {
@@ -255,14 +259,14 @@
 }
 
 .perigo {
-  border: 1.5px solid var(--laranja);
-  background: var(--laranja);
+  border: 1.5px solid #c0392b;
+  background: #c0392b;
   color: var(--branco);
 }
 
 .perigo:hover {
-  border-color: #d9500f;
-  background: #d9500f;
+  border-color: #a93226;
+  background: #a93226;
 }
 
 .principal:focus-visible,

@@ -88,7 +88,6 @@ function PopUpConfirmarEntrega({ pedido, onFechar, onConfirmado }) {
               }}
               inputMode="numeric"
               autoComplete="off"
-              placeholder="0000"
               autoFocus
             />
           </div>

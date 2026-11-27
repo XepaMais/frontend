@@ -57,7 +57,6 @@ function Lancamento({ lancamento, aoFechar, aoSalvar }) {
             id="descricao"
             value={descricao}
             onChange={(evento) => setDescricao(evento.target.value)}
-            placeholder="Digite a descrição"
             required
           />
         </div>
@@ -74,7 +73,6 @@ function Lancamento({ lancamento, aoFechar, aoSalvar }) {
               step="0.01"
               value={valor}
               onChange={(evento) => setValor(evento.target.value)}
-              placeholder="0,00"
               required
             />
           </div>

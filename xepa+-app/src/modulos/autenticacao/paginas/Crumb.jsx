@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { entrar } from '@/compartilhado/servicos/autenticacao';
-import { carregarPlanoSelecionado } from '@/modulos/feirante/servicos/planoFeirante';
+import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function Crumb() {
@@ -17,10 +17,7 @@ function Crumb() {
 
     try {
       const conta = await entrar({ email: formulario.get('email'), senha: formulario.get('senha') });
-      if (conta.tipo === 'FEIRANTE' && !carregarPlanoSelecionado()) {
-        navigate('/planos', { state: { primeiroAcesso: true } });
-        return;
-      }
+      // O plano é escolhido só no cadastro; o login vai direto para a área da conta.
       navigate(conta.tipo === 'FEIRANTE' ? '/homeF' : conta.tipo === 'CONSUMIDOR' ? '/homeU' : '/');
     } catch (erroApi) {
       setErro(erroApi.message);
@@ -35,6 +32,8 @@ function Crumb() {
 
       <section className={Styles.ladoForm}>
         <form className={Styles.form} onSubmit={fazerLogin}>
+          <BotaoVoltar destino="/" />
+
           <h1>Entrar na conta</h1>
 
           <label htmlFor="email">Digite seu Email</label>

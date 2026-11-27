@@ -160,7 +160,6 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
             name="nome"
             value={nome}
             onChange={(evento) => setNome(evento.target.value)}
-            placeholder="Fazendinha"
             required
           />
         </div>
@@ -176,7 +175,6 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
               title="Digite os 8 números do CEP"
               value={cep}
               onChange={(evento) => alterarCep(evento.target.value)}
-              placeholder="00000-000"
               required
             />
           </div>
@@ -188,7 +186,6 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
               name="numero"
               value={numero}
               onChange={(evento) => setNumero(evento.target.value)}
-              placeholder="123 ou s/n"
               required
             />
           </div>
@@ -227,7 +224,7 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
 
         <div className={base.grade}>
           <div className={base.campo}>
-            <label htmlFor="horarioInicio">Horário de início (opcional)</label>
+            <label htmlFor="horarioInicio">Horário de início</label>
             <input
               id="horarioInicio"
               name="horarioInicio"
@@ -239,7 +236,7 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
           </div>
 
           <div className={base.campo}>
-            <label htmlFor="horarioFim">Horário de fim (opcional)</label>
+            <label htmlFor="horarioFim">Horário de fim</label>
             <input
               id="horarioFim"
               name="horarioFim"
@@ -262,7 +259,6 @@ function FormularioFeira({ modo, feira, onFechar, onSalvar }) {
                   name="funcionario"
                   value={funcionario}
                   onChange={(evento) => alterarFuncionario(indice, evento.target.value)}
-                  placeholder="Escreva aqui..."
                   required={indice === 0}
                 />
                 {estaEditando && <img src={pinIcon} alt="" aria-hidden="true" />}
