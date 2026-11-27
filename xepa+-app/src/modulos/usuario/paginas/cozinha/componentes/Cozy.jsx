@@ -191,14 +191,16 @@ function IngredientPicker({ ingredientes, setIngredientes }) {
           <button type="submit">Adicionar</button>
         </form>
 
-        <div className={Style.chips} aria-label="Ingredientes escolhidos">
-          {ingredientes.map((item) => (
-            <button type="button" key={item} className={Style.chip} onClick={() => remover(item)}>
-              {item}
-              <span aria-label={`Remover ${item}`}>×</span>
-            </button>
-          ))}
-        </div>
+        {ingredientes.length > 0 && (
+          <div className={Style.chips} aria-label="Ingredientes escolhidos">
+            {ingredientes.map((item) => (
+              <button type="button" key={item} className={Style.chip} onClick={() => remover(item)}>
+                {item}
+                <span aria-label={`Remover ${item}`}>×</span>
+              </button>
+            ))}
+          </div>
+        )}
 
         <button className={Style.match} type="button" onClick={irParaReceitas}>
           Ver receitas possíveis <span>→</span>
@@ -263,7 +265,7 @@ function RecipeGrid({ lista }) {
 
 export default function Cozy() {
   const [categoria, setCategoria] = useState('Todas');
-  const [ingredientes, setIngredientes] = useState(['tomate', 'banana', 'cenoura', 'couve']);
+  const [ingredientes, setIngredientes] = useState([]);
   const [receitas, setReceitas] = useState(RECEITAS_PADRAO);
 
   // Receitas cadastradas no banco (novas receitas aparecem sem mudar o site).

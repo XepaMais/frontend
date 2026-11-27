@@ -11,7 +11,7 @@ import styles from './estilos/Planos.module.css';
 
 function Planos() {
   const navigate = useNavigate();
-  // Logo após o cadastro (ou no primeiro login), o feirante escolhe o plano antes de entrar.
+  // Logo após o cadastro, o feirante escolhe o plano antes de entrar.
   const primeiroAcesso = Boolean(useLocation().state?.primeiroAcesso);
   const [selecionado, setSelecionado] = useState(carregarPlanoSelecionado);
 

@@ -86,11 +86,6 @@ function Chat2() {
 
   return (
     <main className={Styles.paginaChat}>
-      <header className={Styles.cabecalhoPagina}>
-        <h1>Xepinha</h1>
-        <p>Tire suas dúvidas sobre o Xepa+, a feira e a gestão financeira.</p>
-      </header>
-
       <section
         className={`${Styles.quadroChat} ${mobileConversaAberta ? Styles.conversaMobileAtiva : ''}`}
         aria-label="Conversas com a Xepinha"

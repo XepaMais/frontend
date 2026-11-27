@@ -116,15 +116,6 @@ function ChatHist({ perfil = 'feirante' }) {
 
   return (
     <main className={Styles.paginaChat}>
-      <header className={Styles.cabecalhoPagina}>
-        <h1>Conversas</h1>
-        <p>
-          {ehFeirante
-            ? 'Converse com seus clientes sobre os pedidos.'
-            : 'Fale com o vendedor sobre os seus pedidos.'}
-        </p>
-      </header>
-
       <section
         className={`${Styles.quadroChat} ${mobileConversaAberta && conversa ? Styles.conversaMobileAtiva : ''}`}
         aria-label="Central de conversas"

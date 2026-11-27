@@ -120,7 +120,7 @@ function PopUpAdicionarProduto({ feira, onFechar, onSalvo }) {
 
         <div className={base.campo}>
           <label htmlFor="itens">O que vem na xepa</label>
-          <input id="itens" name="itens" placeholder="Alface, brócolis, batata..." required />
+          <input id="itens" name="itens" required />
         </div>
 
         <div className={base.campo}>
@@ -146,7 +146,6 @@ function PopUpAdicionarProduto({ feira, onFechar, onSalvo }) {
           <textarea
             id="descricao"
             name="descricao"
-            placeholder="Frescor, origem, peso ou quantidade disponível."
             rows="4"
             required
           />
