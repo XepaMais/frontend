@@ -96,12 +96,12 @@ Este repositório guarda o **front-end** do Xepa+: o site que consumidores e fei
 
 | Área | Rotas principais |
 | --- | --- |
-| **Público** | `/` (início), `/sobrenos`, `/xep-ai`, `/seja-parceiro`, `/suporte`, `/termos-de-uso`, `/privacidade`, `/mapa-home`, `/cozinha-home` |
-| **Login e cadastro** | `/Crumb` (entrar), `/OpcaoLogin` (escolher o perfil), `/CriarConta` (consumidor), `/CriarUsuarioF` e `/CriarContaF` (feirante), `/demo` |
-| **Consumidor** | `/homeU`, `/mapa`, `/cozinha`, `/carrinho`, `/pagamento`, `/historico-pedidos`, `/impacto`, `/chat-consumidor`, `/perfil`, `/dispositivos` |
-| **Feirante** | `/homeF`, `/adicionar-produto`, `/adicionar-feira`, `/financeiro`, `/adicionar-gasto`, `/sacar`, `/planilhas`, `/planos`, `/chat-ia` (Xepinha), `/historico-vendas`, `/historico-produtos`, `/perfil-feirante`, `/dispositivos-feirante` |
+| **Público** | `/` (início), `/sobre-nos`, `/xep-ai`, `/seja-parceiro`, `/suporte`, `/termos-de-uso`, `/privacidade`, `/mapa-home`, `/cozinha-home` |
+| **Login e cadastro** | `/entrar`, `/cadastro` (escolher o perfil), `/cadastro/consumidor`, `/cadastro/feirante` e `/cadastro/feirante/negocio`, `/demo` |
+| **Consumidor** | `/consumidor` (início), `/xepa?xepa=ID` (detalhe da oferta), `/consumidor/conversas`, `/mapa`, `/cozinha`, `/carrinho`, `/pagamento`, `/historico-pedidos`, `/impacto`, `/chat-consumidor`, `/perfil`, `/dispositivos` |
+| **Feirante** | `/feirante` (início), `/feirante/conversas`, `/adicionar-produto`, `/adicionar-feira`, `/financeiro`, `/adicionar-gasto`, `/sacar`, `/planilhas`, `/planos`, `/chat-ia` (Xepinha), `/historico-vendas`, `/historico-produtos`, `/perfil-feirante`, `/dispositivos-feirante` |
 
-As rotas ficam em [`xepa+-app/src/aplicacao/rotas`](xepa+-app/src/aplicacao/rotas), com uma lista para cada área.
+As rotas ficam em [`xepa+-app/src/aplicacao/rotas`](xepa+-app/src/aplicacao/rotas), com uma lista para cada área. Endereços antigos (`/Crumb`, `/homeF`, `/Verduras`...) redirecionam para os novos ([`rotas-antigas.jsx`](xepa+-app/src/aplicacao/rotas/rotas-antigas.jsx)); um endereço inexistente mostra a página 404. Cada página tem título próprio na aba do navegador ([`TituloDaPagina.jsx`](xepa+-app/src/compartilhado/componentes/TituloDaPagina.jsx)).
 
 ### Modo demonstração
 

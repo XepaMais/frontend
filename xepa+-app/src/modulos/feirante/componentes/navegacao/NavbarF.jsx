@@ -10,11 +10,11 @@ import styles from './navbarF.module.css';
 import logo from '@/assets/imagens/marca/logo.png';
 
 const links = [
-  { texto: 'Home', destino: '/homeF' },
+  { texto: 'Home', destino: '/feirante' },
   { texto: 'Produtos', destino: '/adicionar-produto' },
   { texto: 'Feiras', destino: '/adicionar-feira' },
   { texto: 'Financeiro', destino: '/financeiro', recurso: 'financeiro' },
-  { texto: 'Chat', destino: '/HistoricoChat' },
+  { texto: 'Chat', destino: '/feirante/conversas' },
   { texto: 'Xepinha', destino: '/chat-ia', recurso: 'ia' },
 ];
 
@@ -54,7 +54,7 @@ export function NavbarF() {
 
   return (
     <header className={styles.navbar}>
-      <Link to="/homeF" className={styles.logo} aria-label="Home do feirante" onClick={fecharMenu}>
+      <Link to="/feirante" className={styles.logo} aria-label="Home do feirante" onClick={fecharMenu}>
         <img src={logo} alt="Logo Xepa+" className={styles.iconeLogo} />
       </Link>
 

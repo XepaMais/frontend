@@ -56,7 +56,7 @@ function DetalheProduto() {
             <Package size={44} aria-hidden="true" />
             <h2>Xepa não encontrada</h2>
             <p>Escolha uma das xepas disponíveis na página inicial.</p>
-            <Link to="/homeU" className={base.botaoPrincipal}>
+            <Link to="/consumidor" className={base.botaoPrincipal}>
               Ver xepas
             </Link>
           </section>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import FotoPerfil from './FotoPerfil';
+import PrivacidadeConta from './PrivacidadeConta';
 import usePerfil from '@/compartilhado/hooks/usePerfil';
 import base from '@/compartilhado/estilos/conta.module.css';
 import styles from './PerfilConta.module.css';
@@ -221,6 +222,8 @@ function PerfilConta({ tipo, campos, informacoesConta }) {
           ))}
         </div>
       </section>
+
+      <PrivacidadeConta />
     </main>
   );
 }

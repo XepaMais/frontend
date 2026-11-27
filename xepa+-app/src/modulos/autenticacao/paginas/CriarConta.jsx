@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { cadastrarConsumidor } from '@/compartilhado/servicos/autenticacao';
-import AceiteTermos from '@/modulos/autenticacao/paginas/AceiteTermos';
+import AceiteTermos, { consentimentoDoFormulario } from '@/modulos/autenticacao/paginas/AceiteTermos';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
 function CriarConta() {
@@ -16,10 +16,11 @@ function CriarConta() {
     const formulario = new FormData(evento.currentTarget);
     const dados = Object.fromEntries(['nome', 'cpf', 'telefone', 'email', 'senha']
       .map((campo) => [campo, formulario.get(campo)]));
+    Object.assign(dados, consentimentoDoFormulario(formulario));
 
     try {
       await cadastrarConsumidor(dados);
-      navigate('/Crumb', { state: { mensagem: 'Conta criada. Entre com seu email e senha.' } });
+      navigate('/entrar', { state: { mensagem: 'Conta criada. Entre com seu email e senha.' } });
     } catch (erroApi) {
       setErro(erroApi.message);
     } finally {
@@ -74,7 +75,7 @@ function CriarConta() {
           {erro && <p role="alert">{erro}</p>}
 
           <p className={Styles.cadastro}>
-            Já tem conta? <Link to="/Crumb">Entrar</Link>
+            Já tem conta? <Link to="/entrar">Entrar</Link>
           </p>
         </form>
       </section>

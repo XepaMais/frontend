@@ -7,10 +7,13 @@ import { rotasAutenticacao } from './aplicacao/rotas/rotas-autenticacao';
 import { rotasFeirante } from './aplicacao/rotas/rotas-feirante';
 import { rotasUsuario } from './aplicacao/rotas/rotas-usuario';
 import { rotasAdmin } from './aplicacao/rotas/rotas-admin';
+import { rotasAntigas } from './aplicacao/rotas/rotas-antigas';
 
 import Footer from './components/footer/footer';
 import UserWay from './components/UserWay';
 import RolarParaTopo from './compartilhado/componentes/RolarParaTopo';
+import TituloDaPagina from './compartilhado/componentes/TituloDaPagina';
+import PularParaConteudo from './compartilhado/componentes/PularParaConteudo';
 
 import HeaderHomeGlobal from './modulos/publico/componentes/navegacao/HeaderHomeGlobal';
 import NavbarFeiranteGlobal from './modulos/feirante/componentes/navegacao/NavbarFeiranteGlobal';
@@ -22,7 +25,7 @@ function Layout() {
 
   // Login vencido (ou de antes do token): leva para a tela de entrar.
   useEffect(() => {
-    const irParaLogin = () => navegar('/Crumb', { replace: true });
+    const irParaLogin = () => navegar('/entrar', { replace: true });
     window.addEventListener(EVENTO_SESSAO_EXPIRADA, irParaLogin);
     return () => window.removeEventListener(EVENTO_SESSAO_EXPIRADA, irParaLogin);
   }, [navegar]);
@@ -34,12 +37,14 @@ function Layout() {
 
   return (
     <div className="app">
+      <PularParaConteudo />
       <UserWay />
 
       <HeaderHomeGlobal />
       <NavbarFeiranteGlobal />
       <NavbarUsuarioGlobal />
       <Routes>
+        {rotasAntigas}
         {rotasAutenticacao}
         {rotasFeirante}
         {rotasUsuario}
@@ -55,6 +60,7 @@ function App() {
   return (
     <BrowserRouter>
       <RolarParaTopo />
+      <TituloDaPagina />
       <Layout />
     </BrowserRouter>
   );

@@ -10,11 +10,11 @@ function EscolherPerfil() {
 
       <section className={Styles.ladoForm}>
         <div className={Styles.form}>
-          <BotaoVoltar destino="/Crumb" />
+          <BotaoVoltar destino="/entrar" />
 
           <h1>Como deseja entrar?</h1>
 
-          <button type="button" className={Styles.opcao} onClick={() => navigate('/CriarUsuarioF')}>
+          <button type="button" className={Styles.opcao} onClick={() => navigate('/cadastro/feirante')}>
             <span className={Styles.icone}>
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                 <path d="M0 0h24v24H0z" fill="none" />
@@ -64,7 +64,7 @@ function EscolherPerfil() {
             <span>Sou feirante</span>
           </button>
 
-          <button type="button" className={Styles.opcao} onClick={() => navigate('/CriarConta')}>
+          <button type="button" className={Styles.opcao} onClick={() => navigate('/cadastro/consumidor')}>
             <span className={Styles.icone}>
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                 <path d="M0 0h24v24H0z" fill="none" />

@@ -86,7 +86,7 @@ function PerfilFeirante({ xepa }) {
   async function falarComFeirante() {
     try {
       const id = await abrirConversaDaXepa(xepa);
-      navegar('/HistoricoChatUsuario', { state: { conversa: id } });
+      navegar('/consumidor/conversas', { state: { conversa: id } });
     } catch (falha) {
       window.alert(falha.message);
     }

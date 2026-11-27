@@ -66,7 +66,7 @@ function Demo() {
         classeJanela={Styles.janelaDemo}
         titulo="Demonstração do Xepa+"
         descricao="Escolha um perfil para conhecer a plataforma. Cada plano de feirante libera recursos diferentes."
-        aoFechar={() => navigate('/Crumb')}
+        aoFechar={() => navigate('/entrar')}
       >
         <div className={Styles.lista}>
           {PERFIS.map((perfil) => (

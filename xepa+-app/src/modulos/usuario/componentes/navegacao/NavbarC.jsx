@@ -9,11 +9,11 @@ import styles from './navbarC.module.css';
 import logo from '@/assets/imagens/marca/logo.png';
 
 const links = [
-  { texto: 'Home', destino: '/homeU' },
+  { texto: 'Home', destino: '/consumidor' },
   { texto: 'Mapa', destino: '/mapa' },
   { texto: 'Seu Impacto', destino: '/impacto' },
   { texto: 'Receita', destino: '/cozinha' },
-  { texto: 'Chat', destino: '/HistoricoChatUsuario' },
+  { texto: 'Chat', destino: '/consumidor/conversas' },
 ];
 
 const itensConta = [
@@ -41,7 +41,7 @@ function NavbarC() {
 
   return (
     <header className={styles.navbar}>
-      <Link to="/homeU" className={styles.logo} aria-label="Home do usuário" onClick={fecharMenu}>
+      <Link to="/consumidor" className={styles.logo} aria-label="Home do usuário" onClick={fecharMenu}>
         <img src={logo} alt="Logo Xepa+" className={styles.iconeLogo} />
       </Link>
 
