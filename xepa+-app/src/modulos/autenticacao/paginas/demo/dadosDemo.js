@@ -3,28 +3,29 @@
 //   Brasilândia e Pirituba (endereços reais, cadastro do feirante inventado);
 // - xepas à venda e esgotadas, pedidos, conversas, rendas, despesas e saques;
 // - um consumidor que já comprou dos três feirantes.
+// As fotos ficam em public/imagens/xepas (endereço fixo, também usado pelo seed do banco).
 // As datas são relativas a hoje, para o financeiro sempre ter "hoje", "semana" e "mês" preenchidos.
 // Entrar de novo na demonstração recomeça tudo do zero.
 import { PLANOS } from '@/compartilhado/dados/planos';
 import { dataEmTexto } from '@/compartilhado/servicos/datas';
-import legumesFeira from '@/assets/imagens/xepas-demo/legumesFeira.jpg';
-import tomateCebola from '@/assets/imagens/xepas-demo/tomateCebola.jpg';
-import bananas from '@/assets/imagens/xepas-demo/bananas.jpg';
-import coentro from '@/assets/imagens/xepas-demo/coentro.jpg';
-import legumesSortidos from '@/assets/imagens/xepas-demo/legumesSortidos.jpg';
-import alface from '@/assets/imagens/xepas-demo/alface.jpg';
-import abobora from '@/assets/imagens/xepas-demo/abobora.jpg';
-import morangos from '@/assets/imagens/xepas-demo/morangos.jpg';
-import manjericao from '@/assets/imagens/xepas-demo/manjericao.jpg';
-import brocolisCouveFlor from '@/assets/imagens/xepas-demo/brocolisCouveFlor.jpg';
-import frutasTropicais from '@/assets/imagens/xepas-demo/frutasTropicais.jpg';
-import cestaLegumes from '@/assets/imagens/xepas-demo/cestaLegumes.jpg';
-import tomates from '@/assets/imagens/xepas-demo/tomates.jpg';
-import alfaceCrespa from '@/assets/imagens/xepas-demo/alfaceCrespa.jpg';
-import gengibre from '@/assets/imagens/xepas-demo/gengibre.jpg';
+const legumesFeira = '/imagens/xepas/legumesFeira.jpg';
+const tomateCebola = '/imagens/xepas/tomateCebola.jpg';
+const bananas = '/imagens/xepas/bananas.jpg';
+const coentro = '/imagens/xepas/coentro.jpg';
+const legumesSortidos = '/imagens/xepas/legumesSortidos.jpg';
+const alface = '/imagens/xepas/alface.jpg';
+const abobora = '/imagens/xepas/abobora.jpg';
+const morangos = '/imagens/xepas/morangos.jpg';
+const manjericao = '/imagens/xepas/manjericao.jpg';
+const brocolisCouveFlor = '/imagens/xepas/brocolisCouveFlor.jpg';
+const frutasTropicais = '/imagens/xepas/frutasTropicais.jpg';
+const cestaLegumes = '/imagens/xepas/cestaLegumes.jpg';
+const tomates = '/imagens/xepas/tomates.jpg';
+const alfaceCrespa = '/imagens/xepas/alfaceCrespa.jpg';
+const gengibre = '/imagens/xepas/gengibre.jpg';
 
 // ---------- Fotos das xepas ----------
-// Fotos reais do Wikimedia Commons (licenças livres), salvas em src/assets/imagens/xepas-demo.
+// Fotos reais do Wikimedia Commons (licenças livres), salvas em public/imagens/xepas.
 // Créditos:
 // - legumesFeira.jpg: Legumes e verduras da Feira Livre de Jacobina (CC BY-SA 4.0)
 // - tomateCebola.jpg: Tomatoes and Onions at a Farmers Market (CC0)
