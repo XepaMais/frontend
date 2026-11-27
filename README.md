@@ -19,8 +19,9 @@
 Este repositório guarda o **front-end** do Xepa+: o site que consumidores e feirantes usam no navegador, **sem instalar nada**, no celular, tablet ou computador. Ele é feito em **React** com **Vite** e publicado na **Vercel**.
 
 **Onde ficam os dados:**
-- Todos os dados de quem tem conta ficam na **[API do Xepa+](https://github.com/XepaMais/backend)**, guardados em MySQL: perfil, carrinho, pedidos, xepas, feiras, financeiro, conversas e fotos. A pessoa encontra tudo ao entrar de qualquer aparelho.
-- O navegador guarda só o login da aba (`sessionStorage`) e os dados do [modo demonstração](#modo-demonstração) (`localStorage`). A demonstração funciona sem criar conta.
+- Todos os dados de quem tem conta ficam na **[API do Xepa+](https://github.com/XepaMais/backend)**, que roda na **AWS** e guarda tudo em MySQL: perfil, carrinho, pedidos, xepas, feiras, financeiro, conversas e fotos. A pessoa encontra tudo ao entrar de qualquer aparelho.
+- O navegador guarda só o login da aba (`sessionStorage`).
+- Os dados do [modo demonstração](#modo-demonstração) ficam no próprio navegador (`localStorage`), então a demonstração funciona sem criar conta.
 
 ### Tecnologias
 
@@ -127,8 +128,7 @@ Cada plano de feirante libera recursos diferentes, como a Xepinha e a gestão fi
 - **Sem conexão:** a pessoa vê "Sem conexão com o servidor. Verifique sua internet e tente de novo.", e o site não quebra.
 - **Sessão expirada (`401`):** o site sai da conta sozinho e leva para `/entrar`.
 - **Endereço da API:**
-  - em produção, o site chama `/api`, e a Vercel repassa por HTTPS para `https://api.xepamais.com.br` ([`vercel.json`](xepa+-app/vercel.json));
-  - em desenvolvimento, quem repassa é o proxy do Vite ([`vite.config.js`](xepa+-app/vite.config.js)).
+  - o site chama `/api`, e a Vercel repassa por HTTPS para a API na AWS, em `https://api.xepamais.com.br` ([`vercel.json`](xepa+-app/vercel.json)).
 
 ## Acessibilidade
 
