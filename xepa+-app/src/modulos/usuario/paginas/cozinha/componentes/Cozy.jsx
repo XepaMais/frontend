@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { CakeSlice, Clock3, GlassWater, Grid2X2, Leaf, Salad, Soup } from 'lucide-react';
 import ScrollReveal from 'scrollreveal';
 import videoCozinha from '@/assets/videos/cozinha-hero.mp4';
 import Style from '@/modulos/usuario/paginas/cozinha/estilos/Cozy.module.css';
-import imagemTalos from '@/assets/imagens/gerais/imagem-talos.jpg';
-import imagemRefogados from '@/assets/imagens/gerais/imagem-refogados.jpg';
-import imagemVitamina from '@/assets/imagens/gerais/imagem-vitamina.jpg';
-import imagemBolo from '@/assets/imagens/gerais/imagem-bolo.jpg';
-import imagemSaladaF from '@/assets/imagens/gerais/imagem-saladaF.jpg';
-import imagemTomates from '@/assets/imagens/gerais/imagem-tomates.jpg';
-import imagemSopaV from '@/assets/imagens/gerais/imagem-sopaV.jpg';
-import imagemSopaC from '@/assets/imagens/gerais/imagem-sopaC.jpg';
-import imagemSaladaC from '@/assets/imagens/gerais/imagem-saladaC.jpg';
-import imagemMorangos from '@/assets/imagens/gerais/morangos.png';
+import HeroVitrine from '@/modulos/usuario/paginas/cozinha/componentes/HeroVitrine';
+import { buscarReceitas, caminhoDaReceita, RECEITAS_PADRAO } from '@/modulos/usuario/paginas/cozinha/dados/receitas';
+
+// true = novo topo "vitrine" (potes flutuando + destaque + vídeo). false = topo antigo.
+const USAR_TOPO_VITRINE = true;
 
 const categorias = ['Todas', 'Saladas', 'Sopas', 'Doces', 'Sucos', 'Aproveitamento integral', 'Rápidas'];
+
+// Quantas receitas aparecem antes de clicar em "Ver mais receitas".
+const RECEITAS_POR_VEZ = 8;
 
 const iconesCategoria = {
   Todas: Grid2X2,
@@ -25,18 +24,6 @@ const iconesCategoria = {
   'Aproveitamento integral': Leaf,
   Rápidas: Clock3,
 };
-
-const receitas = [
-  { nome: 'Salada ceaser', categoria: 'Saladas', tempo: '15 min', dificuldade: 'Fácil', ingredientes: ['tomate', 'cenoura', 'alface'], imagem: imagemSaladaC },
-  { nome: 'Caldo verde', categoria: 'Sopas', tempo: '35 min', dificuldade: 'Fácil', ingredientes: ['couve', 'batata', 'cebola'], imagem: imagemSopaV },
-  { nome: 'Bolo de banana ', categoria: 'Doces', tempo: '45 min', dificuldade: 'Média', ingredientes: ['banana', 'aveia', 'canela'], imagem: imagemBolo},
-  { nome: 'Talos salteados com alho', categoria: 'Aproveitamento integral', tempo: '20 min', dificuldade: 'Fácil', ingredientes: ['couve', 'alho', 'cenoura'], imagem: imagemTalos,},
-  { nome: 'Tomates recheados', categoria: 'Rápidas', tempo: '25 min', dificuldade: 'Média', ingredientes: ['tomate', 'arroz', 'queijo'], imagem: imagemTomates },
-  { nome: 'Creme de cenoura', categoria: 'Sopas', tempo: '30 min', dificuldade: 'Fácil', ingredientes: ['cenoura', 'batata', 'gengibre'],imagem: imagemSopaC },
-  { nome: 'Salada de frutas da estação', categoria: 'Doces', tempo: '12 min', dificuldade: 'Fácil', ingredientes: ['banana', 'mamão', 'laranja'], imagem: imagemSaladaF},
-  { nome: 'Refogado colorido', categoria: 'Aproveitamento integral', tempo: '18 min', dificuldade: 'Fácil', ingredientes: ['cenoura', 'couve', 'cebola'], imagem: imagemRefogados},
-  { nome: 'Vitamina de banana e mamão', categoria: 'Sucos', tempo: '5 min', dificuldade: 'Fácil', ingredientes: ['banana', 'mamão', 'leite'], imagem: imagemVitamina },
-];
 
 // Deixa o texto minúsculo para comparar sem se preocupar com maiúsculas
 const normalizar = (texto) => texto.trim().toLocaleLowerCase('pt-BR');
@@ -163,14 +150,16 @@ function IngredientPicker({ ingredientes, setIngredientes }) {
           <button type="submit">Adicionar</button>
         </form>
 
-        <div className={Style.chips} aria-label="Ingredientes escolhidos">
-          {ingredientes.map((item) => (
-            <button type="button" key={item} className={Style.chip} onClick={() => remover(item)}>
-              {item}
-              <span aria-label={`Remover ${item}`}>×</span>
-            </button>
-          ))}
-        </div>
+        {ingredientes.length > 0 && (
+          <div className={Style.chips} aria-label="Ingredientes escolhidos">
+            {ingredientes.map((item) => (
+              <button type="button" key={item} className={Style.chip} onClick={() => remover(item)}>
+                {item}
+                <span aria-label={`Remover ${item}`}>×</span>
+              </button>
+            ))}
+          </div>
+        )}
 
         <button className={Style.match} type="button" onClick={irParaReceitas}>
           Ver receitas possíveis <span>→</span>
@@ -181,31 +170,31 @@ function IngredientPicker({ ingredientes, setIngredientes }) {
 }
 
 function RecipeCard({ receita }) {
+  const { pathname } = useLocation();
+
   return (
     <article className={Style.card}>
-      <div
-        className={`${Style.cardImage} ${receita.imagem ? Style.cardImageWithImage : ''}`}
-        style={{ backgroundColor: receita.cor }}
-      >
-        {receita.imagem ? (
-          <img src={receita.imagem} alt={receita.nome} />
-        ) : (
-          <span aria-hidden="true">{receita.emoji}</span>
-        )}
-      </div>
-
-      <div className={Style.cardBody}>
-        <span className={Style.tag}>{receita.categoria}</span>
-        <h3>{receita.nome}</h3>
-
-        <div className={Style.meta}>
-          <span>◷ {receita.tempo}</span>
-          <span>·</span>
-          <span>{receita.dificuldade}</span>
+      <Link to={caminhoDaReceita(pathname, receita.codigo)} className={Style.cardLink}>
+        <div className={Style.cardImage}>
+          {receita.imagem ? <img src={receita.imagem} alt="" /> : <span aria-hidden="true">🥗</span>}
         </div>
 
-        <div className={Style.ingredients}>{receita.ingredientes.join(' · ')}</div>
-      </div>
+        <div className={Style.cardBody}>
+          <span className={Style.tag}>{receita.categoria}</span>
+          <h3>{receita.nome}</h3>
+
+          <div className={Style.meta}>
+            <span>◷ {receita.tempo}</span>
+            <span aria-hidden="true">·</span>
+            <span>{receita.dificuldade}</span>
+          </div>
+
+          <div className={Style.ingredients}>{receita.ingredientes.join(' · ')}</div>
+          <span className={Style.verReceita}>
+            Ver receita <span aria-hidden="true">→</span>
+          </span>
+        </div>
+      </Link>
     </article>
   );
 }
@@ -225,7 +214,7 @@ function RecipeGrid({ lista }) {
   return (
     <div className={Style.grid}>
       {lista.map((receita) => (
-        <RecipeCard key={receita.nome} receita={receita} />
+        <RecipeCard key={receita.codigo || receita.nome} receita={receita} />
       ))}
     </div>
   );
@@ -235,7 +224,31 @@ function RecipeGrid({ lista }) {
 
 export default function Cozy() {
   const [categoria, setCategoria] = useState('Todas');
-  const [ingredientes, setIngredientes] = useState(['tomate', 'banana', 'cenoura', 'couve']);
+  const [ingredientes, setIngredientes] = useState([]);
+  const [receitas, setReceitas] = useState(RECEITAS_PADRAO);
+  const [quantidadeVisivel, setQuantidadeVisivel] = useState(RECEITAS_POR_VEZ);
+
+  // Receitas cadastradas no banco (novas receitas aparecem sem mudar o site).
+  useEffect(() => {
+    let ativo = true;
+    buscarReceitas().then((lista) => {
+      if (ativo) setReceitas(lista);
+    });
+    return () => {
+      ativo = false;
+    };
+  }, []);
+
+  // Trocou o filtro: volta a mostrar só a primeira leva.
+  function trocarCategoria(nova) {
+    setCategoria(nova);
+    setQuantidadeVisivel(RECEITAS_POR_VEZ);
+  }
+
+  function trocarIngredientes(novos) {
+    setIngredientes(novos);
+    setQuantidadeVisivel(RECEITAS_POR_VEZ);
+  }
 
   // Só ficam as receitas que passam nos filtros de categoria e ingredientes
   const receitasFiltradas = receitas.filter(
@@ -243,15 +256,17 @@ export default function Cozy() {
       bateComCategoria(receita, categoria) &&
       bateComIngredientes(receita, ingredientes)
   );
+  const receitasVisiveis = receitasFiltradas.slice(0, quantidadeVisivel);
+  const temMais = receitasFiltradas.length > quantidadeVisivel;
 
   return (
     <div className={Style.page}>
-      <Hero />
+      {USAR_TOPO_VITRINE ? <HeroVitrine receitas={receitas} /> : <Hero />}
 
       <main>
         <section className={Style.recipes} id="receitas">
-          <CategoryFilters categoriaAtual={categoria} setCategoria={setCategoria} />
-          <IngredientPicker ingredientes={ingredientes} setIngredientes={setIngredientes} />
+          <CategoryFilters categoriaAtual={categoria} setCategoria={trocarCategoria} />
+          <IngredientPicker ingredientes={ingredientes} setIngredientes={trocarIngredientes} />
 
           <div className={Style.sectionHeading}>
             <div>
@@ -259,14 +274,22 @@ export default function Cozy() {
               <h2>Receitas para aproveitar</h2>
               <p>Pratos simples, ingredientes frescos e sem desperdício.</p>
             </div>
-            <span className={Style.count}>{receitasFiltradas.length} receitas</span>
+            <span className={Style.count}>
+              {receitasFiltradas.length} {receitasFiltradas.length === 1 ? 'receita' : 'receitas'}
+            </span>
           </div>
 
-          <RecipeGrid lista={receitasFiltradas} />
+          <RecipeGrid lista={receitasVisiveis} />
 
-          <button className={Style.more} type="button">
-            Ver mais receitas <span>→</span>
-          </button>
+          {temMais && (
+            <button
+              className={Style.more}
+              type="button"
+              onClick={() => setQuantidadeVisivel((atual) => atual + RECEITAS_POR_VEZ)}
+            >
+              Ver mais receitas <span>→</span>
+            </button>
+          )}
         </section>
       </main>
     </div>

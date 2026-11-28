@@ -6,7 +6,8 @@ function HeaderHomeGlobal() {
 
   const caminhosHome = ['/mapa-home', '/cozinha-home'];
 
-  if (!caminhosHome.includes(pathname)) {
+  // Páginas de uma receita (/cozinha-home/bolo-banana) também mostram o cabeçalho do site.
+  if (!caminhosHome.includes(pathname) && !pathname.startsWith('/cozinha-home/')) {
     return null;
   }
 

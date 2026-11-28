@@ -1,0 +1,500 @@
+/* Página de uma receita: usa as cores, fontes e medidas de aplicacao.css */
+
+.pagina {
+  width: 100%;
+  max-width: var(--largura-pagina);
+  min-height: 70vh;
+  margin: 0 auto;
+  padding: var(--espaco-topo) var(--margem-lateral) var(--espaco-base);
+  color: var(--verde);
+}
+
+.pagina a {
+  text-decoration: none;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #eef5d6;
+  color: #3d5a00;
+  font-size: var(--fonte-legenda);
+  font-weight: 600;
+}
+
+/* ---------- Trilha (Receitas / Categoria / Nome) ---------- */
+
+.trilha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: var(--cinza);
+  font-size: var(--fonte-pequena);
+}
+
+.voltar {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  gap: 6px;
+  color: var(--verde);
+  font-weight: 600;
+}
+
+.voltar:hover {
+  color: var(--laranja);
+}
+
+.trilha [aria-current='page'] {
+  color: var(--verde);
+  font-weight: 500;
+}
+
+/* ---------- Topo: foto + resumo ---------- */
+
+.topo {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: var(--espaco-base);
+}
+
+.foto {
+  position: relative;
+  display: grid;
+  aspect-ratio: 4 / 3;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--raio-card);
+  background: var(--cinza-claro);
+}
+
+.foto img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.foto > span {
+  font-size: 96px;
+}
+
+.resumo h1 {
+  margin: 12px 0;
+  color: var(--verde);
+  font-size: var(--fonte-titulo-pagina);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.descricao {
+  margin: 0 0 24px;
+  color: var(--cinza);
+  font-size: var(--fonte-texto);
+  line-height: 1.6;
+}
+
+.infos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 0 24px;
+  border: var(--borda-card);
+  border-radius: var(--raio-card);
+  background: var(--branco);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 8px;
+  text-align: center;
+}
+
+.info + .info {
+  border-left: 1px solid var(--cinza-claro);
+}
+
+.info svg {
+  color: var(--laranja);
+}
+
+.info dt {
+  color: var(--cinza);
+  font-size: var(--fonte-legenda);
+}
+
+.info dd {
+  margin: 0;
+  color: var(--verde);
+  font-size: var(--fonte-texto);
+  font-weight: 700;
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.botaoPrincipal,
+.botaoSecundario {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--raio-botao);
+  font-size: var(--fonte-pequena);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botaoPrincipal {
+  border: 0;
+  background: var(--verde);
+  color: var(--branco) !important;
+}
+
+.botaoPrincipal:hover {
+  background: #287447;
+}
+
+.botaoSecundario {
+  border: 1.5px solid var(--verde);
+  background: var(--branco);
+  color: var(--verde);
+}
+
+.botaoSecundario:hover {
+  background: #eaf2ec;
+}
+
+.aviso {
+  color: var(--verde);
+  font-size: var(--fonte-pequena);
+  font-weight: 600;
+}
+
+/* ---------- Ingredientes + modo de preparo ---------- */
+
+.conteudo {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) 1.4fr;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: var(--espaco-base);
+}
+
+.conteudo h2,
+.relacionadas h2 {
+  margin: 0 0 20px;
+  color: var(--verde);
+  font-size: var(--fonte-titulo-secao);
+  font-weight: 700;
+}
+
+.ingredientes {
+  position: sticky;
+  top: 24px;
+  padding: 24px;
+  border-radius: var(--raio-card);
+  background: #f3f8ef;
+}
+
+.grupo + .grupo {
+  margin-top: 20px;
+}
+
+.grupo h3 {
+  margin: 0 0 8px;
+  color: var(--laranja);
+  font-size: var(--fonte-pequena);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.ingredientes ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ingredientes li + li {
+  border-top: 1px dashed var(--verde-suave);
+}
+
+.ingredientes label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  color: var(--preto);
+  font-size: var(--fonte-texto);
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.ingredientes input {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  accent-color: var(--verde);
+  cursor: pointer;
+}
+
+.ingredientes .marcado span {
+  color: var(--cinza);
+  text-decoration: line-through;
+}
+
+.preparo ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.preparo li {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.preparo li + li {
+  border-top: 1px solid var(--cinza-claro);
+}
+
+.numero {
+  display: grid;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--laranja);
+  color: var(--branco);
+  font-size: var(--fonte-texto);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.preparo li p {
+  margin: 8px 0 0;
+  color: var(--preto);
+  font-size: var(--fonte-texto);
+  line-height: 1.65;
+}
+
+.preparo .feito .numero {
+  background: var(--verde);
+}
+
+.preparo .feito p {
+  color: var(--cinza);
+}
+
+.dica {
+  display: flex;
+  gap: 14px;
+  margin-top: 24px;
+  padding: 18px 20px;
+  border-left: 4px solid var(--amarelo);
+  border-radius: var(--raio-botao);
+  background: #fff8e0;
+}
+
+.dica svg {
+  flex-shrink: 0;
+  color: #b88a00;
+}
+
+.dica strong {
+  color: var(--verde);
+  font-size: var(--fonte-pequena);
+}
+
+.dica p {
+  margin: 4px 0 0;
+  color: var(--preto);
+  font-size: var(--fonte-pequena);
+  line-height: 1.55;
+}
+
+.vazio {
+  color: var(--cinza);
+  font-size: var(--fonte-pequena);
+}
+
+/* ---------- Receitas relacionadas ---------- */
+
+.relacionadas {
+  padding-top: var(--espaco-secao);
+  border-top: 1px solid var(--cinza-claro);
+}
+
+.gradeRelacionadas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.cardRelacionada {
+  overflow: hidden;
+  border: var(--borda-card);
+  border-radius: var(--raio-card);
+  background: var(--branco);
+  color: var(--verde);
+  transition: box-shadow 0.2s ease;
+}
+
+.cardRelacionada:hover {
+  box-shadow: var(--sombra-suave);
+}
+
+.fotoRelacionada {
+  position: relative;
+  height: 150px;
+  background: var(--cinza-claro);
+}
+
+.fotoRelacionada img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.textoRelacionada {
+  padding: 14px;
+}
+
+.textoRelacionada h3 {
+  margin: 8px 0 4px;
+  font-size: var(--fonte-texto);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.metaRelacionada {
+  color: var(--cinza);
+  font-size: var(--fonte-legenda);
+}
+
+/* ---------- Receita não encontrada ---------- */
+
+.naoEncontrada {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 64px 16px;
+  text-align: center;
+}
+
+.naoEncontrada h1 {
+  margin: 0;
+  font-size: var(--fonte-titulo-pagina);
+}
+
+.naoEncontrada p {
+  margin: 0 0 12px;
+  color: var(--cinza);
+}
+
+.voltar:focus-visible,
+.botaoPrincipal:focus-visible,
+.botaoSecundario:focus-visible,
+.numero:focus-visible,
+.cardRelacionada:focus-visible,
+.ingredientes input:focus-visible {
+  outline: 2px solid var(--limao);
+  outline-offset: 2px;
+}
+
+/* ---------- Tablets ---------- */
+
+@media (max-width: 900px) {
+  .topo,
+  .conteudo {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .ingredientes {
+    position: static;
+  }
+
+  .gradeRelacionadas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Celulares ---------- */
+
+@media (max-width: 650px) {
+  .infos {
+    grid-template-columns: 1fr;
+  }
+
+  .info {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px 16px;
+  }
+
+  .info + .info {
+    border-top: 1px solid var(--cinza-claro);
+    border-left: 0;
+  }
+
+  .info dt {
+    flex: 1;
+    text-align: left;
+  }
+
+  .ingredientes {
+    padding: 20px 16px;
+  }
+
+  .gradeRelacionadas {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Impressão: só a receita ---------- */
+
+@media print {
+  .trilha,
+  .acoes,
+  .relacionadas {
+    display: none;
+  }
+
+  .topo,
+  .conteudo {
+    grid-template-columns: 1fr;
+  }
+
+  .ingredientes {
+    position: static;
+    background: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardRelacionada {
+    transition: none;
+  }
+}
