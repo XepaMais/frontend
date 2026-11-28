@@ -6,6 +6,7 @@ import DetalheProduto from '@/modulos/usuario/paginas/detalhe-produto/DetalhePro
 
 import { Impacto } from '@/modulos/usuario/paginas/impacto/ImpactoU';
 import Cozinha from '@/modulos/usuario/paginas/cozinha/componentes/Cozy';
+import DetalheReceita from '@/modulos/usuario/paginas/cozinha/componentes/DetalheReceita';
 import Pagamento from '@/modulos/usuario/paginas/pagamento/pagamento/pagamento';
 import { Carrinho } from '@/modulos/usuario/paginas/carrinho/componentes/carrinho';
 import Perfil from '@/modulos/usuario/paginas/perfil/Perfil';
@@ -21,6 +22,8 @@ export const rotasUsuario = [
 
   <Route key="receitas-usuario" path="/cozinha" element={<Cozinha />} />,
   <Route key="receitas-home" path="/cozinha-home" element={<Cozinha />} />,
+  <Route key="receita-usuario" path="/cozinha/:codigo" element={<DetalheReceita />} />,
+  <Route key="receita-home" path="/cozinha-home/:codigo" element={<DetalheReceita />} />,
 
   <Route key="detalhe-produto" path="/xepa" element={<DetalheProduto />} />,
 
