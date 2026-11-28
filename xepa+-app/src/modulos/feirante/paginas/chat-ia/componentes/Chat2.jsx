@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { MessageCircle, Plus } from 'lucide-react';
 import Styles from '@/modulos/feirante/paginas/historico-chat/estilos/ChatHist.module.css';
 import Xepinha from '@/modulos/feirante/paginas/chat-ia/estilos/chatIA.module.css';
@@ -8,89 +7,17 @@ import TextoXepinha from '@/modulos/feirante/paginas/chat-ia/componentes/TextoXe
 import {
   horarioCurto,
   horarioMensagem,
-} from '@/modulos/feirante/paginas/historico-chat/componentes/ItemConversa';
+} from '@/modulos/feirante/paginas/historico-chat/componentes/horariosConversa';
 import {
-  adicionarMensagemXepinha,
   carregarConversasXepinha,
-  criarConversaXepinha,
+  EVENTO_XEPINHA,
+  perguntarXepinha,
+  sincronizarConversasXepinha,
 } from '@/modulos/feirante/servicos/conversasXepinha';
 import IA from '@/assets/imagens/usuario/ia.png';
-import baseConhecimento from '@/modulos/feirante/paginas/chat-ia/xepa-base-conhecimento.md?raw';
 
-// Lê a chave do .env do Vite
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey);
-
-const persona = `## PERSONA E PAPEL
-Você é a Xepinha, assistente virtual oficial da plataforma Xepa+.
-Você conversa com feirantes assinantes dos planos Broto ou Colheita.
-Seu papel é orientá-los de forma prática no uso da plataforma, na gestão do negócio e no combate ao desperdício, com ênfase na gestão financeira.
-
-## TOM DE VOZ
-- Amigável, prático, acolhedor e direto.
-- Use linguagem simples e acessível, adequada ao dia a dia da feira.
-- Mantenha respostas curtas e objetivas.
-
-## ESCOPO DE ATUAÇÃO
-1. Navegação no Xepa+: recursos, funcionalidades e erros no aplicativo.
-2. Dia a dia da feira: organização da banca, ofertas e combate ao desperdício.
-3. Gestão financeira: vendas, compras, receitas, despesas, precificação, taxas e lucro.
-
-## REGRAS E RESTRIÇÕES
-- Fonte única: sobre o Xepa+, responda somente com base na BASE DE CONHECIMENTO abaixo. Nunca invente telas, botões, valores ou regras. Se a informação não estiver lá, diga que não sabe e indique o suporte.
-- Respostas diretas: responda exatamente ao que foi perguntado, sem sugestões extras.
-- Perguntas: só faça uma pergunta quando for indispensável para responder corretamente.
-- Fora de escopo: se o assunto não for feira, Xepa+ ou sustentabilidade alimentar, redirecione gentilmente para esses temas.
-
-## FORMATAÇÃO DAS RESPOSTAS
-- Texto puro: não use Markdown (sem **negrito**, # títulos, tabelas ou listas com *).
-- Passo a passo: para dúvidas sobre o sistema ou finanças, use passos curtos numerados, CADA PASSO EM UMA LINHA SEPARADA:
-1. Primeiro passo
-2. Segundo passo
-- Tópicos sem ordem: cada tópico em uma linha separada, começando com "- ".
-- Nunca coloque vários passos ou tópicos na mesma linha.
-- Respostas longas: divida em parágrafos curtos de 1 a 3 frases, separados por uma linha em branco.
-- Se usar uma frase de introdução antes de uma lista, deixe-a em uma linha própria, antes da lista.`;
-
-const systemInstruction = `${persona}
-
-## BASE DE CONHECIMENTO
-${baseConhecimento}`;
-
-// Modelo principal primeiro, reserva depois
-const MODELOS = ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'];
-const TENTATIVAS_POR_MODELO = 3;
-
-const esperar = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-// Tenta de novo em 503/429 e, se continuar, usa o modelo reserva.
-async function gerarResposta(history, textoUsuario) {
-  let ultimoErro;
-
-  for (const nome of MODELOS) {
-    const model = genAI.getGenerativeModel({ model: nome, systemInstruction });
-
-    for (let tentativa = 1; tentativa <= TENTATIVAS_POR_MODELO; tentativa++) {
-      try {
-        const chat = model.startChat({ history });
-        const result = await chat.sendMessage(textoUsuario);
-        return result.response.text();
-      } catch (erro) {
-        ultimoErro = erro;
-        const temporario = erro?.status === 503 || erro?.status === 429;
-        if (!temporario) throw erro; // erro de verdade (chave, requisição): não adianta repetir
-
-        console.warn(`${nome} indisponível (tentativa ${tentativa}/${TENTATIVAS_POR_MODELO})`);
-        if (tentativa < TENTATIVAS_POR_MODELO) {
-          await esperar(1000 * 2 ** (tentativa - 1)); // espera 1s, depois 2s
-        }
-      }
-    }
-  }
-
-  throw ultimoErro;
-}
-
+// A persona, a base de conhecimento e a chave do Gemini ficam no backend
+// (resources/xepinha e GEMINI_API_KEY): o navegador só manda a pergunta.
 
 const SAUDACAO = 'Olá! Eu sou a Xepinha, sua assistente no Xepa+. Como posso te ajudar hoje?';
 
@@ -121,9 +48,13 @@ function Chat2() {
     if (area) area.scrollTop = area.scrollHeight;
   }, [conversaAtiva, mensagens.length, carregando]);
 
-  function recarregar() {
-    setConversas(carregarConversasXepinha());
-  }
+  // Feirante logado: traz da API as conversas (feitas em qualquer aparelho).
+  useEffect(() => {
+    const atualizar = () => setConversas(carregarConversasXepinha());
+    window.addEventListener(EVENTO_XEPINHA, atualizar);
+    sincronizarConversasXepinha();
+    return () => window.removeEventListener(EVENTO_XEPINHA, atualizar);
+  }, []);
 
   function abrirConversa(id) {
     setConversaAtiva(id);
@@ -141,43 +72,20 @@ function Chat2() {
     const textoUsuario = inputTexto.trim();
     if (!textoUsuario || aguardando) return;
 
-    // O histórico do Gemini começa pelo usuário: a saudação fica de fora.
-    const history = mensagens.map((msg) => ({
-      role: msg.remetente === 'user' ? 'user' : 'model',
-      parts: [{ text: msg.texto }],
-    }));
-
-    const id = conversa?.id || criarConversaXepinha(textoUsuario);
-    adicionarMensagemXepinha(id, 'user', textoUsuario);
+    // A pergunta aparece na hora; a resposta chega pela API (erros viram uma mensagem da Xepinha).
+    const { id, resposta } = perguntarXepinha(conversa?.id ?? null, textoUsuario);
     setConversaAtiva(id);
     setInputTexto('');
     setAguardando(id);
-    recarregar();
 
-    let resposta;
-    try {
-      resposta = await gerarResposta(history, textoUsuario);
-    } catch (error) {
-      console.error('Erro na API do Gemini:', error);
-
-      const sobrecarga = error?.status === 503 || error?.status === 429;
-      resposta = sobrecarga
-        ? 'Estou com muitas conversas agora. Tente de novo em alguns segundos.'
-        : 'Ops! Tive um problema ao processar sua resposta. Tente novamente em instantes.';
-    }
-
-    adicionarMensagemXepinha(id, 'ia', resposta);
+    const idFinal = await resposta;
+    // Conversa nova ganha o id definitivo da API: continua aberta se o feirante não trocou de conversa.
+    setConversaAtiva((atual) => (atual === id ? idFinal : atual));
     setAguardando(null);
-    recarregar();
   };
 
   return (
     <main className={Styles.paginaChat}>
-      <header className={Styles.cabecalhoPagina}>
-        <h1>Xepinha</h1>
-        <p>Tire suas dúvidas sobre o Xepa+, a feira e a gestão financeira.</p>
-      </header>
-
       <section
         className={`${Styles.quadroChat} ${mobileConversaAberta ? Styles.conversaMobileAtiva : ''}`}
         aria-label="Conversas com a Xepinha"

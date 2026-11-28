@@ -10,13 +10,17 @@
 
 **Conectamos feirantes e consumidores para que o alimento da feira chegue à mesa, e não ao lixo.**
 
-![Status](https://img.shields.io/badge/status-em_desenvolvimento-FF5200?style=for-the-badge)
+**[xepamais.com.br](https://xepamais.com.br)** · [API (Swagger)](https://xepamais.com.br/api/docs) · [Back-end](https://github.com/XepaMais/backend) · [Banco de dados](https://github.com/XepaMais/database) · [Documentação](https://github.com/XepaMais/documentacao)
 
 </div>
 
 ## Sobre este repositório
 
-Este repositório guarda o **front-end** do Xepa+: o site que consumidores e feirantes usam no navegador. Ele é feito em **React** com **Vite** e funciona sozinho, sem servidor: os dados (perfil, carrinho, pedidos, produtos, feiras, finanças e conversas) ficam salvos no próprio navegador, com `localStorage`. Por isso dá para navegar por todas as telas, inclusive pelo [modo demonstração](#modo-demonstração), sem criar uma conta de verdade.
+Este repositório guarda o **front-end** do Xepa+: o site que consumidores e feirantes usam no navegador, **sem instalar nada**, no celular, tablet ou computador. Ele é feito em **React** com **Vite** e publicado na **Vercel**.
+
+**Onde ficam os dados:**
+- Todos os dados de quem tem conta ficam na **[API do Xepa+](https://github.com/XepaMais/backend)**, guardados em MySQL: perfil, carrinho, pedidos, xepas, feiras, financeiro, conversas e fotos. A pessoa encontra tudo ao entrar de qualquer aparelho.
+- O navegador guarda só o login da aba (`sessionStorage`) e os dados do [modo demonstração](#modo-demonstração) (`localStorage`). A demonstração funciona sem criar conta.
 
 ### Tecnologias
 
@@ -35,8 +39,6 @@ Este repositório guarda o **front-end** do Xepa+: o site que consumidores e fei
 | --- | --- |
 | `react-router-dom` | Navegação entre as páginas |
 | `@react-google-maps/api` e `@vis.gl/react-google-maps` | Mapa das feiras e escolha do local ao cadastrar uma feira |
-| `leaflet` e `react-leaflet` | Mapas auxiliares |
-| `@google/generative-ai` | Xepinha (Xep.AI), a assistente com IA do feirante, usando o Gemini |
 | `@google/model-viewer` | Cesta 3D da página inicial (`public/modelos/cesta-xepa.glb`) |
 | `jspdf` e `jspdf-autotable` | Exportação do histórico financeiro em PDF |
 | `lucide-react` | Ícones |
@@ -75,8 +77,8 @@ Este repositório guarda o **front-end** do Xepa+: o site que consumidores e fei
         <li>Controle financeiro de rendas e gastos, com gráficos e exportação em PDF</li>
         <li>Sacar lucros para uma chave Pix (simulação)</li>
         <li>Histórico de vendas, histórico de produtos e planilhas</li>
-        <li>Xepinha (Xep.AI): assistente com inteligência artificial para o dia a dia da barraca</li>
-        <li>Planos de assinatura (Grátis, Crescer e Pro), que liberam recursos diferentes</li>
+        <li>Xepinha (Xep.AI): assistente com inteligência artificial (Gemini, chamado pela API) para o dia a dia da barraca</li>
+        <li>Planos Semente (grátis, 15% de comissão), Broto (R$ 29,90, 8%) e Colheita (R$ 59,90, 5%), que liberam recursos diferentes</li>
       </ul>
       <img src=".github/readme/espaco.png" width="600" height="1" alt="" />
     </td>
@@ -85,8 +87,9 @@ Este repositório guarda o **front-end** do Xepa+: o site que consumidores e fei
 
 **Para todos:**
 
-- Cadastro com aceite obrigatório dos Termos de uso e das Diretrizes de Privacidade
+- Cadastro com aceite obrigatório dos Termos de uso e das Diretrizes de Privacidade, e consentimento opcional para novidades por e-mail
 - Página "Meus dados" para editar o perfil e trocar a foto, e lista de dispositivos conectados
+- **Privacidade e dados (LGPD):** ver quando os termos foram aceitos, ligar ou desligar as novidades, baixar todos os seus dados e excluir a conta
 - Páginas institucionais: Sobre nós, Xep.AI, Seja um feirante parceiro, Contato e suporte, Termos de uso e Diretrizes de Privacidade
 - Widget de acessibilidade UserWay em todas as páginas
 
@@ -96,24 +99,53 @@ Este repositório guarda o **front-end** do Xepa+: o site que consumidores e fei
 
 | Área | Rotas principais |
 | --- | --- |
-| **Público** | `/` (início), `/sobrenos`, `/xep-ai`, `/seja-parceiro`, `/suporte`, `/termos-de-uso`, `/privacidade`, `/mapa-home`, `/cozinha-home` |
-| **Login e cadastro** | `/Crumb` (entrar), `/OpcaoLogin` (escolher o perfil), `/CriarConta` (consumidor), `/CriarUsuarioF` e `/CriarContaF` (feirante), `/demo` |
-| **Consumidor** | `/homeU`, `/mapa`, `/cozinha`, `/carrinho`, `/pagamento`, `/historico-pedidos`, `/impacto`, `/chat-consumidor`, `/perfil`, `/dispositivos` |
-| **Feirante** | `/homeF`, `/adicionar-produto`, `/adicionar-feira`, `/financeiro`, `/adicionar-gasto`, `/sacar`, `/planilhas`, `/planos`, `/chat-ia` (Xepinha), `/historico-vendas`, `/historico-produtos`, `/perfil-feirante`, `/dispositivos-feirante` |
+| **Público** | `/` (início), `/sobre-nos`, `/xep-ai`, `/seja-parceiro`, `/suporte`, `/termos-de-uso`, `/privacidade`, `/mapa-home`, `/cozinha-home` |
+| **Login e cadastro** | `/entrar`, `/cadastro` (escolher o perfil), `/cadastro/consumidor`, `/cadastro/feirante` e `/cadastro/feirante/negocio`, `/demo` |
+| **Consumidor** | `/consumidor` (início), `/xepa?xepa=ID` (detalhe da oferta), `/consumidor/conversas`, `/mapa`, `/cozinha`, `/carrinho`, `/pagamento`, `/historico-pedidos`, `/impacto`, `/chat-consumidor`, `/perfil`, `/dispositivos` |
+| **Feirante** | `/feirante` (início), `/feirante/conversas`, `/adicionar-produto`, `/adicionar-feira`, `/financeiro`, `/adicionar-gasto`, `/sacar`, `/planilhas`, `/planos`, `/chat-ia` (Xepinha), `/historico-vendas`, `/historico-produtos`, `/perfil-feirante`, `/dispositivos-feirante` |
 
-As rotas ficam em [`xepa+-app/src/aplicacao/rotas`](xepa+-app/src/aplicacao/rotas), com uma lista para cada área.
+As rotas ficam em [`xepa+-app/src/aplicacao/rotas`](xepa+-app/src/aplicacao/rotas), com uma lista para cada área. Endereços antigos (`/Crumb`, `/homeF`, `/Verduras`...) redirecionam para os novos ([`rotas-antigas.jsx`](xepa+-app/src/aplicacao/rotas/rotas-antigas.jsx)); um endereço inexistente mostra a página 404. Cada página tem título próprio na aba do navegador ([`TituloDaPagina.jsx`](xepa+-app/src/compartilhado/componentes/TituloDaPagina.jsx)).
 
 ### Modo demonstração
 
 Na tela de login há o botão **"Visite nosso Demo"** (ou acesse `/demo`). Ele abre uma janela para escolher um perfil e entrar direto no site, sem cadastro:
 
 - **Consumidor**
-- **Feirante - Plano Grátis**
-- **Feirante - Plano Crescer**
-- **Feirante - Plano Pro**
+- **Feirante - Plano Semente**
+- **Feirante - Plano Broto**
+- **Feirante - Plano Colheita**
 
 Cada plano de feirante libera recursos diferentes, como a Xepinha e a gestão financeira completa.
 
-### Publicação
+---
 
-O site é publicado no **Vercel**. O arquivo [`vercel.json`](xepa+-app/vercel.json) manda todas as rotas para o `index.html`, para que o React Router funcione ao abrir ou recarregar qualquer página.
+## Integração com a API
+
+- Todas as chamadas passam por [`compartilhado/servicos/api.js`](xepa+-app/src/compartilhado/servicos/api.js), que:
+  - monta o endereço da API e envia o token de login (`Authorization: Bearer`);
+  - mostra o `message` de erro que a API devolve.
+- **Sem conexão:** a pessoa vê "Sem conexão com o servidor. Verifique sua internet e tente de novo.", e o site não quebra.
+- **Sessão expirada (`401`):** o site sai da conta sozinho e leva para `/entrar`.
+- **Endereço da API:**
+  - em produção, o site chama `/api`, e a Vercel repassa por HTTPS para `https://api.xepamais.com.br` ([`vercel.json`](xepa+-app/vercel.json));
+  - em desenvolvimento, quem repassa é o proxy do Vite ([`vite.config.js`](xepa+-app/vite.config.js)).
+
+## Acessibilidade
+
+- O widget **UserWay** está em todas as páginas e oferece contraste, tamanho de fonte, leitura em voz e outros ajustes.
+- Para quem usa teclado:
+  - o link **"Pular para o conteúdo"** é o primeiro item do Tab;
+  - o foco fica visível;
+  - os pop-ups fecham com Esc.
+- Para leitores de tela:
+  - **título próprio em cada página**;
+  - `lang="pt-BR"`;
+  - todas as imagens com `alt`;
+  - rótulos em todos os campos e `role="alert"` nas mensagens de erro.
+- Os vídeos respeitam a preferência por menos movimento.
+
+## Publicação
+
+O site é publicado na **Vercel** a cada merge na `main`. O arquivo [`vercel.json`](xepa+-app/vercel.json):
+- repassa `/api` para a API por HTTPS;
+- manda as outras rotas para o `index.html`, para o React Router funcionar ao abrir ou recarregar qualquer página.

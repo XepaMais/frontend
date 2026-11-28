@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Receipt } from 'lucide-react';
 import {
   carregarVendasDoFeirante,
+  EVENTO_PEDIDOS,
+  sincronizarVendas,
   descreverRecebimento,
   formatarDataHora,
   formatarMoeda,
@@ -10,6 +12,8 @@ import {
   textoTaxaEntrega,
 } from '@/compartilhado/servicos/pedidos';
 import PopUpConfirmarEntrega from '@/modulos/feirante/componentes/PopUpConfirmarEntrega';
+import PopUpCancelarPedido from '@/compartilhado/componentes/conta/PopUpCancelarPedido';
+import { Estrelas } from '@/modulos/usuario/paginas/historico-pedidos/AvaliarPedido';
 import base from '@/compartilhado/estilos/conta.module.css';
 import styles from './estilos/HistoricoVendas.module.css';
 
@@ -26,8 +30,17 @@ function contarItens(venda) {
 function HistoricoVendas() {
   const [vendas, setVendas] = useState(carregarVendasDoFeirante);
 
+  // Feirante logado: as vendas vêm da API (valem em qualquer aparelho).
+  useEffect(() => {
+    const atualizar = () => setVendas(carregarVendasDoFeirante());
+    window.addEventListener(EVENTO_PEDIDOS, atualizar);
+    sincronizarVendas();
+    return () => window.removeEventListener(EVENTO_PEDIDOS, atualizar);
+  }, []);
+
   // O feirante confirma que o cliente retirou o pedido: o pop-up pede o código do cliente.
   const [pedidoParaConfirmar, setPedidoParaConfirmar] = useState(null);
+  const [pedidoParaCancelar, setPedidoParaCancelar] = useState(null);
 
   function aoConfirmarEntrega() {
     setPedidoParaConfirmar(null);
@@ -110,6 +123,12 @@ function HistoricoVendas() {
                     </td>
                     <td data-rotulo="Status">
                       <span className={base.status}>{textoStatus(venda)}</span>
+                      {/* Nota que o cliente deu depois de receber (pedidos da API). */}
+                      {venda.avaliacao && (
+                        <span className={styles.recebimentoDetalhe} title={venda.avaliacao.comentario || ''}>
+                          <Estrelas nota={venda.avaliacao.nota} tamanho={14} />
+                        </span>
+                      )}
                     </td>
                     <td data-rotulo="Recebimento">
                       <strong className={styles.recebimentoTipo}>
@@ -125,17 +144,29 @@ function HistoricoVendas() {
                       )}
                     </td>
                     <td data-rotulo="Código">
-                      <strong>{venda.codigo || '-'}</strong>
+                      <strong>{venda.codigo || (venda.origem === 'api' ? 'com o cliente' : '-')}</strong>
                     </td>
                     <td data-rotulo="Entrega">
                       {venda.status === PENDENTE_RETIRADA ? (
-                        <button
-                          type="button"
-                          className={base.botaoPrincipal}
-                          onClick={() => setPedidoParaConfirmar(venda)}
-                        >
-                          Confirmar entrega
-                        </button>
+                        <>
+                          <button
+                            type="button"
+                            className={base.botaoPrincipal}
+                            onClick={() => setPedidoParaConfirmar(venda)}
+                          >
+                            Confirmar entrega
+                          </button>
+                          {/* Venda da API ainda não retirada: o feirante pode cancelar (ex.: a xepa acabou). */}
+                          {venda.origem === 'api' && (
+                            <button
+                              type="button"
+                              className={base.botaoPerigoContorno}
+                              onClick={() => setPedidoParaCancelar(venda)}
+                            >
+                              Cancelar
+                            </button>
+                          )}
+                        </>
                       ) : (
                         '-'
                       )}
@@ -146,6 +177,17 @@ function HistoricoVendas() {
             </table>
           </div>
         </>
+      )}
+
+      {pedidoParaCancelar && (
+        <PopUpCancelarPedido
+          pedido={pedidoParaCancelar}
+          onFechar={() => setPedidoParaCancelar(null)}
+          onCancelado={() => {
+            setPedidoParaCancelar(null);
+            setVendas(carregarVendasDoFeirante());
+          }}
+        />
       )}
 
       {pedidoParaConfirmar && (

@@ -8,6 +8,8 @@
 
 .plano {
   --cor-plano: var(--limao);
+  --texto-botao: var(--verde);
+  --cor-plano-texto: var(--verde);
 
   position: relative;
   display: flex;
@@ -22,10 +24,14 @@
 
 .crescer {
   --cor-plano: #18552f;
+  --texto-botao: var(--branco);
+  --cor-plano-texto: var(--cor-plano);
 }
 
 .pro {
   --cor-plano: var(--laranja);
+  --texto-botao: var(--branco);
+  --cor-plano-texto: var(--cor-plano);
 
   border-color: var(--laranja);
   box-shadow: 0 6px 20px rgba(247, 96, 25, 0.22);
@@ -100,6 +106,23 @@
 .plano button {
   width: 100%;
   margin-top: auto;
+  border-color: var(--cor-plano);
+  background: var(--cor-plano);
+  color: var(--texto-botao);
+}
+
+.plano button:hover:not(:disabled) {
+  border-color: var(--cor-plano);
+  background: var(--cor-plano);
+  filter: brightness(0.92);
+}
+
+/* Plano já escolhido: botão vazado na cor da borda. */
+.plano button[aria-pressed='true'],
+.plano button[aria-pressed='true']:hover {
+  background: var(--branco);
+  color: var(--cor-plano-texto);
+  filter: none;
 }
 
 @media (max-width: 900px) {

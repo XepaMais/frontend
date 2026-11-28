@@ -17,7 +17,7 @@ const COLUNAS_PUBLICAS = [
     titulo: 'Para vender',
     links: [
       { texto: 'Seja um feirante parceiro', destino: '/seja-parceiro' },
-      { texto: 'Cadastrar minha barraca', destino: '/CriarUsuarioF' },
+      { texto: 'Cadastrar minha barraca', destino: '/cadastro/feirante' },
     ],
   },
   {
@@ -41,13 +41,13 @@ const COLUNAS_FEIRANTE = [
     links: [
       { texto: 'Pedidos para retirar', destino: '/historico-vendas', contador: 'pendentes' },
       { texto: 'Histórico de vendas', destino: '/historico-vendas' },
-      { texto: 'Conversas com clientes', destino: '/HistoricoChat' },
+      { texto: 'Conversas com clientes', destino: '/feirante/conversas' },
     ],
   },
   {
     titulo: 'Minha banca',
     links: [
-      { texto: 'Início', destino: '/homeF' },
+      { texto: 'Início', destino: '/feirante' },
       { texto: 'Cadastrar Xepa', destino: '/adicionar-produto' },
       { texto: 'Histórico de produtos', destino: '/historico-produtos' },
       { texto: 'Minhas feiras', destino: '/adicionar-feira' },
@@ -139,7 +139,7 @@ function Footer() {
         <div className={Styles.marca}>
           <LinkRodape
             className={Styles.logo}
-            to={areaFeirante ? '/homeF' : '/'}
+            to={areaFeirante ? '/feirante' : '/'}
             aria-label="Xepa+, página inicial"
           >
             <img src={logo} alt="" />

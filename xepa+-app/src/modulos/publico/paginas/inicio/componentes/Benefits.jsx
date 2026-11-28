@@ -62,7 +62,7 @@ export default function Benefits() {
           desperdício nas feiras.
         </p>
 
-        <Link to="/CriarConta" className="botao-beneficios">
+        <Link to="/cadastro/consumidor" className="botao-beneficios">
           Criar minha conta
         </Link>
       </header>

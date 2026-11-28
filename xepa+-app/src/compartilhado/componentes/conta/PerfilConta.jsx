@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import FotoPerfil from './FotoPerfil';
+import PrivacidadeConta from './PrivacidadeConta';
 import usePerfil from '@/compartilhado/hooks/usePerfil';
 import base from '@/compartilhado/estilos/conta.module.css';
 import styles from './PerfilConta.module.css';
@@ -42,6 +43,7 @@ function PerfilConta({ tipo, campos, informacoesConta }) {
   const { perfil, salvar } = usePerfil(tipo);
   const [rascunho, setRascunho] = useState(null);
   const [salvo, setSalvo] = useState(false);
+  const [erro, setErro] = useState('');
 
   const editando = rascunho !== null;
 
@@ -61,26 +63,41 @@ function PerfilConta({ tipo, campos, informacoesConta }) {
 
     if (!arquivo) return;
 
-    reduzirFoto(arquivo, (foto) => {
-      salvar({ ...perfil, foto });
-      setSalvo(true);
-    });
+    reduzirFoto(arquivo, (foto) => salvarFoto(foto));
   }
 
   function removerFoto() {
-    salvar({ ...perfil, foto: '' });
-    setSalvo(true);
+    salvarFoto('');
   }
 
-  function salvarAlteracoes(evento) {
+  // Conta logada: a foto vai para a API (aparece em qualquer aparelho).
+  async function salvarFoto(foto) {
+    setErro('');
+    setSalvo(false);
+    try {
+      await salvar({ ...perfil, foto });
+      setSalvo(true);
+    } catch (falha) {
+      setErro(falha.message);
+    }
+  }
+
+  async function salvarAlteracoes(evento) {
     evento.preventDefault();
 
     const dados = { ...rascunho };
     for (const campo of campos) {
-      dados[campo.id] = rascunho[campo.id].trim();
+      dados[campo.id] = (rascunho[campo.id] || '').trim();
     }
 
-    salvar(dados);
+    // Conta logada: a API pode recusar (ex.: email já usado). Nesse caso continua editando.
+    try {
+      setErro('');
+      await salvar(dados);
+    } catch (falha) {
+      setErro(falha.message);
+      return;
+    }
     setRascunho(null);
     setSalvo(true);
   }
@@ -95,6 +112,12 @@ function PerfilConta({ tipo, campos, informacoesConta }) {
       </header>
 
      
+
+      {erro && (
+        <p className={base.erro || undefined} role="alert" style={{ color: '#c0392b' }}>
+          {erro}
+        </p>
+      )}
 
       {salvo && (
         <p className={base.sucesso} role="status">
@@ -199,6 +222,8 @@ function PerfilConta({ tipo, campos, informacoesConta }) {
           ))}
         </div>
       </section>
+
+      <PrivacidadeConta />
     </main>
   );
 }

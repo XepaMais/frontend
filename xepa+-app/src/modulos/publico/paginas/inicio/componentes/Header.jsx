@@ -71,7 +71,7 @@ export default function Header() {
       </nav>
 
       <div className="acoes-xepa">
-        <button type="button" className="botao-entrar" onClick={() => navigate('/Crumb')}>
+        <button type="button" className="botao-entrar" onClick={() => navigate('/entrar')}>
           Login
         </button>
 

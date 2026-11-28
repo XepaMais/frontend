@@ -43,9 +43,9 @@ function HomePrincipal() {
         <About />
         <HowItWorks />
         <Benefits />
-        <Propaganda onDivulgar={() => navigate('/CriarUsuarioF')} />
+        <Propaganda onDivulgar={() => navigate('/cadastro/feirante')} />
         <FaixaXepa palavras={PALAVRAS_FEIRANTE} cor="laranja" />
-        <PlanosFeirante onComprar={() => navigate('/CriarUsuarioF')} />
+        <PlanosFeirante onComprar={() => navigate('/cadastro/feirante')} />
         <MapaFeiras />
         <PerguntasFrequentes />
       </main>

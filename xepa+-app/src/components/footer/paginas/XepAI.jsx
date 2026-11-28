@@ -104,7 +104,7 @@ function XepAI() {
         </h2>
         <p>Cadastre sua barraca, escolha o plano Broto ou Colheita e comece a usar a Xep.AI hoje.</p>
         <div className={Styles.botoes}>
-          <Link to="/CriarUsuarioF" className={Styles.botao}>
+          <Link to="/cadastro/feirante" className={Styles.botao}>
             Cadastrar minha barraca
           </Link>
           <Link to="/chat-ia" className={Styles.botaoSecundario}>

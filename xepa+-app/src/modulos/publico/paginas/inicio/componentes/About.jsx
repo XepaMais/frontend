@@ -28,7 +28,7 @@ export default function About() {
           </p>
 
           <div data-revelar style={{ '--atraso': '0.24s' }}>
-            <button type="button" className="botao-sobre" onClick={() => navigate('/sobrenos')}>
+            <button type="button" className="botao-sobre" onClick={() => navigate('/sobre-nos')}>
               Conheça nossa história
             </button>
           </div>

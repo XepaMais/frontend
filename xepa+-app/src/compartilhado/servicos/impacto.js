@@ -62,7 +62,8 @@ function calcularSemanas(pedidos) {
 }
 
 export function calcularImpacto() {
-  const pedidos = carregarPedidos();
+  // Pedidos cancelados não salvaram comida nenhuma.
+  const pedidos = carregarPedidos().filter((pedido) => pedido.status !== 'Cancelado');
 
   const kgSalvos = pedidos.reduce((soma, pedido) => soma + pesoDoPedido(pedido), 0);
   const totalPago = pedidos.reduce((soma, pedido) => soma + (pedido.total || 0), 0);

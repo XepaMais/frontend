@@ -5,15 +5,15 @@ function NavbarUsuarioGlobal() {
   const { pathname } = useLocation();
 
   const caminhosUsuario = [
-    '/homeU',
+    '/consumidor',
     '/demo/consumidor',
     '/mapa',
     '/cozinha',
     '/impacto',
     '/carrinho',
     '/perfil',
-    '/Verduras',
-    '/HistoricoChatUsuario',
+    '/xepa',
+    '/consumidor/conversas',
     '/pagamento',
     '/historico-pedidos',
     '/dispositivos',

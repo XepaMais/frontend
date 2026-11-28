@@ -8,7 +8,7 @@ function CriarConta() {
   function proximaEtapa(event) {
     event.preventDefault();
     const dados = Object.fromEntries(new FormData(event.target));
-    navigate('/CriarContaF', { state: dados });
+    navigate('/cadastro/feirante/negocio', { state: dados });
   }
 
   return (
@@ -17,7 +17,7 @@ function CriarConta() {
 
       <section className={Styles.ladoForm}>
         <form className={Styles.form} onSubmit={proximaEtapa}>
-          <BotaoVoltar destino="/OpcaoLogin" />
+          <BotaoVoltar destino="/cadastro" />
 
           <h1>Cadastre-se</h1>
 
@@ -57,7 +57,7 @@ function CriarConta() {
           </button>
 
           <p className={Styles.cadastro}>
-            Já tem conta? <Link to="/Crumb">Entrar</Link>
+            Já tem conta? <Link to="/entrar">Entrar</Link>
           </p>
         </form>
       </section>
