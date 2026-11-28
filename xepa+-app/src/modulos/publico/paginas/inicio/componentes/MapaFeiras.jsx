@@ -3,7 +3,8 @@ import { listarFeiras } from '@/modulos/usuario/servicos/feiras';
 import { buscarCep, geocodificarEndereco } from '@/compartilhado/servicos/localizacao';
 import '@/modulos/publico/paginas/inicio/estilos/MapaFeiras.css';
 import Rabisco from '@/modulos/publico/paginas/inicio/componentes/Rabisco.jsx';
-import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa';import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa';
+import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa';
+import MapaFeirasHome from '@/modulos/publico/paginas/inicio/componentes/MapaFeirasHome.jsx';
 
 
 
