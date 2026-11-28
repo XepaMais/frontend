@@ -11,24 +11,15 @@ import styles from './estilos/Planos.module.css';
 
 function Planos() {
   const navigate = useNavigate();
-  // Logo após o cadastro, o feirante escolhe o plano antes de entrar.
+  // Logo após o cadastro (ou no primeiro login), o feirante escolhe o plano antes de entrar.
   const primeiroAcesso = Boolean(useLocation().state?.primeiroAcesso);
   const [selecionado, setSelecionado] = useState(carregarPlanoSelecionado);
 
-  // Feirante logado: o plano fica salvo na API (vale em qualquer aparelho).
-  async function selecionar(idPlano) {
-    const anterior = selecionado;
+  function selecionar(idPlano) {
+    salvarPlanoSelecionado(idPlano);
     setSelecionado(idPlano);
 
-    try {
-      await salvarPlanoSelecionado(idPlano);
-    } catch (falha) {
-      setSelecionado(anterior);
-      window.alert(falha.message);
-      return;
-    }
-
-    if (primeiroAcesso) navigate('/feirante', { replace: true });
+    if (primeiroAcesso) navigate('/homeF', { replace: true });
   }
 
   return (

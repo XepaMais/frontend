@@ -15,8 +15,8 @@ import {
 import { formatarDataHora, formatarMoeda } from '@/compartilhado/servicos/pedidos';
 import ItemConversa, {
   AvatarConversa,
+  horarioMensagem,
 } from '@/modulos/feirante/paginas/historico-chat/componentes/ItemConversa';
-import { horarioMensagem } from '@/modulos/feirante/paginas/historico-chat/componentes/horariosConversa';
 
 const ABAS = [
   { id: STATUS_CONVERSA.recente, titulo: 'Recentes' },
@@ -116,6 +116,15 @@ function ChatHist({ perfil = 'feirante' }) {
 
   return (
     <main className={Styles.paginaChat}>
+      <header className={Styles.cabecalhoPagina}>
+        <h1>Conversas</h1>
+        <p>
+          {ehFeirante
+            ? 'Converse com seus clientes sobre os pedidos.'
+            : 'Fale com o vendedor sobre os seus pedidos.'}
+        </p>
+      </header>
+
       <section
         className={`${Styles.quadroChat} ${mobileConversaAberta && conversa ? Styles.conversaMobileAtiva : ''}`}
         aria-label="Central de conversas"

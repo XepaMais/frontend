@@ -66,6 +66,7 @@ function FormularioGasto({ modo, gasto, onFechar, onSalvar }) {
             ref={primeiroCampo}
             value={descricao}
             onChange={(evento) => setDescricao(evento.target.value)}
+            placeholder="Compra de alface"
             required
           />
         </div>
@@ -103,6 +104,7 @@ function FormularioGasto({ modo, gasto, onFechar, onSalvar }) {
               step="any"
               value={quantidade}
               onChange={(evento) => setQuantidade(evento.target.value)}
+              placeholder="10"
               required
             />
           </div>
@@ -118,6 +120,7 @@ function FormularioGasto({ modo, gasto, onFechar, onSalvar }) {
               step="0.01"
               value={valorUnitario}
               onChange={(evento) => setValorUnitario(evento.target.value)}
+              placeholder="R$ 3,00"
               required
             />
           </div>
@@ -129,6 +132,7 @@ function FormularioGasto({ modo, gasto, onFechar, onSalvar }) {
             id="valorTotalGasto"
             name="valorTotal"
             value={valorTotal}
+            placeholder="R$ 30,00"
             readOnly
             aria-live="polite"
           />

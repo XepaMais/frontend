@@ -100,7 +100,7 @@
   font-size: var(--fonte-legenda);
 }
 
-.upload .botaoImagem {
+.botaoImagem {
   padding: 10px 20px;
   border-radius: var(--raio-botao);
   background: var(--verde);
@@ -110,7 +110,7 @@
   cursor: pointer;
 }
 
-.upload .botaoImagem:hover {
+.botaoImagem:hover {
   background: #287447;
 }
 
@@ -129,17 +129,4 @@
   .descricaoUmaLinha {
     white-space: nowrap;
   }
-}
-
-.previaImagem {
-  width: 100%;
-  max-width: 260px;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: var(--raio-botao);
-  border: 1px solid var(--verde);
-}
-
-.uploadErro {
-  border-color: #b53807;
 }

@@ -5,10 +5,10 @@ import { fileURLToPath, URL } from 'node:url';
 export default defineConfig({
   plugins: [react()],
   server: {
-    // Em desenvolvimento, /api vai para o backend na AWS por HTTPS (evita CORS).
+    // Em desenvolvimento, /api vai para o backend na AWS (evita CORS).
     proxy: {
       '/api': {
-        target: 'https://api.xepamais.com.br',
+        target: 'http://13.184.82.8:8080',
         changeOrigin: true,
       },
     },

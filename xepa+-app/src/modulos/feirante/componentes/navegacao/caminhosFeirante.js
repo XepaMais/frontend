@@ -2,12 +2,12 @@ import { CAMINHOS_FINANCEIRO } from './caminhosFinanceiro';
 
 // Páginas da área do feirante: mostram a navbar do feirante e o rodapé do feirante.
 export const CAMINHOS_FEIRANTE = [
-  '/feirante',
+  '/homeF',
   '/demo/feirante',
   '/adicionar-produto',
   '/adicionar-feira',
   ...CAMINHOS_FINANCEIRO,
-  '/feirante/conversas',
+  '/HistoricoChat',
   '/chat-ia',
   '/perfil-feirante',
   '/historico-vendas',

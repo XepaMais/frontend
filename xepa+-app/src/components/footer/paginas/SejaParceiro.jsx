@@ -92,7 +92,7 @@ function SejaParceiro() {
                 Ajude a combater o desperdício de alimentos
               </li>
             </ul>
-            <Link to="/cadastro/feirante" className={Styles.botao}>
+            <Link to="/CriarUsuarioF" className={Styles.botao}>
               <Store size={20} aria-hidden="true" />
               Quero ser parceiro
             </Link>
@@ -147,7 +147,7 @@ function SejaParceiro() {
         <h2>Vamos juntos fazer a feira render mais?</h2>
         <p>Cadastre sua barraca agora e escolha o plano ideal para o seu negócio.</p>
         <div className={Styles.botoes}>
-          <Link to="/cadastro/feirante" className={Styles.botao}>
+          <Link to="/CriarUsuarioF" className={Styles.botao}>
             Cadastrar minha barraca
           </Link>
           <Link to="/suporte" className={Styles.botaoSecundario}>

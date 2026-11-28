@@ -12,7 +12,7 @@ export function CardXepa({ xepa }) {
 
   return (
     <article className={style.cardXepa}>
-      <Link to={`/xepa?xepa=${xepa.id}`} className={style.linkCard}>
+      <Link to={`/Verduras?xepa=${xepa.id}`} className={style.linkCard}>
         <img className={style.imagem} src={xepa.imagem || imagemPadrao} alt="" />
         <h3 className={style.titulo}>{xepa.nome}</h3>
         <strong className={style.preco}>{formatarMoeda(xepa.preco)}</strong>

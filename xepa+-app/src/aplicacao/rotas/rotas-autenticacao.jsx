@@ -7,10 +7,10 @@ import CriarContaF from '@/modulos/autenticacao/paginas/CriarContaF';
 import CriarConta from '@/modulos/autenticacao/paginas/CriarConta';
 
 export const rotasAutenticacao = [
-  <Route key="crumb" path="/entrar" element={<Crumb />} />,
+  <Route key="crumb" path="/Crumb" element={<Crumb />} />,
   <Route key="demo" path="/demo" element={<Demo />} />,
-  <Route key="opcao-login" path="/cadastro" element={<OpcaoLogin />} />,
-  <Route key="criar-conta-feirante" path="/cadastro/feirante/negocio" element={<CriarContaF />} />,
-  <Route key="criar-usuario-feirante" path="/cadastro/feirante" element={<CriarUsuarioF />} />,
-  <Route key="criar-conta" path="/cadastro/consumidor" element={<CriarConta />} />,
+  <Route key="opcao-login" path="/OpcaoLogin" element={<OpcaoLogin />} />,
+  <Route key="criar-conta-feirante" path="/CriarContaF" element={<CriarContaF />} />,
+  <Route key="criar-usuario-feirante" path="/CriarUsuarioF" element={<CriarUsuarioF />} />,
+  <Route key="criar-conta" path="/CriarConta" element={<CriarConta />} />,
 ];

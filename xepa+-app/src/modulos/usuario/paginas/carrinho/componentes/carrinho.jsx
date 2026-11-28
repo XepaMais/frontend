@@ -12,10 +12,8 @@ import {
   calcularTotal,
   carregarRecebimento,
   enderecoCompleto,
-  EVENTO_RECEBIMENTO,
   removerDoCarrinho,
   salvarRecebimento,
-  sincronizarRecebimento,
 } from '@/modulos/usuario/servicos/carrinho';
 import { calcularFrete, chaveFrete } from '@/modulos/usuario/servicos/frete';
 import Styles from '../estilos/carrinho.module.css';
@@ -26,14 +24,6 @@ export function Carrinho() {
   const { itens } = useCarrinho();
   const [recebimento, setRecebimento] = useState(carregarRecebimento);
   const [mostrarErros, setMostrarErros] = useState(false);
-
-  // Consumidor logado: traz da conta o endereço de entrega usado em outro aparelho.
-  useEffect(() => {
-    const atualizar = () => setRecebimento(carregarRecebimento());
-    window.addEventListener(EVENTO_RECEBIMENTO, atualizar);
-    sincronizarRecebimento();
-    return () => window.removeEventListener(EVENTO_RECEBIMENTO, atualizar);
-  }, []);
   const entrega = recebimento.tipo === ENTREGA_CASA;
   const enderecoOk = enderecoCompleto(recebimento.endereco);
 
@@ -105,7 +95,7 @@ export function Carrinho() {
             <ShoppingCart size={44} aria-hidden="true" />
             <h2>Seu carrinho está vazio</h2>
             <p>Adicione xepas para retirar na feira ou receber em casa.</p>
-            <Link to="/consumidor" className={base.botaoPrincipal}>
+            <Link to="/homeU" className={base.botaoPrincipal}>
               Ver xepas
             </Link>
           </section>
@@ -125,7 +115,7 @@ export function Carrinho() {
                     <img src={item.imagem || imagemPadrao} alt="" />
                     <div>
                       <h4>
-                        <Link to={`/xepa?xepa=${item.id}`}>{item.nome}</Link>
+                        <Link to={`/Verduras?xepa=${item.id}`}>{item.nome}</Link>
                       </h4>
                       <div className={Styles.quantidade}>
                         <button

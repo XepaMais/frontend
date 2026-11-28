@@ -4,7 +4,6 @@ import Modal from '@/compartilhado/componentes/modal/Modal';
 import Crumb from '@/modulos/autenticacao/paginas/Crumb';
 import { encerrarSessao } from '@/compartilhado/servicos/autenticacao';
 import { salvarPlanoSelecionado } from '@/modulos/feirante/servicos/planoFeirante';
-import { prepararDemo } from '@/modulos/autenticacao/paginas/demo/dadosDemo';
 import Styles from '@/modulos/autenticacao/paginas/demo/demo.module.css';
 
 const PERFIS = [
@@ -46,8 +45,6 @@ function Demo() {
 
   function entrar(perfil) {
     encerrarSessao();
-    // Preenche o navegador com os dados fictícios deste perfil (recomeça do zero a cada entrada).
-    prepararDemo(perfil.plano || 'consumidor');
 
     if (perfil.plano) {
       salvarPlanoSelecionado(perfil.plano);
@@ -66,7 +63,7 @@ function Demo() {
         classeJanela={Styles.janelaDemo}
         titulo="Demonstração do Xepa+"
         descricao="Escolha um perfil para conhecer a plataforma. Cada plano de feirante libera recursos diferentes."
-        aoFechar={() => navigate('/entrar')}
+        aoFechar={() => navigate('/Crumb')}
       >
         <div className={Styles.lista}>
           {PERFIS.map((perfil) => (

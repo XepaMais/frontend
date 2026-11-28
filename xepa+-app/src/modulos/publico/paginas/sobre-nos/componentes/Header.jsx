@@ -5,7 +5,7 @@ import logo from '@/assets/imagens/marca/logo.png';
 
 const links = [
   { texto: 'Home', rota: '/' },
-  { texto: 'Sobre Nós', rota: '/sobre-nos' },
+  { texto: 'Sobre Nós', rota: '/sobrenos' },
   { texto: 'Mapa', rota: '/mapa-home' },
   { texto: 'Receitas', rota: '/cozinha-home' },
 ];
@@ -44,7 +44,7 @@ export default function Header() {
       </nav>
 
       <div className="acoes-xepa">
-        <button type="button" className="botao-entrar" onClick={() => navigate('/entrar')}>
+        <button type="button" className="botao-entrar" onClick={() => navigate('/Crumb')}>
           Login
         </button>
 

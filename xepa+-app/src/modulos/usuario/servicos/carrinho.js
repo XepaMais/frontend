@@ -1,15 +1,7 @@
 // Carrinho do consumidor. Guarda só o id e a quantidade; o resto vem da xepa.
-// Consumidor logado: as xepas da API também ficam no carrinho salvo na API
-// (/api/consumidor/{idConta}/carrinho), para valer em qualquer aparelho.
-import { buscarXepa, carregarXepasDisponiveis, ehXepaDaApi, xepaDaApi } from '@/compartilhado/servicos/xepas';
+import { carregarXepasDisponiveis } from '@/compartilhado/servicos/xepas';
 import { ENTREGA_CASA, RETIRADA_FEIRA } from '@/compartilhado/servicos/pedidos';
 import { carregarContaDaSessao } from '@/compartilhado/servicos/autenticacao';
-import { enviarJson, requisicaoApi } from '@/compartilhado/servicos/api';
-import {
-  buscarCarrinho,
-  idConsumidorLogado,
-  substituirCarrinho,
-} from '@/modulos/usuario/servicos/consumidorApi';
 
 const CHAVE_CARRINHO = 'carrinhoXepa';
 const CHAVE_RECEBIMENTO = 'recebimentoXepa';
@@ -28,52 +20,9 @@ export function carregarCarrinho() {
   return JSON.parse(localStorage.getItem(chaveDaConta(CHAVE_CARRINHO))) || [];
 }
 
-function salvarCarrinho(itens, { enviarParaApi = true } = {}) {
+function salvarCarrinho(itens) {
   localStorage.setItem(chaveDaConta(CHAVE_CARRINHO), JSON.stringify(itens));
   window.dispatchEvent(new Event(EVENTO_CARRINHO));
-  if (enviarParaApi) enviarCarrinhoParaApi(itens);
-}
-
-// Só as xepas da API vão para o carrinho do servidor (as do modo demonstração não existem lá).
-function itensDaApi(itens) {
-  return itens
-    .filter((item) => ehXepaDaApi(buscarXepa(item.id)))
-    .map((item) => ({ idXepa: item.id, quantidade: item.quantidade }));
-}
-
-function enviarCarrinhoParaApi(itens) {
-  if (!idConsumidorLogado()) return;
-  // Em segundo plano: se falhar, o carrinho local continua valendo e é reenviado na próxima mudança.
-  substituirCarrinho(itensDaApi(itens)).catch(() => {});
-}
-
-// Ao abrir o app logado: junta o carrinho salvo na API com o deste navegador.
-export async function sincronizarCarrinho() {
-  if (!idConsumidorLogado()) return;
-  try {
-    const remoto = await buscarCarrinho();
-    const locais = carregarCarrinho();
-    const juntos = [...locais];
-
-    for (const item of remoto.itens) {
-      if (!juntos.some((atual) => atual.id === item.id)) {
-        juntos.push({ id: item.id, quantidade: Number(item.quantidade) });
-      }
-    }
-
-    // Garante que as xepas do carrinho remoto estejam na cópia local da vitrine.
-    guardarXepasDoCarrinho(remoto.itens.map((item) => item.xepa));
-    salvarCarrinho(juntos, { enviarParaApi: juntos.length !== remoto.itens.length });
-  } catch {
-    // Sem conexão: fica com o carrinho local.
-  }
-}
-
-function guardarXepasDoCarrinho(xepas) {
-  const cache = JSON.parse(localStorage.getItem('xepasApi')) || [];
-  const novas = xepas.filter((xepa) => !cache.some((atual) => atual.id === xepa.id)).map(xepaDaApi);
-
-  if (novas.length) localStorage.setItem('xepasApi', JSON.stringify([...cache, ...novas]));
 }
 
 export function adicionarAoCarrinho(id) {
@@ -101,9 +50,8 @@ export function alterarQuantidade(id, quantidade) {
   salvarCarrinho(itens);
 }
 
-// Depois da compra pela API o servidor já tirou os itens: não precisa reenviar.
-export function limparCarrinho({ enviarParaApi = true } = {}) {
-  salvarCarrinho([], { enviarParaApi });
+export function limparCarrinho() {
+  salvarCarrinho([]);
 }
 
 // Junta o carrinho com os dados da xepa. Ignora o que esgotou, venceu ou saiu do ar.
@@ -169,53 +117,8 @@ export function carregarRecebimento() {
   };
 }
 
-export const EVENTO_RECEBIMENTO = 'recebimento-atualizado';
-
-// Consumidor logado: a forma de receber e o endereço também vão para a API
-// (/api/consumidor/{idConta}/endereco) e valem em qualquer aparelho. O frete fica só aqui.
-let envioPendente = null;
-
 export function salvarRecebimento(recebimento) {
   localStorage.setItem(chaveDaConta(CHAVE_RECEBIMENTO), JSON.stringify(recebimento));
-
-  const idConta = idConsumidorLogado();
-  if (!idConta) return;
-
-  // Espera a pessoa parar de digitar antes de enviar.
-  clearTimeout(envioPendente);
-  envioPendente = setTimeout(() => {
-    enviarJson(`/consumidor/${idConta}/endereco`, {
-      tipo: recebimento.tipo,
-      endereco: recebimento.endereco,
-    }, 'PUT').catch(() => {
-      // Sem conexão: fica salvo neste navegador e vai na próxima alteração (ou no pedido).
-    });
-  }, 800);
-}
-
-function enderecoVazio(endereco) {
-  return !Object.values(endereco || {}).some((valor) => String(valor || '').trim());
-}
-
-// Ao abrir o app logado: traz o endereço salvo na conta (se neste navegador ainda não há um).
-export async function sincronizarRecebimento() {
-  const idConta = idConsumidorLogado();
-  if (!idConta) return;
-
-  try {
-    const salvo = await requisicaoApi(`/consumidor/${idConta}/endereco`);
-    const local = carregarRecebimento();
-    if (!enderecoVazio(local.endereco) || enderecoVazio(salvo.endereco)) return;
-
-    localStorage.setItem(chaveDaConta(CHAVE_RECEBIMENTO), JSON.stringify({
-      tipo: salvo.tipo === ENTREGA_CASA ? ENTREGA_CASA : RETIRADA_FEIRA,
-      endereco: { ...ENDERECO_VAZIO, ...salvo.endereco },
-      frete: null,
-    }));
-    window.dispatchEvent(new Event(EVENTO_RECEBIMENTO));
-  } catch {
-    // Sem conexão: fica com o endereço deste navegador.
-  }
 }
 
 // Campos obrigatórios para entregar em casa.

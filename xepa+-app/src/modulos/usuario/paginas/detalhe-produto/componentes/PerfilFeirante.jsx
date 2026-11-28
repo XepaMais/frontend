@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { requisicaoApi, urlDaApi } from '@/compartilhado/servicos/api';
-import { Estrelas } from '@/modulos/usuario/paginas/historico-pedidos/AvaliarPedido';
 import { abrirConversaDaXepa } from '@/compartilhado/servicos/conversas';
 import { carregarPerfil } from '@/compartilhado/servicos/perfil';
 import { carregarTodasFeiras } from '@/modulos/feirante/servicos/feirasFeirante';
@@ -43,35 +40,14 @@ function capitalizar(nome) {
 function PerfilFeirante({ xepa }) {
   const navegar = useNavigate();
 
-  // Xepa da API: foto, barraca e avaliações do feirante vêm do perfil público (GET /api/feirantes/{id}).
-  const [perfilApi, setPerfilApi] = useState(null);
-  const idFeiranteApi = xepa.origem === 'api' ? xepa.idFeirante : null;
-
-  useEffect(() => {
-    if (!idFeiranteApi) return undefined;
-    let ativo = true;
-    requisicaoApi(`/feirantes/${idFeiranteApi}`)
-      .then((dados) => ativo && setPerfilApi(dados))
-      .catch(() => {
-        // Sem conexão: mostra só o que veio com a xepa.
-      });
-    return () => {
-      ativo = false;
-    };
-  }, [idFeiranteApi]);
-
-  const nomeFeirante = perfilApi?.nome || xepa.feirante || 'Feirante';
-  // Modo demonstração: o perfil salvo neste navegador é o do feirante que cadastrou a xepa.
+  const nomeFeirante = xepa.feirante || 'Feirante';
+  // Sem backend, o perfil salvo neste navegador é o do feirante que cadastrou a xepa.
   const perfil = carregarPerfil('feirante');
-  const foto = perfilApi ? urlDaApi(perfilApi.foto) : (perfil.nome === nomeFeirante ? perfil.foto : '');
-  const barraca = perfilApi?.barraca || xepa.barraca || (perfil.nome === nomeFeirante ? perfil.barraca : '');
+  const foto = perfil.nome === nomeFeirante ? perfil.foto : '';
+  const barraca = xepa.barraca || (perfil.nome === nomeFeirante ? perfil.barraca : '');
 
   const feira = carregarTodasFeiras().find((item) => item.nome === xepa.feira);
-  // Quem atende: da API (feira da xepa no perfil do feirante) ou, no modo demonstração, da cópia local.
-  const feiraApi = perfilApi?.feiras?.find((item) => item.idFeira === xepa.idFeira);
-  const funcionarios = (feiraApi ? feiraApi.funcionarios : feira?.funcionarios || [])
-    .filter(Boolean)
-    .map(capitalizar);
+  const funcionarios = (feira?.funcionarios || []).filter(Boolean).map(capitalizar);
   const dias = descreverDias(xepa.dias || feira?.dias);
   const horario = xepa.horario || feira?.horario || '';
 
@@ -83,13 +59,9 @@ function PerfilFeirante({ xepa }) {
   ].filter((item) => item.valor);
 
   // Abre (ou reaproveita) a conversa sobre esta xepa e leva direto para ela.
-  async function falarComFeirante() {
-    try {
-      const id = await abrirConversaDaXepa(xepa);
-      navegar('/consumidor/conversas', { state: { conversa: id } });
-    } catch (falha) {
-      window.alert(falha.message);
-    }
+  function falarComFeirante() {
+    const id = abrirConversaDaXepa(xepa);
+    navegar('/HistoricoChatUsuario', { state: { conversa: id } });
   }
 
   return (
@@ -108,13 +80,6 @@ function PerfilFeirante({ xepa }) {
         <div>
           <strong>{nomeFeirante}</strong>
           {barraca && <span>Barraca {barraca}</span>}
-          {perfilApi?.totalAvaliacoes > 0 && (
-            <span>
-              <Estrelas nota={Math.round(Number(perfilApi.media))} tamanho={14} />{' '}
-              {Number(perfilApi.media).toLocaleString('pt-BR', { minimumFractionDigits: 1 })} ·{' '}
-              {perfilApi.totalAvaliacoes} {perfilApi.totalAvaliacoes === 1 ? 'avaliação' : 'avaliações'}
-            </span>
-          )}
         </div>
       </div>
 

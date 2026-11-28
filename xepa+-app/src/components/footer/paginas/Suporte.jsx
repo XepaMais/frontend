@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Clock, Mail, Sparkles } from 'lucide-react';
-import { enviarJson } from '@/compartilhado/servicos/api';
 import LayoutFooter from './LayoutFooter';
 import juntarEstilos from './estilos/juntarEstilos';
 import EstilosSuporte from './estilos/Suporte.module.css';
@@ -50,28 +49,13 @@ const PERGUNTAS = [
 ];
 
 function Suporte() {
-  // { protocolo } depois de enviar.
-  const [enviado, setEnviado] = useState(null);
-  const [erro, setErro] = useState('');
-  const [enviando, setEnviando] = useState(false);
+  const [enviado, setEnviado] = useState(false);
 
-  // A mensagem fica salva na API (POST /api/suporte) e a equipe vê no painel admin.
-  async function enviar(evento) {
+  function enviar(evento) {
     evento.preventDefault();
-    const formulario = evento.currentTarget;
-    const dados = Object.fromEntries(new FormData(formulario));
-
-    setErro('');
-    setEnviando(true);
-    try {
-      const resposta = await enviarJson('/suporte', dados);
-      formulario.reset();
-      setEnviado({ protocolo: resposta.protocolo });
-    } catch (falha) {
-      setErro(falha.message);
-    } finally {
-      setEnviando(false);
-    }
+    // Ainda não existe um serviço de suporte; apenas confirmamos o envio na tela.
+    evento.target.reset();
+    setEnviado(true);
   }
 
   return (
@@ -180,20 +164,13 @@ function Suporte() {
 
             {enviado && (
               <p className={Styles.aviso} role="status">
-                Mensagem enviada! Protocolo nº {enviado.protocolo}. Nossa equipe responderá pelo e-mail
-                informado.
-              </p>
-            )}
-
-            {erro && (
-              <p className={Styles.aviso} role="alert" style={{ color: '#c0392b' }}>
-                {erro}
+                Mensagem enviada! Nossa equipe responderá em breve.
               </p>
             )}
 
             <div className={Styles.botoes}>
-              <button type="submit" className={Styles.botao} disabled={enviando}>
-                {enviando ? 'Enviando...' : 'Enviar mensagem'}
+              <button type="submit" className={Styles.botao}>
+                Enviar mensagem
               </button>
               <Link to="/xep-ai" className={Styles.botaoSecundario}>
                 Conhecer a Xep.AI

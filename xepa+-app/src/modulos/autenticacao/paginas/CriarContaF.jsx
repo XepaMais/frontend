@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cadastrarFeirante, entrar } from '@/compartilhado/servicos/autenticacao';
-import AceiteTermos, { consentimentoDoFormulario } from '@/modulos/autenticacao/paginas/AceiteTermos';
+import AceiteTermos from '@/modulos/autenticacao/paginas/AceiteTermos';
 import BotaoVoltar from '@/modulos/autenticacao/paginas/BotaoVoltar';
 import Styles from '@/modulos/autenticacao/paginas/estilos/Autenticacao.module.css';
 
@@ -25,7 +25,6 @@ function CriarContaF() {
     cadastro.ccm = formulario.get('ccm');
     cadastro.matricula = formulario.get('matricula');
     cadastro.grupoComercio = formulario.get('grupo');
-    Object.assign(cadastro, consentimentoDoFormulario(formulario));
 
     try {
       if (!cadastro.email) throw new Error('Volte à etapa anterior e preencha os dados da conta.');
@@ -46,7 +45,7 @@ function CriarContaF() {
 
       <section className={Styles.ladoForm}>
         <form className={Styles.form} onSubmit={proximaEtapa}>
-          <BotaoVoltar destino="/cadastro/feirante" />
+          <BotaoVoltar destino="/CriarUsuarioF" />
 
           <h1>Cadastre sua conta</h1>
 
@@ -95,7 +94,7 @@ function CriarContaF() {
           {erro && <p role="alert">{erro}</p>}
 
           <p className={Styles.cadastro}>
-            Já tem conta? <Link to="/entrar">Entrar</Link>
+            Já tem conta? <Link to="/Crumb">Entrar</Link>
           </p>
         </form>
       </section>

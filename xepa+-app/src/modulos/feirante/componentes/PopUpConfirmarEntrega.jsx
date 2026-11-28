@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import Modal from '@/compartilhado/componentes/modal/Modal';
 import styles from '@/compartilhado/componentes/modal/Modal.module.css';
-import { confirmarEntregaDoPedido, sincronizarConversas } from '@/compartilhado/servicos/conversas';
+import { confirmarEntregaDoPedido } from '@/compartilhado/servicos/conversas';
 import {
-  confirmarRetiradaNaApi,
   descreverRecebimento,
   ENTREGA_CASA,
   formaRecebimento,
@@ -11,37 +10,17 @@ import {
 } from '@/compartilhado/servicos/pedidos';
 
 // Confirmação usada na Home do feirante e no Histórico de vendas.
-// O feirante digita o código que o cliente mostra; pedidos antigos sem código só pedem confirmação.
-// Pedidos da API: quem confere o código é a API (o feirante não recebe o código).
+// O feirante digita o código do cliente; pedidos antigos só pedem confirmação.
 function PopUpConfirmarEntrega({ pedido, onFechar, onConfirmado }) {
   const [codigo, setCodigo] = useState('');
   const [erro, setErro] = useState('');
-  const [enviando, setEnviando] = useState(false);
 
   const entrega = formaRecebimento(pedido) === ENTREGA_CASA;
   const recebimento = descreverRecebimento(pedido);
-  const daApi = pedido.origem === 'api';
-  const precisaCodigo = daApi || Boolean(pedido.codigo);
+  const precisaCodigo = Boolean(pedido.codigo);
 
-  async function confirmar(evento) {
+  function confirmar(evento) {
     evento.preventDefault();
-
-    if (daApi) {
-      setEnviando(true);
-      try {
-        await confirmarRetiradaNaApi(pedido, codigo.trim());
-      } catch (falha) {
-        setErro(falha.message === 'Código de retirada incorreto.'
-          ? 'Código incorreto. Confira o código que aparece no pedido do cliente.'
-          : falha.message);
-        setEnviando(false);
-        return;
-      }
-      // A conversa do pedido também foi finalizada pela API.
-      sincronizarConversas();
-      onConfirmado();
-      return;
-    }
 
     if (precisaCodigo && codigo.trim() !== String(pedido.codigo)) {
       setErro('Código incorreto. Confira o código que aparece no pedido do cliente.');
@@ -88,6 +67,7 @@ function PopUpConfirmarEntrega({ pedido, onFechar, onConfirmado }) {
               }}
               inputMode="numeric"
               autoComplete="off"
+              placeholder="0000"
               autoFocus
             />
           </div>
@@ -106,7 +86,7 @@ function PopUpConfirmarEntrega({ pedido, onFechar, onConfirmado }) {
           <button
             type="submit"
             className={styles.principal}
-            disabled={enviando || (precisaCodigo && codigo.length < 4)}
+            disabled={precisaCodigo && codigo.length < 4}
           >
             {entrega ? 'Confirmar entrega' : 'Confirmar retirada'}
           </button>
