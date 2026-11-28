@@ -8,10 +8,26 @@ import { caminhoDaReceita } from '@/modulos/usuario/paginas/cozinha/dados/receit
 // Prato solto, visto de cima. Com PNG recortado (sem fundo) usa ele;
 // senão, corta a foto em círculo com borda branca, como um prato.
 function Prato({ receita }) {
+  // No celular (Safari), a sombra aparece como um quadrado enquanto a imagem
+  // ainda não foi decodificada. Só mostramos o prato depois que ela estiver pronta.
+  const [pronta, setPronta] = useState(false);
+
   if (receita.recorte) {
     return (
       <div className={Style.prato}>
-        <img src={receita.recorte} alt="" className={Style.recorte} />
+        <img
+          src={receita.recorte}
+          alt=""
+          decoding="async"
+          className={`${Style.recorte} ${pronta ? Style.recortePronto : ''}`}
+          ref={(img) => {
+            if (img && img.complete && img.naturalWidth && !pronta) setPronta(true);
+          }}
+          onLoad={(evento) => {
+            const img = evento.currentTarget;
+            (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).finally(() => setPronta(true));
+          }}
+        />
       </div>
     );
   }
@@ -47,6 +63,16 @@ function Destaque({ receitas, pathname }) {
   const [pausado, setPausado] = useState(false);
   const total = receitas.length;
   const receita = receitas[indice % total];
+
+  // Baixa e decodifica todos os pratos logo de início, para a troca ser instantânea.
+  useEffect(() => {
+    receitas.forEach(({ recorte }) => {
+      if (!recorte) return;
+      const img = new Image();
+      img.src = recorte;
+      img.decode?.().catch(() => {});
+    });
+  }, [receitas]);
 
   useEffect(() => {
     if (pausado || total < 2) return undefined;
