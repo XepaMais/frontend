@@ -4,6 +4,9 @@ import { buscarCep, geocodificarEndereco } from '@/compartilhado/servicos/locali
 import '@/modulos/publico/paginas/inicio/estilos/MapaFeiras.css';
 import Rabisco from '@/modulos/publico/paginas/inicio/componentes/Rabisco.jsx';
 import BarraPesquisa from '@/compartilhado/componentes/barra-pesquisa/BarraPesquisa';
+import MapaFeirasHome from '@/modulos/publico/paginas/inicio/componentes/MapaFeirasHome.jsx';
+
+
 
 const CENTRO_PADRAO = { lat: -23.4669, lng: -46.6869 }; // Brasilândia, São Paulo
 
@@ -143,13 +146,7 @@ function MapaFeiras() {
         </div>
 
         <div className="mapa-visual" data-revelar="zoom" style={{ '--atraso': '0.2s' }}>
-          <iframe
-            title={`Mapa próximo de ${centro.lat}, ${centro.lng}`}
-            src={`https://maps.google.com/maps?q=${centro.lat},${centro.lng}&output=embed`}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-          />
+                    <MapaFeirasHome centro={centro} feiras={feiras} />
         </div>
 
         <p className="mapa-observacao" aria-live="polite">

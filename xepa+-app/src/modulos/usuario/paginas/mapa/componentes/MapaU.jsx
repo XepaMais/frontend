@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api'
+import { useState, useEffect, useRef } from 'react'
+import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF } from '@react-google-maps/api'
 import Styles from '../estilos/MapU.module.css'
 import Modal from '@/compartilhado/componentes/modal/Modal'
 import logoXepa from '@/assets/imagens/gerais/logo-colorida.png'
@@ -59,6 +59,17 @@ function feiraParaMapa(feira) {
   };
 }
 
+// Link do Google Maps com a rota até a feira. Sem a posição do usuário, o próprio Google usa a localização atual.
+// No celular abre o app do Google Maps (carro, a pé ou transporte público).
+function linkDaRota(feira, origem) {
+  const parametros = new URLSearchParams({
+    api: '1',
+    destination: `${feira.position.lat},${feira.position.lng}`,
+  });
+  if (origem) parametros.set('origin', `${origem.lat},${origem.lng}`);
+  return `https://www.google.com/maps/dir/?${parametros}`;
+}
+
 // Compara nomes sem acento e sem diferença de maiúsculas.
 function normalizar(texto) {
   return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLocaleLowerCase('pt-BR').trim();
@@ -83,6 +94,23 @@ function MapPage() {
   // Todas as feiras cadastradas: quando um feirante adiciona uma feira, ela aparece aqui
   // (ao abrir o mapa, ao voltar para a aba e a cada minuto com a tela aberta).
   const [feiras, setFeiras] = useState([]);
+
+  // Mapa do Google (para enquadrar as feiras) e se a pessoa já mexeu nele (busca ou arrastar).
+  const [mapa, setMapa] = useState(null);
+  const pessoaMexeu = useRef(false);
+
+  // Ao abrir, enquadra todas as feiras (e a posição do usuário) para os marcadores ficarem à vista.
+  // Depois que a pessoa busca ou arrasta o mapa, não mexe mais.
+  useEffect(() => {
+    if (!mapa || pessoaMexeu.current || feiras.length === 0) return;
+
+    const limites = new window.google.maps.LatLngBounds();
+    feiras.forEach((feira) => limites.extend(feira.position));
+    if (userPosition) limites.extend(userPosition);
+    mapa.fitBounds(limites, 60);
+    // Só uma feira: não deixa o zoom chegar perto demais.
+    if (feiras.length === 1 && !userPosition) mapa.setZoom(15);
+  }, [mapa, feiras.length, userPosition]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     let ativo = true;
@@ -170,6 +198,7 @@ function MapPage() {
         return;
       }
 
+      pessoaMexeu.current = true;
       setFeiraSelecionada(null);
       setMapCenter({ lat: local.latitude, lng: local.longitude });
     } catch {
@@ -198,6 +227,7 @@ function MapPage() {
     }
 
     // Feira nova que ainda não estava no mapa: entra agora.
+    pessoaMexeu.current = true;
     setFeiras((atuais) => (atuais.some((feira) => feira.id === encontrada.id) ? atuais : [...atuais, encontrada]));
     setMapCenter(encontrada.position);
     setFeiraSelecionada(encontrada);
@@ -224,10 +254,13 @@ function MapPage() {
             mapContainerStyle={{ width: '100%', height: '100%' }}
             center={mapCenter}
             zoom={14}
+            onLoad={setMapa}
+            onUnmount={() => setMapa(null)}
+            onDragStart={() => { pessoaMexeu.current = true; }}
           >
             {/* Marcador do usuário (só se aceitar a localização) */}
             {userPosition && (
-              <Marker
+              <MarkerF
                 position={userPosition}
                 title="Você está aqui"
                 icon={{
@@ -244,7 +277,7 @@ function MapPage() {
 
             {/* Marcadores das feiras */}
             {feiras.map((feira) => (
-              <Marker
+              <MarkerF
                 key={feira.id}
                 position={feira.position}
                 title={feira.nome}
@@ -258,7 +291,7 @@ function MapPage() {
             ))}
 
             {feiraSelecionada && (
-              <InfoWindow
+              <InfoWindowF
                 position={feiraSelecionada.position}
                 onCloseClick={() => setFeiraSelecionada(null)}
               >
@@ -269,8 +302,27 @@ function MapPage() {
                     <p style={{ margin: '0 0 5px 0', fontSize: '12px', color: '#666' }}>{feiraSelecionada.dias}</p>
                   )}
                   <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#4caf50' }}>{feiraSelecionada.horario}</span>
+                  <a
+                    href={linkDaRota(feiraSelecionada, userPosition)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'block',
+                      marginTop: '8px',
+                      padding: '6px 10px',
+                      borderRadius: '6px',
+                      background: '#FF5200',
+                      color: '#fff',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    Como chegar
+                  </a>
                 </div>
-              </InfoWindow>
+              </InfoWindowF>
             )}
           </GoogleMap>
         ) : (
