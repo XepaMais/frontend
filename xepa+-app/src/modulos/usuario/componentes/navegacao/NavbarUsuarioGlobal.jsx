@@ -19,7 +19,8 @@ function NavbarUsuarioGlobal() {
     '/dispositivos',
   ];
 
-  if (!caminhosUsuario.includes(pathname)) {
+  // Páginas de uma receita (/cozinha/bolo-banana) também mostram o menu do consumidor.
+  if (!caminhosUsuario.includes(pathname) && !pathname.startsWith('/cozinha/')) {
     return null;
   }
 

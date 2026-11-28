@@ -54,7 +54,9 @@ function TituloDaPagina() {
 
   useEffect(() => {
     const caminho = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
-    const titulo = TITULOS[caminho] ?? TITULOS[caminho.toLowerCase()] ?? 'Página não encontrada';
+    // Página de uma receita: o nome certo é colocado pela própria página (DetalheReceita).
+    const ehReceita = /^\/cozinha(-home)?\/[^/]+$/.test(caminho);
+    const titulo = TITULOS[caminho] ?? TITULOS[caminho.toLowerCase()] ?? (ehReceita ? 'Receita' : 'Página não encontrada');
     document.title = `${titulo} | Xepa+`;
   }, [pathname]);
 
