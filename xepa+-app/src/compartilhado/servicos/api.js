@@ -34,7 +34,6 @@ export function excluirNaApi(caminho) {
   return requisicaoApi(caminho, { method: 'DELETE' });
 }
 
-// Baixa um arquivo gerado pela API (ex.: planilha CSV) com o nome informado.
 export async function baixarArquivoDaApi(caminho, nomeArquivo) {
   let resposta;
   try {
